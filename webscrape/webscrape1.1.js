@@ -43,10 +43,19 @@ function getDomPath(el) {
 function getClickedElement(){
 	document.addEventListener("click",function(e){
 			console.log(e.target.innerHTML);
+			if(e.target.style.outline == ''){
+				e.target.style.outline = 'solid black 1px';
+			}else{
+				e.target.style.outline = '';
+			}
 			var path = getDomPath(e.target);
 			console.log(path);
 	})
 }
+//
+//function highlight(style){
+//	style = 
+//}
 
 getClickedElement();
 
