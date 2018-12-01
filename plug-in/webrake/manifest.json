@@ -1,0 +1,22 @@
+{
+    "name": "Web Rake",
+    "version": "0.1",
+    "description": "This is Chrome plug-in for team31 group work",
+    "permissions": ["tabs","<all_urls>","declarativeContent", "storage"],
+    "background": {
+      "scripts": ["background.js"],
+      "persistent": false
+    },
+    "content_scripts": [
+        {
+        "matches": ["http://*/*","https://*/*"],
+        "js": ["contentScript.js"],
+        "run_at": "document_end"         // allow the content script runs when the page has been fully loaded
+        }
+    ], 
+  	"browser_action": {
+		"default_title": "Title", // The title that shows up when a user hovers on your icon
+	    "default_popup": "popup.html" // The URL of your popup page
+	},
+    "manifest_version":2
+}
