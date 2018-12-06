@@ -1,6 +1,6 @@
 {
     "name": "Web Rake",
-    "version": "0.1",
+    "version": "1.0",
     "description": "This is Chrome plug-in for team31 group work",
     "permissions": ["tabs","<all_urls>","declarativeContent", "storage"],
     "background": {
@@ -15,7 +15,7 @@
         }
     ], 
   	"browser_action": {
-		"default_title": "Title", // The title that shows up when a user hovers on your icon
+		"default_title": "Web Rake", // The title that shows up when a user hovers on your icon
 	    "default_popup": "popup.html" // The URL of your popup page
 	},
     "manifest_version":2
