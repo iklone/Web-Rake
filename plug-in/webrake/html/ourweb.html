@@ -3,8 +3,62 @@
 	<head>
 		<meta charset="utf-8">
 		<title>our web rake website</title>
+		<link rel="stylesheet" type="text/css" href="../css/popUpStyle.css">
+		<style type="text/css">
+			.search-box{
+				width: 330px;
+				height: 42px;
+				background:rgba(0,0,0,.2);
+				padding:5px;
+				border:none;
+				border-radius:5px;
+			}
+			.search-box-holder{
+				width: 242px;
+				height: 42px;
+				background-color: #eeeeee;
+				border:none;
+				border-top-left-radius:5px;
+				border-bottom-left-radius:5px;
+				font: bold 15px 'lucida sans', 'trebuchet MS', 'Tahoma';
+				font-style:italic;
+			}
+			.search-box-btn{
+				width:82px;
+				height: 42px;
+				background-color:#d93c3c;
+				color:#fff;
+				border:none;
+				border-top-right-radius:5px;
+				border-bottom-right-radius:5px;
+				font-size:16px;
+				font-weight: bold;
+			}
+			.new-task{
+				width: 100px;
+				height: 50px;;
+				position: relative;
+				top: -50px;
+				left: 420px;
+			}
+		</style>
 	</head>
 	<body>
-		<h1>Pretend this is our website </h1>
+		<div id="main">
+			<!-- <input type="text" id="myInput" onkeyup="myFunction()" placeholder="搜索..."> -->
+			<div class="search-box">
+				<input class="search-box-holder" type="text" id="search" placeholder="Search...">
+				<button class="search-box-btn">SEARCH</button>
+			</div>
+			<div>
+				<button class="new-task">+ New Task</button>
+			</div>
+			<HR style="border:3 double #987cb9; position: relative; top: -40px; left: 0;" width="95%" color=black SIZE=3>
+			<h2 style="position: relative; left: 20px;">all tasks</h2>
+			<HR style="border:3 double #987cb9; position: relative; top: 250px; left: 0;" width="95%" color=black SIZE=3>
+			<h2 style="position: relative; top: 270px; left: 20px;">current task</h2>
+			<!-- <h3 style="position: relative; top: 350px;">Pretend this is our website </h3> -->
+		</div>
+		
 	</body>
 </html>
