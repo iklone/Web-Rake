@@ -2,7 +2,7 @@
     "name": "Web Rake",
     "version": "1.0",
     "description": "This is Chrome plug-in for team31 group work",
-    "permissions": ["tabs","<all_urls>","declarativeContent", "storage"],
+    "permissions": ["tabs","<all_urls>","declarativeContent", "storage", "activeTab"],
     "background": {
       "scripts": ["js/background.js"],
       "persistent": false
@@ -10,8 +10,8 @@
     "content_scripts": [
         {
         "matches": ["http://*/*","https://*/*"],
-        "js": ["js/contentScript.js", "js/popup.js"],
-        "run_at": "document_end"         // allow the content script runs when the page has been fully loaded
+        "js": ["js/contentScript.js"]
+        //"run_at": "document_end"         // allow the content script runs when the page has been fully loaded
         }
     ], 
   	"browser_action": {
