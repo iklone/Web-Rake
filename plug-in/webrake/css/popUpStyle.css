@@ -1,0 +1,38 @@
+.left-sidebar-item{
+	margin:0;
+	text-align:center;
+	list-style:none;
+	font-size:20px;
+	line-height:45px;
+	padding:5px;
+	color:#b0bcc3;
+	height:55px;
+	width:40px;
+	vertical-align:middle;
+}
+
+#main{
+	position:relative; 
+	width:580px; 
+	height:535px; 
+	background-color:#f5f5f5; 
+	color:#333;
+}
+
+.login{
+	position:absolute; 
+	width:550px; 
+	height:450px; 
+	top: 0; 
+	left: 0; 
+	bottom: 0; 
+	right: 0;
+	margin:auto; 
+	text-align:center;
+}
+
+.left-sidebar{
+	width:45px; 
+	height: 535px; 
+	background-color:grey;
+}
