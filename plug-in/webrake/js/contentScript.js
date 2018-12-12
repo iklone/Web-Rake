@@ -1,3 +1,25 @@
+chrome.runtime.onMessage.addListener(gotMessage);
+
+function gotMessage(message, sender, sendResponse){
+	if(message.txt ="start script"){
+		console.log("taskadded");
+		getClickedElement();
+	}
+}
+
+function getClickedElement(){
+	document.addEventListener("click",function(e){
+			console.log(e.target.innerHTML);
+			if(e.target.style.outline == ''){
+				e.target.style.outline = 'solid black 1px';
+			}else{
+				e.target.style.outline = '';
+			}
+			var path = getDomPath(e.target);
+			console.log(path);
+	})
+}
+
 function getDomPath(el) {
 	if(!el){
 		//click error!
@@ -39,19 +61,4 @@ function getDomPath(el) {
 	//console.log(stack);
 	return stack.slice(1).join(' > '); 
 }
-
-function getClickedElement(){
-	document.addEventListener("click",function(e){
-			console.log(e.target.innerHTML);
-			if(e.target.style.outline == ''){
-				e.target.style.outline = 'solid black 1px';
-			}else{
-				e.target.style.outline = '';
-			}
-			var path = getDomPath(e.target);
-			console.log(path);
-	})
-}
-
-getClickedElement();
 
