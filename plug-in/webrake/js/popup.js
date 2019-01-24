@@ -9,6 +9,8 @@ window.onload = function login() {
 	// window.location.href = "../html/ourweb.html";
 	    var username = document.getElementById("username");
 	    var pass = document.getElementById("password");
+// 		var xmlhttp;
+// 		xmlhttp=new XMLHttpRequest();
 	 
 	    if (username.value == "") {
 	        alert("Please enter your username");
@@ -16,6 +18,10 @@ window.onload = function login() {
 	        alert("Please enter your password");
 	    } else if(username.value == "psyad10" && pass.value == "123456"){
 			chrome.browserAction.setPopup({popup: "../html/ourweb.html"});
+			//window.location.href = "../html/ourweb.html";
+			//window.location.reload();
+// 			xmlhttp.open("GET","../html/ourweb.html",true);
+// 			xmlhttp.send();
 	    } else {
 	        alert("Please enter the correct user name or password! ")
 	    }
