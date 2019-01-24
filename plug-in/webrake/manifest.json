@@ -2,7 +2,7 @@
     "name": "Web Rake",
     "version": "1.0",
     "description": "This is Chrome plug-in for team31 group work",
-    "permissions": ["tabs","<all_urls>","declarativeContent", "storage", "activeTab"],
+    "permissions": ["tabs","<all_urls>","declarativeContent", "storage", "activeTab", "contextMenus"],
     "background": {
       "scripts": ["js/background.js"],
       "persistent": false

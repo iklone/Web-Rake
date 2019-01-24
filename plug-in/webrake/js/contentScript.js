@@ -1,23 +1,28 @@
-chrome.runtime.onMessage.addListener(gotMessage);
+chrome.runtime.sendMessage({greeting: "shouldIStart"});
 
-function gotMessage(message, sender, sendResponse){
-	if(message.txt ="start script"){
-		console.log("taskadded");
-		getClickedElement();
-	}
-}
-
-function getClickedElement(){
-	document.addEventListener("click",function(e){
-			console.log(e.target.innerHTML);
-			if(e.target.style.outline == ''){
-				e.target.style.outline = 'solid black 1px';
-			}else{
-				e.target.style.outline = '';
+chrome.runtime.onMessage.addListener(
+	function(request, sender, response){
+		if(request.txt == "start contentScript"){
+			document.body.onmousedown = function(e){
+				if(e.button == 2){
+					getClickedElement(e);
+					chrome.extension.onMessage.addListener(function(request, sender, response){
+						if(request.contextMenuId == "script"){
+						//put into task list
+						}
+					})
+				}
 			}
-			var path = getDomPath(e.target);
-			console.log(path);
+		}
 	})
+
+function getClickedElement(e){
+	console.log(e.target.innerHTML);
+	if(e.target.style.outline == ''){
+		e.target.style.outline = 'solid black 1px';
+	}
+	var path = getDomPath(e.target);
+	console.log(path);
 }
 
 function getDomPath(el) {
@@ -42,10 +47,6 @@ function getDomPath(el) {
 	      	}
 	    }
 	    var nodeName = el.nodeName.toLowerCase();
-	    /*el.nodetype()*************
-	     * need to do
-	    used to specify the kind of node 
-	    */
 	    if(el.hasAttribute('id') && el.id != ''){
 	  		nodeName += '#' + el.id;
 	  	}
@@ -61,4 +62,3 @@ function getDomPath(el) {
 	//console.log(stack);
 	return stack.slice(1).join(' > '); 
 }
-
