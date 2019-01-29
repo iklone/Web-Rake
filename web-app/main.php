@@ -10,6 +10,19 @@
 
             }
         }
+		function insertTaskListing(name) {
+			var article = document.createElement("article");
+
+			var title = document.createElement("span");
+			title.innerHTML = name;
+			article.appendChild(title);
+
+			var meta = document.createElement("h6");
+			meta.innerHTML = "TODO";
+			article.appendChild(meta);
+
+			document.getElementById("taskListing").appendChild(article);
+		}
     </script>
 </head>
 
@@ -27,19 +40,24 @@
         <i>Logged in as psyjct</i>
     </span>
 
-    <div class="split left" style="overflow: scroll;">
+    <div id="taskListing" class="split left" style="overflow: scroll;">
         <article class="newTask">
             +New Task
         </article>
         <article>
             <span class="taskName">Task A</span><span class="taskMeta">Next: 10:50</span>
         </article>
-        <article>
-            <span class="taskName">Task B</span><span class="taskMeta">Next: 12:00</span>
-        </article>
-        <article>
-            <span class="taskName">Task C</span><span class="taskMeta">Next: 15:15</span>
-        </article>
+		
+		<script>
+		<?php
+			include 'db.php';
+			$taskData = mysqli_query($conn, 'SELECT * FROM Task;');
+			foreach ($taskData as $task){
+				echo 'insertTaskListing("' . $task["taskName"] . '");';
+			}
+		?>
+		</script>
+		
         <div style="margin: 100px;"></div>
     </div>
 
