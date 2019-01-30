@@ -16,6 +16,7 @@ chrome.runtime.onMessage.addListener(
 		}
 	})
 
+
 function getClickedElement(e){
 	console.log(e.target.innerHTML);
 	if(e.target.style.outline == ''){
@@ -24,6 +25,7 @@ function getClickedElement(e){
 	var path = getDomPath(e.target);
 	console.log(path);
 }
+
 
 function getDomPath(el) {
 	if(!el){
