@@ -7,7 +7,7 @@ Web Rake is a program to allow users to specify recurring data scrapes from the 
 - Olasubomi Awolesi (Administrator)
 - Hashim Hussain (Repository Manager)
 - Rikesh Zaveri
-- Andy "Ang" Ding
+- Ang "Andy" Ding
 - Peichen "Payne" Yu
 
 Sponsor: James Millen (Refinitiv)
