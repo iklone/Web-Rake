@@ -5,7 +5,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class TaskScraper {
+public class TaskScraperThread extends Thread {
 	
 	private URL url;
 	private InputStream is;
@@ -13,7 +13,7 @@ public class TaskScraper {
 	String line;
 	
 	//Double array to store scrape ID AND scrape name so that we can store the result using the scrape ID
-	public TaskScraper(String urlStr, String[][] elements) {
+	public TaskScraperThread(String urlStr, String[][] elements) {
 		try {
 			url = new URL(urlStr);
 			is = url.openStream();

@@ -47,7 +47,8 @@ public class TaskScheduler {
 					 switch(type) {
 						 case "Hourly":
 							 if (resultMin == currentMin) {
-								 
+								//TaskScraperThread ts = new TaskScraperThread(args);
+								//ts.start();
 							 }
 						 case "Daily":
 							 int resultHour = rs.getInt("Hour");
