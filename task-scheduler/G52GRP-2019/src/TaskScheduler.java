@@ -39,7 +39,7 @@ public class TaskScheduler {
 				  ResultSet rs = stmt.executeQuery(sql);
 				
 				  //STEP 5: Extract data from result set
-				  while(rs.next()){
+				  while(rs.next()) {
 					 //Retrieve by column name
 					 String type  = rs.getString("Type");
 					 int resultMin = rs.getInt("Min");
@@ -85,7 +85,7 @@ public class TaskScheduler {
 			   }
 			   finally {
 			      //finally block used to close resources
-				  try{
+				  try {
 				     if(stmt!=null)
 				        stmt.close();
 				  }
