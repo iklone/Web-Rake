@@ -41,14 +41,16 @@ public class TaskScheduler {
 				  //STEP 5: Extract data from result set
 				  while(rs.next()) {
 					 //Retrieve by column name
+					 int taskID = rs.getInt("taskID");
 					 String type  = rs.getString("Type");
 					 int resultMin = rs.getInt("Min");
+					 String urlStr = rs.getString("taskURL");
 					 
 					 switch(type) {
 						 case "Hourly":
 							 if (resultMin == currentMin) {
-								//TaskScraperThread ts = new TaskScraperThread(args);
-								//ts.start();
+								ElementSearchThread elementSearch = new ElementSearchThread(taskID, urlStr);
+								elementSearch.start();
 							 }
 						 case "Daily":
 							 int resultHour = rs.getInt("Hour");
