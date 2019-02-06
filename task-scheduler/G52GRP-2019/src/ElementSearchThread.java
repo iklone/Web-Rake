@@ -30,7 +30,7 @@ public class ElementSearchThread extends Thread {
    static final String PASS = "1234Fred";
    
    int taskID;
-   private URL url;
+   String urlStr;
    private InputStream is;
    BufferedReader br;
    FileWriter fw;
@@ -43,17 +43,18 @@ public class ElementSearchThread extends Thread {
 	   
    public static void main(String[] args) {
 	   System.out.println("TOP OF MAIN\n");
-	   ElementSearchThread est = new ElementSearchThread(2, "https://www.nottingham.ac.uk");
+	   ElementSearchThread est = new ElementSearchThread(1, "https://en.wikipedia.org/");
    }
    
 	public ElementSearchThread(int taskID, String urlStr) {
 		this.taskID = taskID;
+		this.urlStr = urlStr;
 
 		/*
 		 * Downloading the page and storing it in the instance variable
 		 */
 		try {
-			url = new URL(urlStr);
+			URL url = new URL("https://en.wikipedia.org/");
 			is = url.openStream();
 			br = new BufferedReader(new InputStreamReader(is));
 
@@ -150,7 +151,8 @@ public class ElementSearchThread extends Thread {
 	public String getValue(String element) {
 		try {			
 			//obtain Document somehow, doesn't matter how
-			Document doc = Jsoup.connect("http://nottingham.ac.uk/").get();
+			Document doc = Jsoup.connect(urlStr).get();
+			System.out.println(doc.toString());
 			System.out.println(doc.title());
 			Elements elements = doc.select(element);
 			for (Element currentElement : elements) {
