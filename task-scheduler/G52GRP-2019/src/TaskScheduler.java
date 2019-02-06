@@ -49,25 +49,28 @@ public class TaskScheduler {
 					 switch(type) {
 						 case "Hourly":
 							 if (resultMin == currentMin) {
-								ElementSearchThread elementSearch = new ElementSearchThread(taskID, urlStr);
-								elementSearch.start();
+								 ElementSearchThread elementSearch = new ElementSearchThread(taskID, urlStr);
+								 elementSearch.start();
 							 }
 						 case "Daily":
 							 int resultHour = rs.getInt("Hour");
 						     if (resultHour == currentHour && resultMin == currentMin) {
-						    	 
+						    	 ElementSearchThread elementSearch = new ElementSearchThread(taskID, urlStr);
+						    	 elementSearch.start();
 						     }
 						 case "Weekly":
 							 resultHour = rs.getInt("Hour");
 							 int resultDotW = rs.getInt("DotW");
 							 if (resultDotW == currentDotW && resultHour == currentHour && resultMin == currentMin) {
-								 
+								 ElementSearchThread elementSearch = new ElementSearchThread(taskID, urlStr);
+								 elementSearch.start();
 							 }
 						 case "Monthly":
 							 resultHour = rs.getInt("Hour");
 							 int resultDotM = rs.getInt("DotM");
 							 if (resultDotM == currentDotW && resultHour == currentHour && resultMin == currentMin) {
-									 
+								 ElementSearchThread elementSearch = new ElementSearchThread(taskID, urlStr);
+								 elementSearch.start();	 
 							 }
 						 default:
 							 

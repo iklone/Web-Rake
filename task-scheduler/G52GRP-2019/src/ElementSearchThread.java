@@ -14,14 +14,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathFactory;
-
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 public class ElementSearchThread extends Thread {
 
@@ -46,7 +42,8 @@ public class ElementSearchThread extends Thread {
    String elements[][];
 	   
    public static void main(String[] args) {
-	   new ElementSearchThread(2, "https://www.nottingham.ac.uk");
+	   System.out.println("TOP OF MAIN\n");
+	   ElementSearchThread est = new ElementSearchThread(2, "https://www.nottingham.ac.uk");
    }
    
 	public ElementSearchThread(int taskID, String urlStr) {
@@ -59,7 +56,7 @@ public class ElementSearchThread extends Thread {
 			url = new URL(urlStr);
 			is = url.openStream();
 			br = new BufferedReader(new InputStreamReader(is));
-			
+
 			//save to this filename
 
 			// Could use TaskID as unique file name
@@ -69,11 +66,11 @@ public class ElementSearchThread extends Thread {
 			if (!file.exists()) {
 				file.createNewFile();
 			}
-			
+
 			//use FileWriter to write file
 			fw = new FileWriter(file.getAbsoluteFile(), false);
 			bw = new BufferedWriter(fw);
-			
+
 			while ((inputLine = br.readLine()) != null) {
 				bw.write(inputLine + "\n");
 			}
@@ -100,23 +97,26 @@ public class ElementSearchThread extends Thread {
 	   
 		Connection conn = null;
 		Statement stmt = null;
+		Statement stmt2 = null;
 		try {
 			Class.forName(JDBC_DRIVER);
 		  
 			conn = DriverManager.getConnection(DB_URL,USER,PASS);
 		  
 			stmt = conn.createStatement();
+			stmt2 = conn.createStatement();
 			String sql;
 			sql = "SELECT * FROM Scrape WHERE Scrape.taskID = " + taskID;
 			ResultSet rs = stmt.executeQuery(sql);
-			
 			while(rs.next()) {
+				
 				scrapeID = rs.getInt("scrapeID");
 				element = rs.getString("Element");
-				
-				String value = getValue(element);
-				
+
+				sql = "INSERT INTO Result (scrapeID, resultTime, resultValue) VALUES (" + scrapeID + ", CURRENT_TIMESTAMP, \"" + getValue(element) + "\")";
+				System.out.println(stmt2.executeUpdate(sql));
 			}
+
 			rs.close();
 			stmt.close();
 			conn.close();
@@ -147,25 +147,24 @@ public class ElementSearchThread extends Thread {
 	   }//end try 
 	}
 	
-	public void getValue(String element) {
-		try {
+	public String getValue(String element) {
+		try {			
 			//obtain Document somehow, doesn't matter how
-			DocumentBuilder b = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-			org.w3c.dom.Document doc = b.parse(new FileInputStream(this.taskID + ".html"));
-	
-			//Evaluate XPath against Document itself
-			XPath xPath = XPathFactory.newInstance().newXPath();
-			NodeList nodes = (NodeList)xPath.evaluate(element,
-			        doc, XPathConstants.NODESET);
-			for (int i = 0; i < nodes.getLength(); ++i) {
-			    Element e = (Element) nodes.item(i);
+			Document doc = Jsoup.connect("http://nottingham.ac.uk/").get();
+			System.out.println(doc.title());
+			Elements elements = doc.select(element);
+			for (Element currentElement : elements) {
+				System.out.println(currentElement.html());
+				return currentElement.html();
 			}
-		}
-		catch (Exception e) {
 			
+		}
+		catch (Exception f) {
+			System.out.println("Exception caught\n");
 		}
 		finally {
 			
 		}
+		return "Exception";
 	}
 }
