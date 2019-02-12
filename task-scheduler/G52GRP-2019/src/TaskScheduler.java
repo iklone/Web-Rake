@@ -1,5 +1,7 @@
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class TaskScheduler {
 	
@@ -12,6 +14,8 @@ public class TaskScheduler {
    static final String PASS = "1234Fred";
 	   
    public static void main(String[] args) {
+	// Thread pool
+	   ExecutorService tp = Executors.newFixedThreadPool(1);
 	   int currentMin = LocalDateTime.now().getMinute();
 		
 	   while(true) {
@@ -49,28 +53,24 @@ public class TaskScheduler {
 					 switch(type) {
 						 case "Hourly":
 							 if (resultMin == currentMin) {
-								 ElementSearchThread elementSearch = new ElementSearchThread(taskID, urlStr);
-								 elementSearch.start();
+								 tp.submit(new ElementSearchThread(taskID, urlStr));
 							 }
 						 case "Daily":
 							 int resultHour = rs.getInt("Hour");
 						     if (resultHour == currentHour && resultMin == currentMin) {
-						    	 ElementSearchThread elementSearch = new ElementSearchThread(taskID, urlStr);
-						    	 elementSearch.start();
+						    	 tp.submit(new ElementSearchThread(taskID, urlStr));
 						     }
 						 case "Weekly":
 							 resultHour = rs.getInt("Hour");
 							 int resultDotW = rs.getInt("DotW");
 							 if (resultDotW == currentDotW && resultHour == currentHour && resultMin == currentMin) {
-								 ElementSearchThread elementSearch = new ElementSearchThread(taskID, urlStr);
-								 elementSearch.start();
+								 tp.submit(new ElementSearchThread(taskID, urlStr));
 							 }
 						 case "Monthly":
 							 resultHour = rs.getInt("Hour");
 							 int resultDotM = rs.getInt("DotM");
 							 if (resultDotM == currentDotW && resultHour == currentHour && resultMin == currentMin) {
-								 ElementSearchThread elementSearch = new ElementSearchThread(taskID, urlStr);
-								 elementSearch.start();	 
+								 tp.submit(new ElementSearchThread(taskID, urlStr));
 							 }
 						 default:
 							 

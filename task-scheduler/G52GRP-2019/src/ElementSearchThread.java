@@ -19,7 +19,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class ElementSearchThread extends Thread {
+public class ElementSearchThread implements Runnable {
 
    // JDBC driver name and database URL
    static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
@@ -31,6 +31,7 @@ public class ElementSearchThread extends Thread {
    
    int taskID;
    String urlStr;
+   
    private InputStream is;
    BufferedReader br;
    FileWriter fw;
@@ -40,124 +41,88 @@ public class ElementSearchThread extends Thread {
    int scrapeID;
    String element;
    String elements[][];
-	   
-   public static void main(String[] args) {
-	   System.out.println("TOP OF MAIN\n");
-	   ElementSearchThread est = new ElementSearchThread(1, "https://en.wikipedia.org/");
-   }
+   ScrapeResult result;
+   String value;
    
 	public ElementSearchThread(int taskID, String urlStr) {
 		this.taskID = taskID;
 		this.urlStr = urlStr;
-
-		/*
-		 * Downloading the page and storing it in the instance variable
-		 */
-		try {
-			URL url = new URL("https://en.wikipedia.org/");
-			is = url.openStream();
-			br = new BufferedReader(new InputStreamReader(is));
-
-			//save to this filename
-
-			// Could use TaskID as unique file name
-			String fileName = this.taskID + ".html";
-			File file = new File(fileName);
-
-			if (!file.exists()) {
-				file.createNewFile();
-			}
-
-			//use FileWriter to write file
-			fw = new FileWriter(file.getAbsoluteFile(), false);
-			bw = new BufferedWriter(fw);
-
-			while ((inputLine = br.readLine()) != null) {
-				bw.write(inputLine + "\n");
-			}
-			
-			bw.close();
-			br.close();
-		}
-		catch (MalformedURLException mue) {
-			mue.printStackTrace();
-		}
-		catch (IOException ioe) {
-			
-		}
-		finally {
-			try {
-				if (is != null) is.close();
-				bw.close();
-				br.close();
-			}
-			catch (IOException ioe) {
-				// nothing to see here
-			}
-		}
-	   
-		Connection conn = null;
-		Statement stmt = null;
-		Statement stmt2 = null;
-		try {
-			Class.forName(JDBC_DRIVER);
-		  
-			conn = DriverManager.getConnection(DB_URL,USER,PASS);
-		  
-			stmt = conn.createStatement();
-			stmt2 = conn.createStatement();
-			String sql;
-			sql = "SELECT * FROM Scrape WHERE Scrape.taskID = " + taskID;
-			ResultSet rs = stmt.executeQuery(sql);
-			while(rs.next()) {
-				
-				scrapeID = rs.getInt("scrapeID");
-				element = rs.getString("Element");
-
-				sql = "INSERT INTO Result (scrapeID, resultTime, resultValue) VALUES (" + scrapeID + ", CURRENT_TIMESTAMP, \"" + getValue(element) + "\")";
-				System.out.println(stmt2.executeUpdate(sql));
-			}
-
-			rs.close();
-			stmt.close();
-			conn.close();
-		}
-		catch(SQLException se) {
-			//Handle errors for JDBC
-			se.printStackTrace();
-		}
-		catch(Exception e) {
-			//Handle errors for Class.forName
-			e.printStackTrace();
-		}
-		finally {
-			//finally block used to close resources
-			try {
-				if(stmt!=null)
-					stmt.close();
-			}
-			catch(SQLException se2) {
-			}// nothing we can do
-			try {
-				if(conn!=null)
-					conn.close();
-			}
-			catch(SQLException se) {
-				se.printStackTrace();
-			}//end finally try
-	   }//end try 
 	}
 	
-	public String getValue(String element) {
+	@Override
+	public void run() {
+		insertResultIntoDatabase();
+	}
+	
+	public void insertResultIntoDatabase() {
+			Connection conn = null;
+			Statement stmt = null;
+			Statement stmt2 = null;
+			try {
+				Class.forName(JDBC_DRIVER);
+			  
+				conn = DriverManager.getConnection(DB_URL,USER,PASS);
+			  
+				stmt = conn.createStatement();
+				stmt2 = conn.createStatement();
+				String sql;
+				sql = "SELECT * FROM Scrape WHERE Scrape.taskID = " + taskID;
+				ResultSet rs = stmt.executeQuery(sql);
+				while(rs.next()) {
+					
+					scrapeID = rs.getInt("scrapeID");
+					element = rs.getString("Element");
+
+					result = getResult(element);
+					value = result.getElement();
+
+					sql = "INSERT INTO Result (scrapeID, resultTime, resultValue) VALUES (" + scrapeID + ", CURRENT_TIMESTAMP, \"" + value + "\")";
+					System.out.println(stmt2.executeUpdate(sql));
+				}
+
+				rs.close();
+				stmt.close();
+				conn.close();
+			}
+			catch(SQLException se) {
+				//Handle errors for JDBC
+				se.printStackTrace();
+			}
+			catch(Exception e) {
+				//Handle errors for Class.forName
+				e.printStackTrace();
+			}
+			finally {
+				//finally block used to close resources
+				try {
+					if(stmt!=null)
+						stmt.close();
+				}
+				catch(SQLException se2) {
+				}// nothing we can do
+				try {
+					if(conn!=null)
+						conn.close();
+				}
+				catch(SQLException se) {
+					se.printStackTrace();
+				}//end finally try
+		   }//end try 
+	}
+	
+	
+	public ScrapeResult getResult(String element) {
+		ScrapeResult result = new ScrapeResult();
+		
+		System.out.println("Getting result from " + urlStr);
 		try {			
 			//obtain Document somehow, doesn't matter how
 			Document doc = Jsoup.connect(urlStr).get();
-			System.out.println(doc.toString());
-			System.out.println(doc.title());
 			Elements elements = doc.select(element);
 			for (Element currentElement : elements) {
 				System.out.println(currentElement.html());
-				return currentElement.html();
+				result.setElement(currentElement.html());
+				result.setFlag(0);
 			}
 			
 		}
@@ -165,8 +130,13 @@ public class ElementSearchThread extends Thread {
 			System.out.println("Exception caught\n");
 		}
 		finally {
-			
+			/*if (result.getElement() != null) {
+				result.setFlag(0);;
+			}
+			else if (result.getElement() != null) {
+				result.setFlag(0);
+			}*/
 		}
-		return "Exception";
+		return result;
 	}
 }

@@ -8,5 +8,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="Z:/git/web-rake/task-scheduler/G52GRP-2019/lib/mysql-connector-java-8.0.15.jar"/>
 	<classpathentry kind="lib" path="Z:/git/web-rake/task-scheduler/G52GRP-2019/lib/jsoup-1.11.3.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
