@@ -27,28 +27,28 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 public class ElementSearchThread implements Runnable {
 
-   // JDBC driver name and database URL
-   static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
-   static final String DB_URL = "jdbc:mysql://mysql.cs.nott.ac.uk/psyjct";
-
-   //  Database credentials
-   static final String USER = "psyjct";
-   static final String PASS = "1234Fred";
-   
-   int taskID;
-   String urlStr;
-   
-   private InputStream is;
-   BufferedReader br;
-   FileWriter fw;
-   BufferedWriter bw;
-   String line;
-   String inputLine;
-   int scrapeID;
-   String element;
-   String elements[][];
-   ScrapeResult result;
-   String value;
+	// JDBC driver name and database URL
+	static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
+	static final String DB_URL = "jdbc:mysql://mysql.cs.nott.ac.uk/psyjct";
+	
+	//  Database credentials
+	static final String USER = "psyjct";
+	static final String PASS = "1234Fred";
+	   
+	int taskID;
+	String urlStr;
+	   
+	private InputStream is;
+	BufferedReader br;
+	FileWriter fw;
+	BufferedWriter bw;
+	String line;
+	String inputLine;
+	int scrapeID;
+	String element;
+	String elements[][];
+	ScrapeResult result;
+	String value;
    
 	public ElementSearchThread(int taskID, String urlStr) {
 		this.taskID = taskID;
@@ -61,74 +61,73 @@ public class ElementSearchThread implements Runnable {
 	}
 	
 	public void insertResultIntoDatabase() {
-			Connection conn = null;
-			Statement stmt = null;
-			Statement stmt2 = null;
-			try {
-				Class.forName(JDBC_DRIVER);
-			  
-				conn = DriverManager.getConnection(DB_URL,USER,PASS);
-			  
-				stmt = conn.createStatement();
-				stmt2 = conn.createStatement();
-				String sql;
-				sql = "SELECT * FROM Scrape WHERE Scrape.taskID = " + taskID;
-				ResultSet rs = stmt.executeQuery(sql);
-				while(rs.next()) {
-					
-					scrapeID = rs.getInt("scrapeID");
-					element = rs.getString("Element");
+		Connection conn = null;
+		Statement stmt = null;
+		Statement stmt2 = null;
+		
+		try {
+			Class.forName(JDBC_DRIVER);
+		  
+			conn = DriverManager.getConnection(DB_URL,USER,PASS);
+		  
+			stmt = conn.createStatement();
+			stmt2 = conn.createStatement();
+			String sql;
+			sql = "SELECT * FROM Scrape WHERE Scrape.taskID = " + taskID;
+			ResultSet rs = stmt.executeQuery(sql);
+			while(rs.next()) {
+				scrapeID = rs.getInt("scrapeID");
+				element = rs.getString("Element");
 
-					result = getHTMLUnitResult(element);
-					
-					if (result.getElement() == null) {
-						value = "ERROR";
-					}
-					else {
-						value = result.getElement();
-					}
-					
-					sql = "INSERT INTO Result (scrapeID, resultTime, resultValue) VALUES (" + scrapeID + ", CURRENT_TIMESTAMP, \"" + value + "\")";
-					System.out.println(stmt2.executeUpdate(sql));
+				result = getHTMLUnitResult(element);
+				
+				if (result.getElement() == null) {
+					value = "ERROR";
 				}
+				else {
+					value = result.getElement();
+				}
+				
+				sql = "INSERT INTO Result (scrapeID, resultTime, resultValue) VALUES (" + scrapeID + ", CURRENT_TIMESTAMP, \"" + value + "\")";
+			}
 
-				rs.close();
-				stmt.close();
-				conn.close();
+			rs.close();
+			stmt.close();
+			conn.close();
+		}
+		catch(SQLException se) {
+			//Handle errors for JDBC
+			se.printStackTrace();
+		}
+		catch(Exception e) {
+			//Handle errors for Class.forName
+			e.printStackTrace();
+		}
+		finally {
+			//finally block used to close resources
+			try {
+				if(stmt!=null)
+					stmt.close();
+			}
+			catch(SQLException se2) {
+			}// nothing we can do
+			try {
+				if(conn!=null)
+					conn.close();
 			}
 			catch(SQLException se) {
-				//Handle errors for JDBC
 				se.printStackTrace();
-			}
-			catch(Exception e) {
-				//Handle errors for Class.forName
-				e.printStackTrace();
-			}
-			finally {
-				//finally block used to close resources
-				try {
-					if(stmt!=null)
-						stmt.close();
-				}
-				catch(SQLException se2) {
-				}// nothing we can do
-				try {
-					if(conn!=null)
-						conn.close();
-				}
-				catch(SQLException se) {
-					se.printStackTrace();
-				}//end finally try
-		   }//end try 
+			}//end finally try
+	   }//end try 
 	}
 	
 	public ScrapeResult getHTMLUnitResult(String element) throws Exception {
 		ScrapeResult result = new ScrapeResult();
-		
+		System.out.println("Getting result from " + urlStr);
 		try (final WebClient webClient = new WebClient()) {
 		    webClient.getOptions().setThrowExceptionOnScriptError(false);
 		    
-			// turn of htmlunit warnings
+			// turn off HtmlUnit warnings
 			java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.OFF);
 		    java.util.logging.Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
 			
@@ -141,12 +140,13 @@ public class ElementSearchThread implements Runnable {
 			for (Object o : list) {
 				if(o instanceof HtmlElement) {
 					HtmlElement e = (HtmlElement)o;
+					System.out.println("The content of the element is: " + e.getTextContent());
 					result.setElement(e.getTextContent());
 					result.setFlag(0);
 				}
 			}
-
 		}
+		
 		return result;
 	}
 	
