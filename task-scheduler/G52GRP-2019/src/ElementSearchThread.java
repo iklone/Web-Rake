@@ -13,11 +13,17 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlDivision;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 public class ElementSearchThread implements Runnable {
 
@@ -73,9 +79,15 @@ public class ElementSearchThread implements Runnable {
 					scrapeID = rs.getInt("scrapeID");
 					element = rs.getString("Element");
 
-					result = getResult(element);
-					value = result.getElement();
-
+					result = getHTMLUnitResult(element);
+					
+					if (result.getElement() == null) {
+						value = "ERROR";
+					}
+					else {
+						value = result.getElement();
+					}
+					
 					sql = "INSERT INTO Result (scrapeID, resultTime, resultValue) VALUES (" + scrapeID + ", CURRENT_TIMESTAMP, \"" + value + "\")";
 					System.out.println(stmt2.executeUpdate(sql));
 				}
@@ -110,8 +122,35 @@ public class ElementSearchThread implements Runnable {
 		   }//end try 
 	}
 	
+	public ScrapeResult getHTMLUnitResult(String element) throws Exception {
+		ScrapeResult result = new ScrapeResult();
+		
+		try (final WebClient webClient = new WebClient()) {
+		    webClient.getOptions().setThrowExceptionOnScriptError(false);
+		    
+			// turn of htmlunit warnings
+			java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.OFF);
+		    java.util.logging.Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
+			
+		    final HtmlPage page = webClient.getPage(urlStr);
+			
+			page.getEnclosingWindow().getJobManager().waitForJobs(1000);
+			
+			List list = page.getByXPath(element);
+			
+			for (Object o : list) {
+				if(o instanceof HtmlElement) {
+					HtmlElement e = (HtmlElement)o;
+					result.setElement(e.getTextContent());
+					result.setFlag(0);
+				}
+			}
+
+		}
+		return result;
+	}
 	
-	public ScrapeResult getResult(String element) {
+	public ScrapeResult getJSoupResult(String element) {
 		ScrapeResult result = new ScrapeResult();
 		
 		System.out.println("Getting result from " + urlStr);

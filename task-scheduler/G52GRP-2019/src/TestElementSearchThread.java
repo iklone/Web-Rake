@@ -30,7 +30,7 @@ public class TestElementSearchThread {
 	public void testGetValueCorrectly() {
 		String url = "http://avon.cs.nott.ac.uk/~psyjct/main.php";
 		ElementSearchThread est = new ElementSearchThread(3, url);
-		ScrapeResult result = est.getResult("html body h1");
+		ScrapeResult result = est.getJSoupResult("html body h1");
 		assertTrue(result.element.toString().contains("Web Scrape"));
 		assertEquals(result.getFlag(), 0);
 	}
@@ -39,7 +39,7 @@ public class TestElementSearchThread {
 	public void testGetValueAIFlag() {
 		String url = "http://avon.cs.nott.ac.uk/~psyjct/main.php";
 		ElementSearchThread est = new ElementSearchThread(3, url);
-		ScrapeResult result = est.getResult("html body h1");
+		ScrapeResult result = est.getJSoupResult("html body h1");
 		assertEquals(result.getFlag(), 1);	
 	}
 	
@@ -47,7 +47,7 @@ public class TestElementSearchThread {
 	public void testGetValueHumanFlag() {
 		String url = "http://avon.cs.nott.ac.uk/~psyjct/main.php";
 		ElementSearchThread est = new ElementSearchThread(3, url);
-		ScrapeResult result = est.getResult("html body h1");
+		ScrapeResult result = est.getJSoupResult("html body h1");
 		assertEquals(result.getFlag(), 2);	
 	}
 	
