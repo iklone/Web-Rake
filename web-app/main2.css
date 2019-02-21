@@ -1,0 +1,144 @@
+body {
+    margin: 0;    
+}
+/* css for header */
+
+header {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    margin-bottom: 200px;
+    background-color: #AED6F1;
+    background-size: cover;
+    background-repeat: no-repeat;
+    text-align: center;
+    padding-bottom: 110px;
+}
+
+/* for the top header bar*/
+nav {
+    position: relative;
+    width: 100%;
+    height: 150px;
+    top: 0;
+    text-align: center;
+}
+
+nav a:first-child:link {
+    color: #fff;
+    text-decoration: none;
+}
+
+nav a:first-child:visited {
+    color: #fff;
+    text-decoration: none;
+}
+
+nav a:first-child img {
+    width: 198px;
+    height: 40px;
+    margin-top: 40px;
+}
+
+#slide-menu:link {
+    position: absolute;
+    right: 30px;
+    top: 40px;
+    font-size: 38px;
+    color: white;
+    text-decoration: none;
+}
+
+#slide-menu:visited {
+    color: white;
+    text-decoration: none;
+}
+
+/* header stuff */
+
+#brief{
+    font-size: 65px;
+    line-height: 1.3;
+    color: black;
+    text-align: center;
+    font-family: 'Raleway', sans-serif;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    max-width: 970px;
+    margin: 50px auto 50px auto;
+}
+
+#underHeaderText{
+    font-size: 20px;
+    line-height: 1.8;
+    color: black;
+    text-align: center;
+    font-family: 'Raleway', sans-serif;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    max-width: 1800px;
+    font-weight: lighter;
+    margin: 50px auto 20px auto;
+    font-family: 700;
+    font-weight: 700;
+      
+}
+
+#clickForPlugin{
+    font-size: 20px;
+    line-height: 1.8;
+    color: black;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 300;
+    text-align: center;
+    margin-bottom: 80px;
+    
+}
+
+#clickForPluginButton:link{
+    color: black;
+    text-decoration: none;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    padding: 22px 40px;
+    border: 2px solid black;
+    background: transparent;
+    text-transform: uppercase;
+    font-size: 20px;
+    margin-bottom: 100px;
+    transition: all 200ms ease-in-out; 
+    -webkit-transition: all 200ms ease-in-out;
+    -soz-transition: all 200ms ease-in-out;
+    -o-transition: all 200ms ease-in-out;  
+        
+}
+
+#clickForPluginButton:visited{
+    color: black;
+    text-decoration: none;
+    font-family: 'Raleway', sans-serif;
+    
+}
+
+ #clickForPluginButton:hover{
+    background-color: aquamarine;
+}
+
+/* tasks */
+#clickForPlugin{
+    font-size: 20px;
+    line-height: 1.8;
+    color: black;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 300;
+    text-align: center;
+    margin-bottom: 80px;
+    
+}
+
+
+
+
+
