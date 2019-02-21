@@ -8,7 +8,7 @@ header {
     top: 0;
     left: 0;
     width: 100%;
-    margin-bottom: 200px;
+    margin-bottom: 0px;
     background-color: #AED6F1;
     background-size: cover;
     background-repeat: no-repeat;
@@ -127,16 +127,240 @@ nav a:first-child img {
 }
 
 /* tasks */
-#clickForPlugin{
-    font-size: 20px;
-    line-height: 1.8;
-    color: black;
-    font-family: 'Raleway', sans-serif;
-    font-weight: 300;
-    text-align: center;
-    margin-bottom: 80px;
-    
+#tasks{
+    position: relative;
+    width: 100%;
+    background-color: ghostwhite;
+    top: 0;    
 }
+
+#taskTitle{
+    position: relative;
+    margin: 0 auto;
+    padding: 50px 0;
+    text-align: center;
+    font-family: 'Raleway', sans-serif;
+    max-width: 970px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-size: 30px;
+}
+
+.taskBox {
+    position: relative;
+    width: 50%;
+    height: 100px;
+    margin: 0;
+    border-bottom: 1px solid black;
+    border-top: 2px solid black; 
+    border-radius: 2px;
+}
+
+.taskBox.left{
+    float: left;
+    left: 0;
+    background-color: lightgrey;
+}
+
+.taskBox.right{
+    float: right;
+    right: 0;
+    background-color: darkgrey;
+}
+
+.taskBox a:link{
+    color: black;
+    text-decoration: none;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 700;
+    font-size: 25px;
+    line-height: 1;
+    letter-spacing: 0.1em;
+}
+
+.taskBox a:visited{
+    color: black;
+    text-decoration: none;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 700;
+}
+
+.taskBox a:hover{
+    opacity: 0.4;  
+}
+
+#task1{
+    background-image: url(taskbk.png);
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    opacity: 1;
+}
+
+#task1info{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(57, 30, 57, 0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#task2{
+    background-image: url(taskbk.png);
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    opacity: 1;    
+}
+
+#task2info{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#task3{
+     background-image: url(taskbk.png);
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    opacity: 1;   
+}
+
+#task3info{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#task4{
+    background-image: url(taskbk.png);
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    opacity: 1;    
+}
+
+#task4info{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(57, 30, 57, 0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#task5{
+    background-image: url(taskbk.png);
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    opacity: 1;    
+}
+
+#task5info{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(57, 30, 57, 0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#task6{
+    background-image: url(taskbk.png);
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    opacity: 1;    
+}
+
+#task6info{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#task7{
+    background-image: url(taskbk.png);
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    opacity: 1;    
+}
+
+#task7info{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#task8{
+    background-image: url(taskbk.png);
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    opacity: 1;    
+}
+
+#task8info{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(57, 30, 57, 0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#task9{
+    background-image: url(taskbk.png);
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    opacity: 1;    
+}
+
+#task9info{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(57, 30, 57, 0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
 
 
 
