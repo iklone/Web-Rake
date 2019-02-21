@@ -1,8 +1,7 @@
 <head>
     <title>Web Scrape</title>
     <link rel = "stylesheet" type = "text/css" href = "main.css">
-   
-  <script>
+    <script>
         function deleteVerify() {
             var result = confirm("Are you sure you want to delete this task?");
             if (result == true) {
@@ -25,7 +24,6 @@
 			document.getElementById("taskListing").appendChild(article);
 		}
     </script>
-	   
 </head>
 
 <body>
@@ -39,7 +37,7 @@
     </span>
 
     <span class="rightTopBar">
-         <i>Logged in as psyjct</i>
+        <i>Logged in as psyjct</i>
     </span>
 
     <div id="taskListing" class="split left" style="overflow: scroll;">
