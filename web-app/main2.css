@@ -6,6 +6,12 @@ body.moved{
     overflow: hidden;
 }
 
+.clearfix::after{
+    content: "";
+    display: table;
+    clear: both;
+}
+
 /* side menu*/
 
 #navMenu{
@@ -464,7 +470,66 @@ nav a:first-child img {
     flex-direction: column;
 }
 
+/* css for footer */
 
+footer {
+    position: relative;
+    max-width: 970px;
+    margin: 60px auto 0 auto;
+    
+}
+
+.footer1{
+    width: 50%;
+    height: auto;
+    float: left;
+}
+
+footer h3 {
+    margin: 0;
+    font-size: 20px;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    color: #333;
+    line-height: 1.55;
+    margin: 0 15px 60px 15px;
+}
+
+footer p {
+    display: block;
+    font-size: 15px;
+    text-decoration: none;
+    color: #333;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 400;
+    margin-bottom: 25px;
+    margin: 0 15px 25px 15px;
+}
+
+footer a:link{
+    display: block;
+    font-size: 15px;
+    text-decoration: none;
+    color: black;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 400;
+    margin-bottom: 25px;
+    margin: 0 15px 25px 15px;
+}
+
+footer a:visited {
+    text-decoration: none;
+    color: black;
+}
+
+footer a:hover {
+    font-weight: bold;
+}
+
+footer p span{
+    font-size: 13px;
+}
 
 
 
