@@ -85,7 +85,7 @@
 	margin-top: 10px;
 }
 
-.login input[type=submit]{
+.login input[type=button]{
 	width: 260px;
 	height: 35px;
 	background: #fff;
@@ -100,7 +100,7 @@
 	margin-top: 10px;
 }
 
-.login input[type=submit]:hover{
+.login input[type=button]:hover{
 	opacity: 0.5;
     color:#222;
     cursor: pointer;
@@ -108,7 +108,7 @@
      
 }
 
-.login input[type=submit]:active{
+.login input[type=button]:active{
 	opacity: 0.6;
 }
 
@@ -122,7 +122,7 @@
 	border: 1px solid rgba(255,255,255,0.9);
 }
 
-.login input[type=submit]:focus{
+.login input[type=button]:focus{
 	outline: none;
 }
 
@@ -140,18 +140,34 @@
 </head>
 
 <body oncontextmenu="return false">
-  <div class="body"></div>
 	<div class="grad"></div>
 	<div class="header">
 		<div>Refi<span>nitiv</span></div>
 	</div>
 	<br>
-	<form name="login" action="loginwapp.php" method="post">
+	<form name="login" action="login.php" method="post">
 		<div class="login">
 			<input type="text" placeholder=" Username" name="username"><br>
 			<input type="password" placeholder=" Password" name="password"><br>
 			<input type="submit">
 		</div>
 	</form>
+	
+<script>
+function check(form)
+{
+ 
+ if(form.userid.value == "user1" && form.pswrd.value == "password1")
+  {
+    window.open('mainsix.html', "_self")
+  //    var myWindow = window.open("", "_self");
+ // myWindow.document.write("index.html");
+  }
+ else
+ {
+   alert("Incorrect Username or Password.")
+  }
+}
+</script>
 </body>
 </html>

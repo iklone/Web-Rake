@@ -1,3 +1,7 @@
+<?php
+// Start the session
+session_start();
+?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -87,7 +91,7 @@
      <a href='javascript:void(0)' id='clickForPluginButton'>Access PlugIn</a>
 </header>
 <div id='tasks' class='clearfix'>
-    <h1 id='taskTitle'>Your Tasks</h1>
+    <h1 id='taskTitle'><?php echo $_SESSION["userName"];?>'s Tasks</h1>
     <div class='taskBox left' id='task1'>
         <div id='task1info'>
             <a href="javascript:void(0)">
