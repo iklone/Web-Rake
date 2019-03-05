@@ -5,13 +5,8 @@ import java.util.concurrent.Executors;
 
 public class TaskScheduler {
 	
-   // JDBC driver name and database URL
-	static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
-	static final String DB_URL = "jdbc:mysql://mysql.cs.nott.ac.uk/psyjct";
-
-	//  Database credentials
-	static final String USER = "psyjct";
-    static final String PASS = "1234Fred";
+	private static final int MAX_RESULT_STORAGE_IN_MB = 3;
+	private static final int SIZE_PER_RESULT_IN_MB = 3;
 	   
     public static void main(String[] args) {
     	// Thread pool
@@ -28,23 +23,18 @@ public class TaskScheduler {
     			Statement stmt = null;
     			
     			try {
-    				//STEP 2: Register JDBC driver
-    				Class.forName(JDBC_DRIVER);
-
-    				//STEP 3: Open a connection
     				System.out.println("Connecting to database...");
-    				conn = DriverManager.getConnection(DB_URL,USER,PASS);
+    				conn = ConnectionManager.getConnection();
 
-    				//STEP 4: Execute a query
+    				//Execute a query
     				System.out.println("Creating statement...");
     				stmt = conn.createStatement();
 
-    				String sql;
-    				sql = "SELECT * FROM (Task, Schedule) WHERE (Task.taskID = Schedule.taskID)";
+    				String sql = "SELECT * FROM (Task, Schedule) WHERE (Task.taskID = Schedule.taskID)";
 
     				ResultSet rs = stmt.executeQuery(sql);
 
-    				//STEP 5: Extract data from result set
+    				//Extract data from result set
     				while(rs.next()) {
     					//Retrieve by column name
     					int taskID = rs.getInt("taskID");
@@ -78,18 +68,16 @@ public class TaskScheduler {
     					}
     				}
     				
-					//STEP 6: Clean-up environment
+    				//freeSpace(stmt);
+    				
+					//Clean-up environment, do we need these here if they're in finally?
 					rs.close();
 					stmt.close();
 					conn.close();
     			}
-				catch(SQLException se) {
+				catch(SQLException se) { // which of these catches do we need here?
 					//Handle errors for JDBC
 					se.printStackTrace();
-				}
-				catch(Exception e) {
-					//Handle errors for Class.forName
-					e.printStackTrace();
 				}
 				finally {
 					//finally block used to close resources
@@ -109,6 +97,30 @@ public class TaskScheduler {
 				}//end try	   
     		}
     	}
+    }
+    
+    public static void freeSpace(Statement stmt) {
+		//Execute a query
+    	try {
+			String sql = "SELECT table_name AS `Result`, round(((data_length + index_length) / 1024 / 1024), 2) `Size in MB` FROM information_schema.TABLES WHERE table_schema = \"psyjct\" AND table_name = \"Result\"";
+	
+			ResultSet rs = stmt.executeQuery(sql);
+			
+			int sizeInMB = 0;
+			//Extract data from result set
+			while(rs.next()) {
+				sizeInMB = rs.getInt("Size in MB");
+			}
+			
+			if (sizeInMB > MAX_RESULT_STORAGE_IN_MB) {
+				int excessSpace = sizeInMB - MAX_RESULT_STORAGE_IN_MB;
+				int nResultsToDelete = excessSpace/SIZE_PER_RESULT_IN_MB;
+			}
+    	}
+		catch(SQLException se) { // which of these catches do we need here?
+			//Handle errors for JDBC
+			se.printStackTrace();
+		}
     }
 
 }

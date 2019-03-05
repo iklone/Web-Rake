@@ -1,54 +1,21 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlDivision;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 public class ElementSearchThread implements Runnable {
-
-	// JDBC driver name and database URL
-	static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
-	static final String DB_URL = "jdbc:mysql://mysql.cs.nott.ac.uk/psyjct";
 	
-	//  Database credentials
-	static final String USER = "psyjct";
-	static final String PASS = "1234Fred";
-	   
-	int taskID;
-	String urlStr;
-	   
-	private InputStream is;
-	BufferedReader br;
-	FileWriter fw;
-	BufferedWriter bw;
-	String line;
-	String inputLine;
-	int scrapeID;
-	String element;
-	String elements[][];
-	ScrapeResult result;
-	String value;
+	private int taskID;
+	private String urlStr;
+	private int scrapeID;
+	private String element;
+	private ScrapeResult result;
+	private String value;
    
 	public ElementSearchThread(int taskID, String urlStr) {
 		this.taskID = taskID;
@@ -57,41 +24,58 @@ public class ElementSearchThread implements Runnable {
 	
 	@Override
 	public void run() {
-		insertResultIntoDatabase();
+	   	long scrapeStartTime = System.currentTimeMillis();
+
+		WebClient webClient = getWebClient();
+		insertResultIntoDatabase(webClient);
+	   	
+	    long scrapeEndTime = System.currentTimeMillis();
+	   	System.out.println("Time taken: " + (scrapeEndTime - scrapeStartTime) + " milliseconds");
 	}
 	
-	public void insertResultIntoDatabase() {
+	public WebClient getWebClient() {
+	   	WebClient webClient = new WebClient();
+	   	webClient.getOptions().setTimeout(60000); // ??
+		webClient.waitForBackgroundJavaScript(10000);
+	    webClient.getOptions().setJavaScriptEnabled(true);
+		webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
+	    webClient.getOptions().setThrowExceptionOnScriptError(false);
+	    webClient.getOptions().setCssEnabled(false);
+	    webClient.getOptions().setUseInsecureSSL(true);
+	    return webClient;
+	}
+	
+	public void insertResultIntoDatabase(WebClient webClient) {
 		Connection conn = null;
 		Statement stmt = null;
-		Statement stmt2 = null;
 		
 		try {
-			Class.forName(JDBC_DRIVER);
-		  
-			conn = DriverManager.getConnection(DB_URL,USER,PASS);
-		  
+			conn = ConnectionManager.getConnection();
 			stmt = conn.createStatement();
-			stmt2 = conn.createStatement();
-			String sql;
-			sql = "SELECT * FROM Scrape WHERE Scrape.taskID = " + taskID;
+			String sql = "SELECT * FROM Scrape WHERE Scrape.taskID = " + taskID;
 			ResultSet rs = stmt.executeQuery(sql);
 			while(rs.next()) {
 				scrapeID = rs.getInt("scrapeID");
 				element = rs.getString("Element");
-
-				result = getHTMLUnitResult(element);
-				
-				if (result.getElement() == null) {
-					value = "ERROR";
-				}
-				else {
-					value = result.getElement();
-				}
-				
-				sql = "INSERT INTO Result (scrapeID, resultTime, resultValue) VALUES (" + scrapeID + ", CURRENT_TIMESTAMP, \"" + value + "\")";
 			}
-
-			rs.close();
+			
+			result = getHTMLUnitResult(element, webClient);
+			
+			if (result.getElement() == null) {
+				System.out.println("An element was not found.");
+				value = "Element not found.";
+			}
+			else {
+				System.out.println("An element was found.");
+				value = result.getElement();
+			}
+			
+			System.out.println("Inserting result into the Result table.");
+			sql = "INSERT INTO Result (scrapeID, resultTime, resultValue) VALUES (" + scrapeID + ", CURRENT_TIMESTAMP, \"" + value + "\")";
+		    stmt.executeUpdate(sql);
+			System.out.println("Inserted result into the Result table.");
+			
+		    rs.close();
 			stmt.close();
 			conn.close();
 		}
@@ -106,13 +90,14 @@ public class ElementSearchThread implements Runnable {
 		finally {
 			//finally block used to close resources
 			try {
-				if(stmt!=null)
+				if(stmt != null)
 					stmt.close();
 			}
 			catch(SQLException se2) {
-			}// nothing we can do
+				// nothing we can do
+			}
 			try {
-				if(conn!=null)
+				if(conn != null)
 					conn.close();
 			}
 			catch(SQLException se) {
@@ -121,23 +106,22 @@ public class ElementSearchThread implements Runnable {
 	   }//end try 
 	}
 	
-	public ScrapeResult getHTMLUnitResult(String element) throws Exception {
+	public ScrapeResult getHTMLUnitResult(String element, WebClient webClient) throws Exception {
 		ScrapeResult result = new ScrapeResult();
+		
 		System.out.println("Getting result from " + urlStr);
-		try (final WebClient webClient = new WebClient()) {
-		    webClient.getOptions().setThrowExceptionOnScriptError(false);
-		    
+		
+		try {    
 			// turn off HtmlUnit warnings
 			java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.OFF);
 		    java.util.logging.Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
 			
-		    final HtmlPage page = webClient.getPage(urlStr);
-			
-			page.getEnclosingWindow().getJobManager().waitForJobs(1000);
-			
+		    final HtmlPage page = webClient.getPage(urlStr);    
+		    
 			List list = page.getByXPath(element);
-			
+
 			for (Object o : list) {
+				System.out.println("An object o is present in XPath list");
 				if(o instanceof HtmlElement) {
 					HtmlElement e = (HtmlElement)o;
 					System.out.println("The content of the element is: " + e.getTextContent());
@@ -146,36 +130,11 @@ public class ElementSearchThread implements Runnable {
 				}
 			}
 		}
+		finally {
+		   	webClient.close(); // plug memory leaks
+		}
 		
 		return result;
 	}
 	
-	public ScrapeResult getJSoupResult(String element) {
-		ScrapeResult result = new ScrapeResult();
-		
-		System.out.println("Getting result from " + urlStr);
-		try {			
-			//obtain Document somehow, doesn't matter how
-			Document doc = Jsoup.connect(urlStr).get();
-			Elements elements = doc.select(element);
-			for (Element currentElement : elements) {
-				System.out.println(currentElement.html());
-				result.setElement(currentElement.html());
-				result.setFlag(0);
-			}
-			
-		}
-		catch (Exception f) {
-			System.out.println("Exception caught\n");
-		}
-		finally {
-			/*if (result.getElement() != null) {
-				result.setFlag(0);;
-			}
-			else if (result.getElement() != null) {
-				result.setFlag(0);
-			}*/
-		}
-		return result;
-	}
 }

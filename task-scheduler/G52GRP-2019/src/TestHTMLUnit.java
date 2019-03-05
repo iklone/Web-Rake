@@ -13,7 +13,7 @@ public class TestHTMLUnit {
 		try (final WebClient webClient = new WebClient()) {
 		    webClient.getOptions().setThrowExceptionOnScriptError(false);
 		    
-			// turn of htmlunit warnings
+			// turn off htmlunit warnings
 			java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.OFF);
 		    java.util.logging.Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
 			
