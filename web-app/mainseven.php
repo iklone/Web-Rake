@@ -1,6 +1,38 @@
 <?php
+	 // header("Content-type:application/x-www-form-urlencoded;charset=utf-8");
 // Start the session
 session_start();
+	$db_host = 'mysql.cs.nott.ac.uk';
+	$db_user = 'psyjct';
+	$db_pass = '1234Fred';
+	$db_name = 'psyjct';
+
+	/*connect into DB*/
+	$link = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
+	if (!$link)
+	{
+		die('Could not connect: ' . mysql_error());
+	}
+	$userId = $_SESSION["userId"];
+	
+	// find the result
+	$results = mysqli_query($link, "select b.taskName from UserAuthorisation a left join Task b on a.taskID = b.taskID where a.userID="."'"."$userId"."'");
+
+	if(mysqli_num_rows($results) >= 1){
+		$taskList = [];
+		//while($task = mysqli_fetch_assoc($results)) {
+        while($task = @mysqli_fetch_assoc($results)){
+            $taskList[] = $task['taskName'];
+         //   echo $taskList[0];
+           // echo $task['taskName']; 
+          //  echo "<br>";
+	    	// $taskList[] = $task;
+		}
+	}else{
+		echo "no record";
+	}
+
+ 	mysqli_close($link);//close the link
 ?>
 <!DOCTYPE html>
 <html>
@@ -13,6 +45,8 @@ session_start();
         <link href='https://fonts.googleapis.com/css?family=Raleway:300' rel='stylesheet' type='text/css'>
     </head>
 <body>
+    <h1><php var_dump(count($taskList)); ?></h1>
+    <h1><php echo $taskList[1]; ?></h1>
     <div id="navMenu">
         <p id='navClose' class='close'>
         <ion-icon name="close"></ion-icon>
@@ -68,7 +102,7 @@ session_start();
 <header>
   
         <nav>
-                <a href='mainseven.html'>
+                <a href='mainseven.php'>
                     <img src='logo.png'/>
                 </a>
                 <a href='javascript:void(0)' id='slide-menu'>
@@ -90,13 +124,37 @@ session_start();
     <p id='clickForPlugin'>Click the button to access PlugIn</p>
      <a href='javascript:void(0)' id='clickForPluginButton'>Access PlugIn</a>
 </header>
+        
 <div id='tasks' class='clearfix'>
     <h1 id='taskTitle'><?php echo $_SESSION["userName"];?>'s Tasks</h1>
+    <h1>
+        
+    <p id="task1"></p>
+        
+        
+
+
+<script>
+    
+    var j = "<?php echo count($taskList) ?>";
+    for (var i = 0; i < 10; i++) {
+    var MyDiv1 = document.getElementById('task1').innerHTML
+    alert(MyDiv1)
+    }
+    
+    
+</script>
+        
+        
+        
+        
+        </h1>
     <div class='taskBox left' id='task1'>
         <div id='task1info'>
             <a href="javascript:void(0)">
-            Task 1
+            Task 1test
             </a>
+            <h4><?php print_r($taskList[0]); ?></h4>
         </div>
     </div>
     <div class='taskBox right' id='task2'>
@@ -104,6 +162,7 @@ session_start();
             <a href="javascript:void(0)">
             Task 2
             </a>
+            <h4><?php print_r($taskList[1]); ?></h4>
         </div>    
     </div>
     <div class='taskBox left' id='task3'>
@@ -111,6 +170,7 @@ session_start();
             <a href="javascript:void(0)">
             Task 3
             </a>
+            <h4><?php print_r($taskList[2]); ?></h4>
         </div>    
     </div>
     <div class='taskBox right' id='task4'>
@@ -118,6 +178,7 @@ session_start();
             <a href="javascript:void(0)">
             Task 4
             </a>
+            <h4><?php print_r($taskList[3]); ?></h4>
         </div>    
     </div>
     <div class='taskBox left' id='task5'>
@@ -125,6 +186,7 @@ session_start();
             <a href="javascript:void(0)">
             Task 5
             </a>
+             <h4><?php print_r($taskList[4]); ?></h4>
         </div>   
     </div>
     <div class='taskBox right' id='task6'>
@@ -132,6 +194,7 @@ session_start();
             <a href="javascript:void(0)">
             Task 6
             </a>
+            <h4><?php print_r($taskList[5]); ?></h4>
         </div>    
     </div>
     <div class='taskBox left' id='task7'>
@@ -139,6 +202,7 @@ session_start();
             <a href="javascript:void(0)">
             Task 7
             </a>
+            <h4><?php print_r($taskList[6]); ?></h4>
         </div>    
     </div>
     <div class='taskBox right' id='task8'>
@@ -146,6 +210,7 @@ session_start();
             <a href="javascript:void(0)">
             Task 8
             </a>
+            <h4><?php print_r($taskList[7]); ?></h4>
         </div>    
     </div>
     <div class='taskBox left' id='task9'>
@@ -153,6 +218,15 @@ session_start();
             <a href="javascript:void(0)">
             Task 9
             </a>
+             <h4><?php print_r($taskList[8]); ?></h4>
+        </div>   
+    </div>
+    <div class='taskBox right' id='task10'>
+         <div id='task10info'>
+            <a href="javascript:void(0)">
+            Task 10
+            </a>
+             <h4><?php print_r($taskList[9]); ?></h4>
         </div>   
     </div>
 </div>
