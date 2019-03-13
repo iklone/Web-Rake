@@ -14,26 +14,31 @@ public class ElementSearchThread implements Runnable {
 	private String urlStr;
 	private int scrapeID;
 	private String element;
+	private String elementID;
 	private ScrapeResult result;
 	private String value;
+	private WebClient webClient;
+	private HtmlPage page;
    
 	public ElementSearchThread(int taskID, String urlStr) {
 		this.taskID = taskID;
 		this.urlStr = urlStr;
+		this.page = null;
+		this.result = new ScrapeResult();
+		createWebClient();
 	}
 	
 	@Override
 	public void run() {
 	   	long scrapeStartTime = System.currentTimeMillis();
-
-		WebClient webClient = getWebClient();
-		insertResultIntoDatabase(webClient);
+	   	
+		insertResultIntoDatabase();
 	   	
 	    long scrapeEndTime = System.currentTimeMillis();
 	   	System.out.println("Time taken: " + (scrapeEndTime - scrapeStartTime) + " milliseconds");
 	}
 	
-	public WebClient getWebClient() {
+	public void createWebClient() {
 	   	WebClient webClient = new WebClient();
 	   	webClient.getOptions().setTimeout(60000); // ??
 		webClient.waitForBackgroundJavaScript(10000);
@@ -42,10 +47,10 @@ public class ElementSearchThread implements Runnable {
 	    webClient.getOptions().setThrowExceptionOnScriptError(false);
 	    webClient.getOptions().setCssEnabled(false);
 	    webClient.getOptions().setUseInsecureSSL(true);
-	    return webClient;
+	    this.webClient = webClient;
 	}
 	
-	public void insertResultIntoDatabase(WebClient webClient) {
+	public void insertResultIntoDatabase() {
 		Connection conn = null;
 		Statement stmt = null;
 		
@@ -57,12 +62,13 @@ public class ElementSearchThread implements Runnable {
 			while(rs.next()) {
 				scrapeID = rs.getInt("scrapeID");
 				element = rs.getString("Element");
+				elementID = rs.getString("elementID");
 			}
 			
-			result = getHTMLUnitResult(element, webClient);
+			getHTMLUnitResult(element, elementID);
 			
 			if (result.getElement() == null) {
-				System.out.println("An element was not found.");
+				System.out.println("An element was not found. Flag: " + result.getFlag());
 				value = "Element not found.";
 			}
 			else {
@@ -72,6 +78,9 @@ public class ElementSearchThread implements Runnable {
 			
 			System.out.println("Inserting result into the Result table.");
 			sql = "INSERT INTO Result (scrapeID, resultTime, resultValue) VALUES (" + scrapeID + ", CURRENT_TIMESTAMP, \"" + value + "\")";
+		    stmt.executeUpdate(sql);
+		    
+		    sql = "UPDATE Scrape SET flag = " + result.getFlag() + " WHERE ScrapeID = " + this.scrapeID;
 		    stmt.executeUpdate(sql);
 			System.out.println("Inserted result into the Result table.");
 			
@@ -106,17 +115,31 @@ public class ElementSearchThread implements Runnable {
 	   }//end try 
 	}
 	
-	public ScrapeResult getHTMLUnitResult(String element, WebClient webClient) throws Exception {
-		ScrapeResult result = new ScrapeResult();
-		
+	public void getHTMLUnitResult(String element, String elementID) {
 		System.out.println("Getting result from " + urlStr);
+
+		if (!scrape() && (result.getFlag() != 4)) {
+			if (searchAI(element, elementID, page)) {
+				scrape(); // On AI success, scrape again
+				result.setFlag(1);
+			}
+			else {
+				result.setFlag(2);
+			}
+		}
+		
+	   	webClient.close(); // plug memory leaks
+	}
+	
+	public Boolean scrape() {
+		Boolean foundElement = false;
 		
 		try {    
 			// turn off HtmlUnit warnings
 			java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.OFF);
 		    java.util.logging.Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
 			
-		    final HtmlPage page = webClient.getPage(urlStr);    
+		    page = webClient.getPage(urlStr);    
 		    
 			List list = page.getByXPath(element);
 
@@ -125,16 +148,131 @@ public class ElementSearchThread implements Runnable {
 				if(o instanceof HtmlElement) {
 					HtmlElement e = (HtmlElement)o;
 					System.out.println("The content of the element is: " + e.getTextContent());
-					result.setElement(e.getTextContent());
+					result.setResult(e.getTextContent());
 					result.setFlag(0);
+					foundElement = true;
 				}
 			}
 		}
-		finally {
-		   	webClient.close(); // plug memory leaks
+		catch (Exception e) {
+			result.setFlag(4); // couldn't even download the webpage
 		}
 		
-		return result;
+		return foundElement;
+	}
+	
+	public Boolean searchAI(String element, String elementID, HtmlPage page) {
+		Connection conn = null;
+		Statement stmt = null;
+		int depth = 0;
+		String[] parts = element.split("/");
+		parts = parts[parts.length].split("[");
+		String tag = parts[0];
+		HtmlElement htmlElement;
+		
+		try {
+			conn = ConnectionManager.getConnection();
+			stmt = conn.createStatement();
+			String sql = "SELECT AVG(Depth) FROM Intervention";
+			
+			ResultSet rs = stmt.executeQuery(sql);
+			while(rs.next()) {
+				depth = rs.getInt("AVG(Depth)");
+			}
+			
+		    rs.close();
+			stmt.close();
+			conn.close();
+		}
+		catch(SQLException se) {
+			//Handle errors for JDBC
+			se.printStackTrace();
+		}
+		catch(Exception e) {
+			//Handle errors for Class.forName
+			e.printStackTrace();
+		}
+		finally {
+			//finally block used to close resources
+			try {
+				if(stmt != null)
+					stmt.close();
+			}
+			catch(SQLException se2) {
+				// nothing we can do
+			}
+			try {
+				if(conn != null)
+					conn.close();
+			}
+			catch(SQLException se) {
+				se.printStackTrace();
+			}//end finally try
+	   }//end try
+		
+		for (int i = 0; i < depth; i++) {
+			// for every parent, completely evaluate whether any of their descendants are the element
+			// by checking the id
+			element += "/..";
+
+			for (Object o : page.getByXPath(".//" + tag)) {
+				htmlElement = (HtmlElement) o;
+				if (htmlElement.getId() == elementID) {
+					updateXPath(htmlElement.getCanonicalXPath(), i);
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
+	
+	public void updateXPath(String updatedXPath, int depth) {
+		Connection conn = null;
+		Statement stmt = null;
+		
+		this.element = updatedXPath;
+		
+		try {
+			conn = ConnectionManager.getConnection();
+			stmt = conn.createStatement();
+			
+			String sql = "UPDATE Scrape SET Element = " + updatedXPath + " WHERE ScrapeID = " + this.scrapeID;
+			stmt.executeUpdate(sql);
+			System.out.println("Updated Scrape table with new Element XPath.");
+			
+			sql = "INSERT INTO Intervention (scrapeID, Depth) VALUES (" + scrapeID + "," + depth + ")";
+			stmt.executeUpdate(sql);
+			System.out.println("Inserted intervention into Intervention table.");
+			
+			stmt.close();
+			conn.close();
+		}
+		catch(SQLException se) {
+			//Handle errors for JDBC
+			se.printStackTrace();
+		}
+		catch(Exception e) {
+			//Handle errors for Class.forName
+			e.printStackTrace();
+		}
+		finally {
+			//finally block used to close resources
+			try {
+				if(stmt != null)
+					stmt.close();
+			}
+			catch(SQLException se2) {
+				// nothing we can do
+			}
+			try {
+				if(conn != null)
+					conn.close();
+			}
+			catch(SQLException se) {
+				se.printStackTrace();
+			}//end finally try
+	   }//end try
 	}
 	
 }

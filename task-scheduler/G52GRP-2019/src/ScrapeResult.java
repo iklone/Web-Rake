@@ -19,7 +19,7 @@ public class ScrapeResult {
 		return element;
 	}
 
-	public void setElement(String element) {
+	public void setResult(String element) {
 		this.element = element;
 	}
 }

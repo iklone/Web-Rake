@@ -115,6 +115,7 @@ public class TaskScheduler {
 			if (sizeInMB > MAX_RESULT_STORAGE_IN_MB) {
 				int excessSpace = sizeInMB - MAX_RESULT_STORAGE_IN_MB;
 				int nResultsToDelete = excessSpace/SIZE_PER_RESULT_IN_MB;
+				sql = "DELETE FROM Result WHERE resultID IN ( SELECT resultID FROM ( SELECT resultID FROM Result ORDER BY resultTime LIMIT " + nResultsToDelete + " ) a )";
 			}
     	}
 		catch(SQLException se) { // which of these catches do we need here?
