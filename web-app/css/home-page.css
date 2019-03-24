@@ -124,6 +124,21 @@ header.moved{
     overflow: hidden;
 } 
 
+.brief-intro{
+		text-align: -webkit-left;
+    position: relative;
+    top: -24px;
+    left: 6%;
+		width: 40%;
+}
+.plugin-image{
+	  position: absolute;
+    text-align: -webkit-right;
+    top: 150px;
+    right: 8%;
+    width: 40%;
+} img{width: 100%;}
+
 /* for the top header bar*/
 nav {
     position: relative;
@@ -300,7 +315,7 @@ nav a:first-child img {
 }
 
 #task1{
-    background-image: url(taskbk.png);
+    background-image: url(../img/taskbk.png);
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
@@ -319,7 +334,7 @@ nav a:first-child img {
 }
 
 #task2{
-    background-image: url(taskbk.png);
+    background-image: url(../img/taskbk.png);
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
@@ -338,7 +353,7 @@ nav a:first-child img {
 }
 
 #task3{
-     background-image: url(taskbk.png);
+     background-image: url(../img/taskbk.png);
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
@@ -357,7 +372,7 @@ nav a:first-child img {
 }
 
 #task4{
-    background-image: url(taskbk.png);
+    background-image: url(../img/taskbk.png);
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
@@ -376,7 +391,7 @@ nav a:first-child img {
 }
 
 #task5{
-    background-image: url(taskbk.png);
+    background-image: url(../img/taskbk.png);
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
@@ -395,7 +410,7 @@ nav a:first-child img {
 }
 
 #task6{
-    background-image: url(taskbk.png);
+    background-image: url(../img/taskbk.png);
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
@@ -414,7 +429,7 @@ nav a:first-child img {
 }
 
 #task7{
-    background-image: url(taskbk.png);
+    background-image: url(../img/taskbk.png);
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
@@ -433,7 +448,7 @@ nav a:first-child img {
 }
 
 #task8{
-    background-image: url(taskbk.png);
+    background-image: url(../img/taskbk.png);
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
@@ -452,7 +467,7 @@ nav a:first-child img {
 }
 
 #task9{
-    background-image: url(taskbk.png);
+    background-image: url(../img/taskbk.png);
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
@@ -471,7 +486,7 @@ nav a:first-child img {
 }
 
 #task10{
-    background-image: url(taskbk.png);
+    background-image: url(../img/taskbk.png);
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;

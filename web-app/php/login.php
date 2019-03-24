@@ -24,6 +24,8 @@
 	if($pa == $password){
 		$id = mysqli_query($link, "select userID from User where binary userName="."'"."$username"."'"." and binary userPassword="."'"."$password"."'");
 		$userId =  mysqli_fetch_row($id);
+		$_SESSION["userId"] = $userId[0];
+		$_SESSION["userName"] = $_POST["username"];
 		echo $userId[0];
 	}else{
 		echo "fail";
