@@ -10,11 +10,14 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 public class ElementSearchThread implements Runnable {
 	
+	private static final int MAX_CLICKED_PAGES = 8;
+	
 	private int taskID;
 	private String urlStr;
 	private int scrapeID;
 	private String element;
 	private String elementID;
+	private int flag;
 	private ScrapeResult result;
 	private String value;
 	private WebClient webClient;
@@ -35,6 +38,11 @@ public class ElementSearchThread implements Runnable {
 	}
 	
 	public void createWebClient() {
+		// turn off HtmlUnit warnings
+		java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.OFF);
+	    java.util.logging.Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
+	    
+	    // create webclient
 	   	WebClient webClient = new WebClient();
 	   	webClient.getOptions().setTimeout(60000); // ??
 		webClient.waitForBackgroundJavaScript(10000);
@@ -62,8 +70,13 @@ public class ElementSearchThread implements Runnable {
 				scrapeID = rs.getInt("scrapeID");
 				element = rs.getString("Element");
 				elementID = rs.getString("elementID");
+				flag = rs.getInt("flag");
 				System.out.println("Scraping element: " + element + " from: " + this.urlStr);
-				scrapeElement();
+				
+				if (flag != 2)
+					scrapeElement();
+				else
+					System.out.println("Didn't scrape, flag was 2");
 				
 			    long scrapeEndTime = System.currentTimeMillis();
 			   	System.out.println("Time taken: " + (scrapeEndTime - scrapeStartTime) + " milliseconds");
@@ -175,33 +188,54 @@ public class ElementSearchThread implements Runnable {
 	public Boolean scrape() {
 		Boolean foundElement = false;
 		
-		try {
-			// turn off HtmlUnit warnings
-			java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.OFF);
-		    java.util.logging.Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
-		    
+		try {  
 		    page = webClient.getPage(urlStr);    
-			System.out.println("%%%%%%%%%%%%%%%%%%%%%%%% GETS HERE FOR ELEMENT " + element + " %%%%%%%%%%%%%%%%%%%%%%%%%");
-
 			HtmlElement e = page.getFirstByXPath(element);
 			
-			System.out.println("~~~~~~~~~~~~ DEBUG ~~~~~~~~~~~~");
-			System.out.println("The URL is :" + urlStr);
-			System.out.println("The element is: " + element);
-			System.out.println("~~~~~~~~~~~~ END DEBUG ~~~~~~~~~~~~");
-			
 			if (e == null) {
-				System.out.println("Couldn't find element. Trying the submit buttons.");
+				int i = 0;
+				int clickedPages = 0;
+				HtmlElement acceptButton = null;
+				Boolean acceptButtonFound = false;
+				System.out.println("Couldn't find element. Trying the buttons.");
 				
-		        List<HtmlElement> submitButtons = page.getByXPath("//button[@type='submit']");
-		        submitButtons.addAll(page.getByXPath("//input[@type='submit']"));
-		        
-				for (HtmlElement e2 : submitButtons) {
-					System.out.println("Button text: " + e2.asText());
-					// Can we check each button innerHTML for 'OK' or 'I accept' or 'Accept' or ... ?
-					page = e2.click();
-					if ((e = (HtmlElement) page.getFirstByXPath(element)) != null) {
+				List<HtmlElement> buttons = page.getByXPath("//button");
+				for (HtmlElement e2: buttons) {
+					System.out.println("GETS HERE Button text: " + e2.asText());
+					String[] acceptSynonyms = {"accept", "submit", "ok", "agree"};
+					for (i = 0; i < acceptSynonyms.length; i++) {
+						if (e2.asText().toLowerCase().equals(acceptSynonyms[i])) {
+							acceptButtonFound = true;
+							acceptButton = e2;
+							break;
+						}
+					}
+					
+					if (acceptButtonFound) {
 						break;
+					}
+				}
+				
+				if (acceptButtonFound) {
+					System.out.println("Accept button was found: " + acceptButton.asText());
+					page = acceptButton.click();
+					e = (HtmlElement) page.getFirstByXPath(element);
+				}
+				else {
+			        List<HtmlElement> submitButtons = page.getByXPath("//button[@type='submit']");
+			        submitButtons.addAll(page.getByXPath("//input[@type='submit']"));
+			        
+					for (HtmlElement e2 : submitButtons) {
+						System.out.println("Button text: " + e2.asText());
+						// Can we check each button innerHTML for 'OK' or 'I accept' or 'Accept' or ... 'Agree' ?
+						page = e2.click();
+						if ((e = (HtmlElement) page.getFirstByXPath(element)) != null) {
+							break;
+						}
+						clickedPages++;
+						if (clickedPages == MAX_CLICKED_PAGES) {
+							break;
+						}
 					}
 				}
 			}
