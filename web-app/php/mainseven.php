@@ -1,5 +1,5 @@
 <?php
-	 // header("Content-type:application/x-www-form-urlencoded;charset=utf-8");
+	header("Content-type:application/x-www-form-urlencoded;charset=utf-8");
 // Start the session
 session_start();
 	$db_host = 'mysql.cs.nott.ac.uk';
@@ -38,7 +38,7 @@ session_start();
 <html>
     <head>
     <title>WebRake</title>
-        <link rel = 'stylesheet' type = 'text/css' href = 'main2.css'>
+        <link rel = 'stylesheet' type = 'text/css' href = '../css/main2.css'>
         <link href='https://unpkg.com/ionicons@4.4.4/dist/css/ionicons.min.css' rel='stylesheet'>
         <link href='https://fonts.googleapis.com/css?family=Raleway:700' rel='stylesheet' type='text/css'>
         <link href='https://fonts.googleapis.com/css?family=Raleway:400' rel='stylesheet' type='text/css'>
@@ -103,7 +103,7 @@ session_start();
   
         <nav>
                 <a href='mainseven.php'>
-                    <img src='logo.png'/>
+                    <img src='../img/logo.png'/>
                 </a>
                 <a href='javascript:void(0)' id='slide-menu'>
                     <ion-icon name='menu'></ion-icon>
@@ -138,18 +138,14 @@ session_start();
     
     var j = "<?php echo count($taskList) ?>";
     for (var i = 0; i < 10; i++) {
-    var MyDiv1 = document.getElementById('task1').innerHTML
-    alert(MyDiv1)
+    		var MyDiv1 = document.getElementById('task1').innerHTML
+	//  alert(MyDiv1)
     }
     
     
 </script>
-        
-        
-        
-        
         </h1>
-    <div class='taskBox left' id='task1'>
+    <!--<div class='taskBox left' id='task1'>
         <div id='task1info'>
             <a href="javascript:void(0)">
             Task 1test
@@ -228,24 +224,22 @@ session_start();
             </a>
              <h4><?php print_r($taskList[9]); ?></h4>
         </div>   
-    </div>
+    </div>-->
 </div>
 <footer class='clearfix'>
     <div class='footer1'>
-        <h3>Header for links here?</h3>
-        <a href="javascript:void(0)">Link here? (hover=works)</a>
-        <a href="javascript:void(0)">Link2 here?</a>
-        <a href="javascript:void(0)">Link3 here?</a>
-        <p>Simple text here?</p>
+        <h3>About</h3>
+        <a href="javascript:void(0)">Our Story</a>
         <br />
         <br />
         <br />
-        <p><span>i guess copyrights &copy; and stuff?</span></p>
+        <p><span>2019 G52GRP Doe All Rights Reserved</span></p>
     </div>
     <div class='footer1'>
-        <h3>Right side of h3 tag </h3>
-        <a href="javascript:void(0)">Link right side here?</a>
-        <p>Simple text here?</p>
+        <h3>Contact</h3>
+        <a href="javascript:void(0)">Contact us</a>
+        <a href="javascript:void(0)">FAQ</a>
+        <a href="javascript:void(0)">Write for us</a>
     </div>
 </footer>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">

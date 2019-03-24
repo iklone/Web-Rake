@@ -12,7 +12,7 @@ if($pa == $password){
 	$_SESSION["userName"] = $_POST["username"];
 	header('Location: mainseven.php');
 } else {
-	header('Location: index.html');
+	header('Location: ../html/index.html');
 }
 ?>
 </body>
