@@ -1,3 +1,8 @@
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.concurrent.ExecutorService;
@@ -5,10 +10,24 @@ import java.util.concurrent.Executors;
 
 public class TaskScheduler {
 	
-	private static final int MAX_RESULT_STORAGE_IN_MB = 3;
-	private static final int SIZE_PER_RESULT_IN_MB = 3;
+	private static int MAX_RESULT_STORAGE_IN_MB = -1;
 	   
     public static void main(String[] args) {
+    	System.out.println("Scheduler booted.");
+    	
+    	try(BufferedReader br = new BufferedReader(new FileReader("settings.txt"))) {
+    		String[] lineSplit = new String[2];
+    		
+	        String line = br.readLine();
+	        lineSplit = line.split(" ");
+
+    	    MAX_RESULT_STORAGE_IN_MB = Integer.parseInt(lineSplit[1]);
+    	    System.out.println("The max storage size is: " + MAX_RESULT_STORAGE_IN_MB + "MB");
+    	} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}
+    	
     	// Thread pool
     	ExecutorService tp = Executors.newFixedThreadPool(1);
     	int currentMin = LocalDateTime.now().getMinute();
@@ -43,6 +62,8 @@ public class TaskScheduler {
     					String urlStr = rs.getString("taskURL");
 
     					switch(type) {
+							case "Minutely":
+								tp.submit(new ElementSearchThread(taskID, urlStr));
     						case "Hourly":
     							if (resultMin == currentMin) {
     								tp.submit(new ElementSearchThread(taskID, urlStr));
@@ -68,7 +89,8 @@ public class TaskScheduler {
     					}
     				}
     				
-    				//freeSpace(stmt);
+    				if (MAX_RESULT_STORAGE_IN_MB != -1)
+    					freeSpace(stmt);
     				
 					//Clean-up environment, do we need these here if they're in finally?
 					rs.close();
@@ -102,19 +124,28 @@ public class TaskScheduler {
     public static void freeSpace(Statement stmt) {
 		//Execute a query
     	try {
+    		int nTotalResults = 0;
+    		
 			String sql = "SELECT table_name AS `Result`, round(((data_length + index_length) / 1024 / 1024), 2) `Size in MB` FROM information_schema.TABLES WHERE table_schema = \"psyjct\" AND table_name = \"Result\"";
 	
 			ResultSet rs = stmt.executeQuery(sql);
 			
-			int sizeInMB = 0;
+			int tableSizeInMB = 0;
 			//Extract data from result set
 			while(rs.next()) {
-				sizeInMB = rs.getInt("Size in MB");
+				tableSizeInMB = rs.getInt("Size in MB");
 			}
 			
-			if (sizeInMB > MAX_RESULT_STORAGE_IN_MB) {
-				int excessSpace = sizeInMB - MAX_RESULT_STORAGE_IN_MB;
-				int nResultsToDelete = excessSpace/SIZE_PER_RESULT_IN_MB;
+			sql = "SELECT COUNT(*) FROM Result";
+			
+			int nResultsToDelete = 0;
+			//Extract data from result set
+			while(rs.next()) {
+				nTotalResults = rs.getInt("COUNT(*)");
+			}
+			nResultsToDelete = nTotalResults / 5;
+			
+			if (tableSizeInMB > MAX_RESULT_STORAGE_IN_MB) {
 				sql = "DELETE FROM Result WHERE resultID IN ( SELECT resultID FROM ( SELECT resultID FROM Result ORDER BY resultTime LIMIT " + nResultsToDelete + " ) a )";
 			}
     	}
