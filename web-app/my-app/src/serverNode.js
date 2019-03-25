@@ -19,6 +19,7 @@ app.get('/tasks', (req, res) => {
         if (err) {
             return err;
         }
+        res.json(rows);
     })
 });
 
