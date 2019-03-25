@@ -3,8 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="182daac6-6c7f-4a0f-9568-f2b3a57bde3a" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web-app/my-app/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/web-app/my-app/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web-app/my-app/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/web-app/my-app/yarn.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web-app/my-app/src/serverNode.js" beforeDir="false" afterPath="$PROJECT_DIR$/web-app/my-app/src/serverNode.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -54,8 +53,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/web-app/my-app/src/serverNode.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="7" column="51" selection-start-line="7" selection-start-column="51" selection-end-line="7" selection-end-column="51" />
+            <state relative-caret-position="211">
+              <caret line="20" column="9" selection-start-line="20" selection-start-column="9" selection-end-line="20" selection-end-column="9" />
             </state>
           </provider>
         </entry>
@@ -165,9 +164,12 @@
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="javascript.nodejs.core.library.configured.version" value="10.15.0" />
     <property name="last_opened_file_path" value="$USER_HOME$/WebstormProjects/untitled" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="nodejs_package_manager_path" value="yarn" />
+    <property name="settings.editor.selected.configurable" value="settings.nodejs" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -203,12 +205,12 @@
       <workItem from="1553419216925" duration="1337000" />
       <workItem from="1553422365003" duration="4143000" />
       <workItem from="1553435159230" duration="2251000" />
-      <workItem from="1553511291410" duration="1787000" />
+      <workItem from="1553511291410" duration="2452000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="40213000" />
+    <option name="totallyTimeSpent" value="40878000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-6" y="0" width="781" height="838" extended-state="0" />
@@ -314,8 +316,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/web-app/my-app/src/serverNode.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="51" selection-start-line="7" selection-start-column="51" selection-end-line="7" selection-end-column="51" />
+        <state relative-caret-position="211">
+          <caret line="20" column="9" selection-start-line="20" selection-start-column="9" selection-end-line="20" selection-end-column="9" />
         </state>
       </provider>
     </entry>
