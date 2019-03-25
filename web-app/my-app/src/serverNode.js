@@ -6,7 +6,7 @@ const SELECT_ALL_TASKS_QUERY = "SELECT * FROM Task";
 
 app.use(cors());
 app.get('/tasks', (req, res) => {
-    console.log("GO TO /tasks TO SEE ALL TASKS");
+    console.log("GO TO localhost/tasks TO SEE ALL TASKS");
 
     const conn = mysql.createConnection({
         host: 'mysql.cs.nott.ac.uk',
@@ -15,7 +15,7 @@ app.get('/tasks', (req, res) => {
         database: 'psyjct'
     });
 
-    conn.query(SELECT_ALL_TASKS_QUERY, (err,rows, fields) => {
+    conn.query(SELECT_ALL_TASKS_QUERY, (err,rows) => {
         if (err) {
             return err;
         }
