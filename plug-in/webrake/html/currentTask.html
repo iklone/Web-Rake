@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="../css/popUpStyle.css">
+		<script src="../js/taskScrape.js"></script>
+		<style type="text/css">
+			.title{
+			   font-size: 40px;
+				position: fixed;
+				top: -10px;
+				left: 160px;
+			}
+			.backButton{
+				position: relative;
+				top: 10px;
+				left: 10px;
+				height: 60px;
+				width: 100px;
+			}
+			.task-detail{
+				border: 2px solid #D02C09;
+				border-radius: 7px;
+				margin: 2px 2px;
+				padding: 5px 10px;
+				background-color: white;
+				position: absolute;
+				left: 0px;
+				top: 15%;
+				height: 82%;
+				width: 95.5%;
+				overflow: auto;
+			}
+			.task-name{
+				font-size: 35px;
+			}
+			.editButton{
+				position: relative;
+				left: 80%;
+				top: -40px;
+				height: 35px;
+				width: 70px;
+			}
+			.scrape-data{
+			    border: 1px solid black;
+    				border-radius: 7px;
+			    margin: 3px 5px;
+			    padding: 5px 10px;
+			    background-color: #fff;
+			    position: relative;
+			    top: -26px;
+			    left: -19px;
+			    overflow: auto;
+			    height: 31px;
+			    width: 72%;
+			    font-size: 23px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id = "main">
+			<div>
+				<button class="backButton" id="back-btn" type="button">Back</button>
+			</div>
+			<div id="currentTask-title">
+				<h1 class="title">Current Task</h1>
+			</div>
+			<div id="task-box" class="task-detail">
+				<div id="currentTask-name" class="task-name"></div>
+				<div>
+					<button class="editButton" id="edit-btn">Edit</button>
+				</div>
+				<ul id="cur-ul"></ul>
+			</div>
+		</div>
+		
+	</body>
+</html>
