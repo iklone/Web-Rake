@@ -3,10 +3,11 @@
  * @author Ang Ding, Peichen Yu
  */
 window.onload = function getUserInfo(){
-	chrome.storage.local.get(['userInfo'], function(result) {
+	chrome.storage.local.get(['userInfoInPlugIn'], function(result) {
           console.log('Value currently is ' + result.userInfo);
-          userName = result.userInfo.userName;
-          userId = result.userInfo.userId;
+          userName = result.userInfoInPlugIn.userName;
+          userId = result.userInfoInPlugIn.userId;
+          userPassword = result.userInfoInPlugIn.userPassword;
    	});
    
     chrome.storage.local.get(['allTask'], function(result) {
@@ -77,8 +78,8 @@ function displayTask(){
  */
 function getTaskInfo(){
 	let xhr = new XMLHttpRequest();
-	xhr.open("POST", "http://avon.cs.nott.ac.uk/~psyjct/plug-in/taskDisplay.php", true);
-//	xhr.open("POST", "http://192.168.64.2/taskDisplay.php", true);
+//	xhr.open("POST", "http://avon.cs.nott.ac.uk/~psyjct/plug-in/taskDisplay.php", true);
+	xhr.open("POST", "http://192.168.64.2/taskDisplay.php", true);
 	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
 	xhr.onreadystatechange = function() {
 	    	if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
@@ -434,13 +435,21 @@ function manage_btn(){
 function homepage_btn(){
 	var homepage = document.getElementById("homePage-btn");
 	homepage.onclick = function(){
-		chrome.storage.local.get(['logInWebAppFlag'], function(result) {
-			if(result.logInWebAppFlag == 0){
-				window.open("http://avon.cs.nott.ac.uk/~psyjct/web-app/html/index.html")
-				//window.open("http://192.168.64.2/web-app/html/index.html");
-			}else if(result.logInWebAppFlag == 1){
-				window.open("http://avon.cs.nott.ac.uk/~psyjct/web-app/php/home-page.php")
-				//window.open("http://192.168.64.2/web-app/php/home-page.php");
+   		
+		chrome.storage.local.get(['userInfoInWebapp'], function(result) {
+			if(result.userInfoInWebapp){
+				console.log(result.userInfoInWebapp);
+				if(userName == result.userInfoInWebapp.userName && userPassword == result.userInfoInWebapp.userPassword){
+	//				window.open("http://avon.cs.nott.ac.uk/~psyjct/web-app/php/home-page.php")
+					window.open("http://192.168.64.2/web-app/php/home-page.php");
+				}else{
+					chrome.storage.local.set({"logInFlag" : 1});
+				//  window.open("http://avon.cs.nott.ac.uk/~psyjct/web-app/html/index.html")
+					window.open("http://192.168.64.2/web-app/html/index.html");
+				}
+			}else{
+			//  window.open("http://avon.cs.nott.ac.uk/~psyjct/web-app/html/index.html")
+				window.open("http://192.168.64.2/web-app/html/index.html");
 			}
 		});
 	}
@@ -467,8 +476,8 @@ function checkTaskNameDuplicate(taskName){
 function deleteTaskInDatabase(taskID){
 	console.log('?');
 	let xhr = new XMLHttpRequest();
-	xhr.open("POST", "http://avon.cs.nott.ac.uk/~psyjct/plug-in/deleteTask.php", true);
-//	xhr.open("POST", "http://192.168.64.2/deleteTask.php", true);
+//	xhr.open("POST", "http://avon.cs.nott.ac.uk/~psyjct/plug-in/deleteTask.php", true);
+	xhr.open("POST", "http://192.168.64.2/deleteTask.php", true);
 	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
 	xhr.onreadystatechange = function() {
     		if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
@@ -497,8 +506,8 @@ function newtaskSender(taskName) {
 		var taskDescription = document.getElementById('decription-box').value;
 		
 		let xhr = new XMLHttpRequest();
-		xhr.open("POST", "http://avon.cs.nott.ac.uk/~psyjct/plug-in/addTask.php", true);
-//		xhr.open("POST", "http://192.168.64.2/addTask.php", true);
+//		xhr.open("POST", "http://avon.cs.nott.ac.uk/~psyjct/plug-in/addTask.php", true);
+		xhr.open("POST", "http://192.168.64.2/addTask.php", true);
 		xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
 		xhr.onreadystatechange = function() {
 			if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {

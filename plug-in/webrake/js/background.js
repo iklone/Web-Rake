@@ -12,6 +12,15 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
 				sendScrape(newTaskScrape[i]);
 			}
 		})
+   	}else if(request.msg == "re-logInPlugIn"){
+   		chrome.storage.local.remove(["userInfoInPlugIn","allTask"],function(){
+			var error = chrome.runtime.lastError;
+			if (error) {
+		    		console.error(error);
+			}
+		})
+		chrome.storage.local.set({ "logInFlag": 2});
+   		chrome.browserAction.setPopup({popup: "../html/popup.html"});
    	}
    	return Promise.resolve("Dummy response to keep the console quiet");
 })
@@ -27,8 +36,8 @@ function sendScrape(scrape){
 		currentTaskID = result.currentTask.taskID;
 		console.log(currentTaskID);
 		let xhr = new XMLHttpRequest();
-		xhr.open("POST", "http://avon.cs.nott.ac.uk/~psyjct/plug-in/addTaskContent.php", true);
-//		xhr.open("POST", "http://192.168.64.2/addTaskContent.php", true);
+//		xhr.open("POST", "http://avon.cs.nott.ac.uk/~psyjct/plug-in/addTaskContent.php", true);
+		xhr.open("POST", "http://192.168.64.2/addTaskContent.php", true);
 		xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
 		xhr.onreadystatechange = function() {
 	    		if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
