@@ -100,7 +100,7 @@ function ContentScriptController(flag){
 function getScrape(taskID){
 	let xhr = new XMLHttpRequest();
 //	xhr.open("POST", "http://avon.cs.nott.ac.uk/~psyjct/plug-in/scrapeDisplay.php", true);
-	xhr.open("POST", "http://192.168.64.2/scrapeDisplay.php", true);
+	xhr.open("POST", "http://192.168.64.2/plug-in/scrapeDisplay.php", true);
 	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
 	xhr.onreadystatechange = function() {
     		if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {

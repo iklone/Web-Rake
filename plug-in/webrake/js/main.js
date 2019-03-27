@@ -79,7 +79,7 @@ function displayTask(){
 function getTaskInfo(){
 	let xhr = new XMLHttpRequest();
 //	xhr.open("POST", "http://avon.cs.nott.ac.uk/~psyjct/plug-in/taskDisplay.php", true);
-	xhr.open("POST", "http://192.168.64.2/taskDisplay.php", true);
+	xhr.open("POST", "http://192.168.64.2/plug-in/taskDisplay.php", true);
 	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
 	xhr.onreadystatechange = function() {
 	    	if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
@@ -477,7 +477,7 @@ function deleteTaskInDatabase(taskID){
 	console.log('?');
 	let xhr = new XMLHttpRequest();
 //	xhr.open("POST", "http://avon.cs.nott.ac.uk/~psyjct/plug-in/deleteTask.php", true);
-	xhr.open("POST", "http://192.168.64.2/deleteTask.php", true);
+	xhr.open("POST", "http://192.168.64.2/plug-in/deleteTask.php", true);
 	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
 	xhr.onreadystatechange = function() {
     		if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
@@ -507,7 +507,7 @@ function newtaskSender(taskName) {
 		
 		let xhr = new XMLHttpRequest();
 //		xhr.open("POST", "http://avon.cs.nott.ac.uk/~psyjct/plug-in/addTask.php", true);
-		xhr.open("POST", "http://192.168.64.2/addTask.php", true);
+		xhr.open("POST", "http://192.168.64.2/plug-in/addTask.php", true);
 		xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
 		xhr.onreadystatechange = function() {
 			if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {

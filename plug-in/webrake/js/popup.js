@@ -24,7 +24,7 @@ window.onload = function login() {
 	    		// XMLHttpRequest
 			var xhr = new XMLHttpRequest();
 //			xhr.open("POST", "http://avon.cs.nott.ac.uk/~psyjct/plug-in/login.php", true);
-			xhr.open("POST", "http://192.168.64.2/login.php", true);
+			xhr.open("POST", "http://192.168.64.2/plug-in/login.php", true);
 			xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
 			console.log(xhr);
 			xhr.onreadystatechange = function() {
@@ -63,7 +63,7 @@ function loginWithWebApp(){
 	    	// XMLHttpRequest
 		var xhr = new XMLHttpRequest();
 //		xhr.open("POST", "http://avon.cs.nott.ac.uk/~psyjct/plug-in/login.php", true);
-		xhr.open("POST", "http://192.168.64.2/login.php", true);
+		xhr.open("POST", "http://192.168.64.2/plug-in/login.php", true);
 		xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
 		console.log(xhr);
 		xhr.onreadystatechange = function() {
