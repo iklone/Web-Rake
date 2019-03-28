@@ -285,7 +285,6 @@ public class ElementSearchThread implements Runnable {
 					}
 				}
 			}
-			
 			if (e != null) {
 				// check the type and neighbours to ensure the element is still the same, if not return false
 				if (unchangedNumericness(e.asText()) && unchangedDateTimeness(e.asText()) && unchangedCurrencyness(e.asText())) {
@@ -293,12 +292,10 @@ public class ElementSearchThread implements Runnable {
 					result.setFlag(0);
 					return true;
 				}
-					
 			}
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-
 		}
 		
 		return false;
@@ -380,10 +377,15 @@ public class ElementSearchThread implements Runnable {
 	}
 	
 	public Boolean isCurrency(String element) {
+		String currSymbols = "\\$|US\\$|\\€|\\¥|\\£|A\\$|C\\$|Fr|\\?|kr|NZ\\$|S\\$|HK\\$|R\\$|R";
+		String currAbbs = "USD|EUR|JPY|GBP|AUD|CAD|CHF|CNY|SEK|NZD|MXN|SGD|HKD|NOK|KRW|TRY|RUB|INR|BRL|ZAR";
 		
-		/*if (Pattern.matches(, element)) {
+		if (Pattern.matches("(" + currSymbols + "|" + currAbbs + "){0,1} {0,1}(\\d+|\\d{1,3}(,\\d{3})*)(\\.\\d+)?$", element)) {
 			return true;
-		}*/
+		}
+		if (Pattern.matches("(\\d+|\\d{1,3}(,\\d{3})*)(\\.\\d+)? {0,1}(" + currAbbs + "){0,1}$", element)) {
+			return true;
+		}
 		return false;
 	}
 	
