@@ -36,8 +36,8 @@ function sendScrape(scrape){
 		currentTaskID = result.currentTask.taskID;
 		console.log(currentTaskID);
 		let xhr = new XMLHttpRequest();
-//		xhr.open("POST", "http://avon.cs.nott.ac.uk/~psyjct/plug-in/addTaskContent.php", true);
-		xhr.open("POST", "http://192.168.64.2/plug-in/addTaskContent.php", true);
+		xhr.open("POST", "http://avon.cs.nott.ac.uk/~psyjct/plug-in/php/addTaskContent.php", true);
+//		xhr.open("POST", "http://192.168.64.2/plug-in/addTaskContent.php", true);
 		xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
 		xhr.onreadystatechange = function() {
 	    		if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {

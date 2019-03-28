@@ -226,8 +226,8 @@ function setTaskContentInfo(list){
 
 chrome.storage.local.get(['logInFlag'], function(result) {
 	if(result.logInFlag == 1){
-//		if(window.location.toString() == "http://avon.cs.nott.ac.uk/~psyjct/web-app/html/index.html"){
-		if(window.location.toString() == "http://192.168.64.2/web-app/html/index.html"){
+		if(window.location.toString() == "http://avon.cs.nott.ac.uk/~psyjct/web-app/html/index.html"){
+//		if(window.location.toString() == "http://192.168.64.2/web-app/html/index.html"){
 			chrome.storage.local.get(['userInfoInPlugIn'], function(result) {
 		          var userName = result.userInfoInPlugIn.userName;
 		          var userPassword = result.userInfoInPlugIn.userPassword;
@@ -247,16 +247,16 @@ chrome.storage.local.get(['logInFlag'], function(result) {
 })
 
 function updateWebappUserInfo(){
-  //if(window.location.toString() == "http://avon.cs.nott.ac.uk/~psyjct/web-app/html/index.html"){
-	if(window.location.toString() == "http://192.168.64.2/web-app/html/index.html"){
+    if(window.location.toString() == "http://avon.cs.nott.ac.uk/~psyjct/web-app/html/index.html"){
+//	if(window.location.toString() == "http://192.168.64.2/web-app/html/index.html"){
 		document.getElementsByName("login")[0].onsubmit = function(){
 			var userName = document.getElementsByName("username")[0].value;
 			var userPassword = document.getElementsByName("password")[0].value;
 			chrome.storage.local.set({ "userInfoInWebapp": {userName:userName, userPassword:userPassword}});
 			chrome.storage.local.set({ "logInFlag": 2});
 		}
+	}else if(window.location.toString() == "http://avon.cs.nott.ac.uk/~psyjct/web-app/php/home-page.php"){
 //	}else if(window.location.toString() == "http://192.168.64.2/web-app/php/home-page.php"){
-	}else if(window.location.toString() == "http://192.168.64.2/web-app/php/home-page.php"){
 		chrome.storage.local.get(['logInFlag'], function(result) {
 			if(result.logInFlag == 2){
 				chrome.runtime.sendMessage({msg:"re-logInPlugIn"});
