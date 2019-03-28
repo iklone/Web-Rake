@@ -17,7 +17,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 public class ElementSearchThread implements Runnable {
 	
 	private static final int MAX_CLICKED_PAGES = 8;
-	
+
 	private int taskID;
 	private String urlStr;
 	private int scrapeID;
@@ -176,12 +176,10 @@ public class ElementSearchThread implements Runnable {
 		try {
 			conn = ConnectionManager.getConnection();
 			stmt = conn.createStatement();
-			
-			System.out.println("Getting result from " + urlStr);
 
-			if (!scrape()) {
-				if (searchAI(element, elementID, page)) {
-					scrape(); // On AI success, scrape again
+			if (!regularScrapeFind()) {
+				if (searchAIFind(element, elementID, page)) {
+					regularScrapeFind(); // On AI success, scrape again
 					result.setFlag(1);
 				}
 				else {
@@ -237,8 +235,7 @@ public class ElementSearchThread implements Runnable {
 	   }//end try 
 	}
 	
-	public Boolean scrape() {
-		Boolean foundElement = false;
+	public Boolean regularScrapeFind() {
 		
 		try {    
 			HtmlElement e = page.getFirstByXPath(element);
@@ -291,11 +288,12 @@ public class ElementSearchThread implements Runnable {
 			
 			if (e != null) {
 				// check the type and neighbours to ensure the element is still the same, if not return false
-				if (isStillNumeric(e.asText()) && isStillDateTime(e.asText()))
-					return foundElement;
-				result.setResult(e.getTextContent());
-				result.setFlag(0);
-				foundElement = true;
+				if (unchangedNumericness(e.asText()) && unchangedDateTimeness(e.asText()) && unchangedCurrencyness(e.asText())) {
+					result.setResult(e.getTextContent());
+					result.setFlag(0);
+					return true;
+				}
+					
 			}
 		}
 		catch (Exception e) {
@@ -303,7 +301,7 @@ public class ElementSearchThread implements Runnable {
 
 		}
 		
-		return foundElement;
+		return false;
 	}
 	
 	public Boolean isNumeric(String element) {
@@ -313,17 +311,21 @@ public class ElementSearchThread implements Runnable {
 		return false;
 	}
 	
-	public Boolean isStillNumeric(String scrapedElement) {
-		Boolean hasChanged = false;
+	public Boolean unchangedNumericness(String scrapedElement) {
+		Boolean hasNotChanged = true;
 		
 		// check type and neighbours
-		if (isNumeric(this.sampleData) ) { // number
-			if (!isNumeric(scrapedElement) ) {
-				hasChanged = true;
+		if (isNumeric(this.sampleData) ) { // should be num
+			if (!isNumeric(scrapedElement) ) { //is not num
+				hasNotChanged = false;
+			}
+		} else { // should not be num
+			if (isNumeric(scrapedElement) ) { // is num
+				hasNotChanged = false;
 			}
 		}
 
-		return hasChanged;
+		return hasNotChanged;
 	}
 	
 	public Boolean isDateTime(String element) {
@@ -357,44 +359,49 @@ public class ElementSearchThread implements Runnable {
 		else if (Pattern.matches("[0-9]{2}[\\/\\-,.][A-Z|a-z]{3}[\\/\\-,.](19|20)[0-9]{2} [0-2][0-9]:[0-5][0-9]:[0-5][0-9].[0-9]*", element)) { // 19-Feb-2019 08:05:33.000000000000000
 			return true;
 		}
-		
-		
-		
-		
 		return false;
 	}
 	
-	public Boolean isStillDateTime(String scrapedElement) {
-		Boolean hasChanged = false;
+	public Boolean unchangedDateTimeness(String scrapedElement) {
+		Boolean hasNotChanged = true;
 		
 		// check type and neighbours
-		if (isDateTime(this.sampleData) ) { // number
-			if (!isDateTime(scrapedElement) ) {
-				hasChanged = true;
+		if (isDateTime(this.sampleData) ) { // should be num
+			if (!isDateTime(scrapedElement) ) { //is not num
+				hasNotChanged = false;
+			}
+		} else { // should not be num
+			if (isDateTime(scrapedElement) ) { // is num
+				hasNotChanged = false;
 			}
 		}
 
-		return hasChanged;
+		return hasNotChanged;
 	}
 	
 	public Boolean isCurrency(String element) {
-		if (Pattern.matches("^(\\d+|\\d{1,3}(,\\d{3})*)(\\.\\d+)?$", element)) {
+		
+		/*if (Pattern.matches(, element)) {
 			return true;
-		}
+		}*/
 		return false;
 	}
 	
-	public Boolean isStillCurrency(String scrapedElement) {
-		Boolean hasChanged = false;
+	public Boolean unchangedCurrencyness(String scrapedElement) {
+		Boolean hasNotChanged = true;
 		
 		// check type and neighbours
-		if (isCurrency(this.sampleData) ) { // number
-			if (!isCurrency(scrapedElement) ) {
-				hasChanged = true;
+		if (isCurrency(this.sampleData) ) { // should be num
+			if (!isCurrency(scrapedElement) ) { //is not num
+				hasNotChanged = false;
+			}
+		} else { // should not be num
+			if (isCurrency(scrapedElement) ) { // is num
+				hasNotChanged = false;
 			}
 		}
 
-		return hasChanged;
+		return hasNotChanged;
 	}
 	
 	public String findParent(String element) {
@@ -405,7 +412,7 @@ public class ElementSearchThread implements Runnable {
 		return element;
 	}
 	
-	public Boolean searchAI(String element, String elementID, HtmlPage page) {
+	public Boolean searchAIFind(String element, String elementID, HtmlPage page) {
 		Connection conn = null;
 		Statement stmt = null;
 		

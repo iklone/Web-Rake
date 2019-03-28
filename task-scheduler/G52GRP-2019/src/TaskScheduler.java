@@ -11,7 +11,7 @@ import java.util.concurrent.Executors;
 public class TaskScheduler {
 	
 	private static int MAX_RESULT_STORAGE_IN_MB = -1;
-	   
+	
     public static void main(String[] args) {
     	System.out.println("Scheduler booted.");
     	
