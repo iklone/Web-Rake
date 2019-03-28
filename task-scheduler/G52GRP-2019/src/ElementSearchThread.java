@@ -45,7 +45,7 @@ public class ElementSearchThread implements Runnable {
 			page = webClient.getPage(urlStr);
 		}
 	    catch (Exception e) {
-	    	System.out.println("Couldn't download the page for task: " + this.taskID);
+	    	System.out.println("Couldn't download the page for task: " + this.taskID + ", scrapeId: " + this.scrapeID);
 			Connection conn = null;
 			Statement stmt = null;
 			
@@ -55,7 +55,7 @@ public class ElementSearchThread implements Runnable {
 			    
 			    String sql = "UPDATE Scrape SET flag = " + 4 + " WHERE TaskID = " + this.taskID;
 			    stmt.executeUpdate(sql);
-				System.out.println("Updated flag in Scrape table where taskID = " + this.taskID);
+				System.out.println("Updated flag in Scrape table for scrapeId:" + this.scrapeID + ", taskID: " + this.taskID);
 				
 				stmt.close();
 				conn.close();
@@ -127,15 +127,15 @@ public class ElementSearchThread implements Runnable {
 				flag = rs.getInt("flag");
 				sampleData = rs.getString("sampleData");
 				scrapeName = rs.getString("scrapeName");
-				System.out.println("Scraping element: " + element + " from: " + this.urlStr);
+				System.out.println("Scraping element: " + element + " from: " + this.urlStr + "for scrapeId:" + this.scrapeID + ", taskID: " + this.taskID);
 				
 				if (flag != 2)
 					scrapeElement();
 				else
-					System.out.println("Didn't scrape, flag was 2");
+					System.out.println("Did not scrape - flag is 2 for scrapeId:" + this.scrapeID + ", taskID: " + this.taskID);
 				
 			    long scrapeEndTime = System.currentTimeMillis();
-			   	System.out.println("Time taken: " + (scrapeEndTime - scrapeStartTime) + " milliseconds");
+			   	System.out.println("Time taken: " + (scrapeEndTime - scrapeStartTime) + " milliseconds, scrapeID: " + this.scrapeID);
 			}
 
 		    rs.close();
@@ -177,25 +177,35 @@ public class ElementSearchThread implements Runnable {
 			conn = ConnectionManager.getConnection();
 			stmt = conn.createStatement();
 			
-			getHTMLUnitResult(element, elementID);
+			System.out.println("Getting result from " + urlStr);
+
+			if (!scrape()) {
+				if (searchAI(element, elementID, page)) {
+					scrape(); // On AI success, scrape again
+					result.setFlag(1);
+				}
+				else {
+					result.setFlag(2);
+				}
+			}
 			
 			if (result.getElement() == null) {
 				value = "Element not found.";
-				System.out.println("The element was not found. Flag: " + result.getFlag());
+				System.out.println("The element was not found." + "for scrapeId:" + this.scrapeID + ", taskID: " + this.taskID + ", New flag: " + result.getFlag());
 			}
 			else {
 				value = result.getElement();
-				System.out.println("The element was found, it's innerHTML is: " + value);
+				System.out.println("The element was found, it's innerHTML is: " + value + "for scrapeId:" + this.scrapeID + ", taskID: " + this.taskID);
 
 			}
 			
-			System.out.println("Inserting result into the Result table.");
+			System.out.println("Inserting result into the Result table for scrapeId:" + this.scrapeID + ", taskID: " + this.taskID);
 			String sql = "INSERT INTO Result (scrapeID, resultTime, resultValue) VALUES (" + scrapeID + ", CURRENT_TIMESTAMP, \"" + value + "\")";
 		    stmt.executeUpdate(sql);
 		    
 		    sql = "UPDATE Scrape SET flag = " + result.getFlag() + " WHERE ScrapeID = " + this.scrapeID;
 		    stmt.executeUpdate(sql);
-			System.out.println("Inserted result into the Result table.");
+			System.out.println("Inserted result into the Result table for scrapeId:" + this.scrapeID + ", taskID: " + this.taskID);
 			
 			stmt.close();
 			conn.close();
@@ -225,20 +235,6 @@ public class ElementSearchThread implements Runnable {
 				se.printStackTrace();
 			}//end finally try
 	   }//end try 
-	}
-	
-	public void getHTMLUnitResult(String element, String elementID) {
-		System.out.println("Getting result from " + urlStr);
-
-		if (!scrape()) {
-			if (searchAI(element, elementID, page)) {
-				scrape(); // On AI success, scrape again
-				result.setFlag(1);
-			}
-			else {
-				result.setFlag(2);
-			}
-		}
 	}
 	
 	public Boolean scrape() {
@@ -271,7 +267,7 @@ public class ElementSearchThread implements Runnable {
 				}
 				
 				if (acceptButtonFound) {
-					System.out.println("Accept button was found: " + acceptButton.asText());
+					System.out.println("Accept button was found: " + acceptButton.asText()  + ", scrapeId:" + this.scrapeID + ", taskID: " + this.taskID);
 					page = acceptButton.click();
 					e = (HtmlElement) page.getFirstByXPath(element);
 				}
@@ -280,7 +276,7 @@ public class ElementSearchThread implements Runnable {
 			        submitButtons.addAll(page.getByXPath("//input[@type='submit']"));
 			        
 					for (HtmlElement e2 : submitButtons) {
-						System.out.println("Button text: " + e2.asText());
+						System.out.println("Submit button text: " + e2.asText() + ", scrapeId: " + this.scrapeID + ", taskID: " + this.taskID);
 						page = e2.click();
 						if ((e = (HtmlElement) page.getFirstByXPath(element)) != null) {
 							break;
@@ -462,20 +458,20 @@ public class ElementSearchThread implements Runnable {
 			}//end finally try
 	   }//end try
 
-		System.out.println("AI init");
+		System.out.println("AI init" + ", scrapeId:" + this.scrapeID + ", taskID: " + this.taskID);
 		for (i = 0; i < depth + 1; i++) {
-			System.out.println("depth attempt " + i);
+			System.out.println("depth attempt " + i + ", scrapeId:" + this.scrapeID + ", taskID: " + this.taskID);
 			element = findParent(element);
-			System.out.println("parent  " + element);
+			System.out.println("parent  " + element + ", scrapeId:" + this.scrapeID + ", taskID: " + this.taskID);
 			HtmlElement parent = page.getFirstByXPath(element);
-			System.out.println("testing parent  " + parent.asText());
+			System.out.println("testing parent  " + parent.asText() + ", scrapeId:" + this.scrapeID + ", taskID: " + this.taskID);
 			Iterable<DomElement> childList = parent.getChildElements();
 			
 
-			System.out.println("this has cousins " + parent.getChildElementCount());
+			System.out.println("this has cousins " + parent.getChildElementCount() + ", scrapeId:" + this.scrapeID + ", taskID: " + this.taskID);
 			for (DomElement e : childList) {
 
-				System.out.println("testing family " + e.asText());
+				System.out.println("testing family " + e.asText() + ", scrapeId:" + this.scrapeID + ", taskID: " + this.taskID);
 				System.out.println("!");
 				passed = false;
 				if (elementID != "") {
@@ -508,11 +504,11 @@ public class ElementSearchThread implements Runnable {
 			
 			String sql = "UPDATE Scrape SET Element = " + updatedXPath + " WHERE ScrapeID = " + this.scrapeID;
 			stmt.executeUpdate(sql);
-			System.out.println("Updated Scrape table with new Element XPath.");
+			System.out.println("Updated Scrape table with new Element XPath." + ", scrapeId:" + this.scrapeID + ", taskID: " + this.taskID);
 			
 			sql = "INSERT INTO Intervention (scrapeID, Depth) VALUES (" + scrapeID + "," + depth + ")";
 			stmt.executeUpdate(sql);
-			System.out.println("Inserted AI intervention into Intervention table.");
+			System.out.println("Inserted AI intervention into Intervention table." + ", scrapeId:" + this.scrapeID + ", taskID: " + this.taskID);
 			
 			stmt.close();
 			conn.close();
