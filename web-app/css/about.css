@@ -151,13 +151,17 @@ nav {
 }
 
 nav a:first-child:link {
+/*
     color: #fff;
     text-decoration: none;
+*/
 }
 
 nav a:first-child:visited {
+/*
     color: #fff;
     text-decoration: none;
+*/
 }
 
 #login{
@@ -168,12 +172,8 @@ nav a:first-child:visited {
     color: #ffffff;
     padding: 12px 20px;
     text-decoration: none;
-/*    display: inline-block;*/
-    width: 100px;
-    margin-left: 1290px;
-    font-weight: 300; 
-    margin-top: -33px;
     
+    font-weight: 300;   
 }
 
 
@@ -186,18 +186,7 @@ nav a:first-child:visited {
     padding: 12px 20px;
     text-decoration: none;
     font-weight: 300;  
-/*    display: inline-block;*/
-    width: 100px;
-    margin-left: 1140px;
-    margin-top: -43px;
-    
-}
-
-#signUp:hover{
-    color: chocolate;
-}
-footer a:hover {
-    font-weight: bold;
+    display: inline-block;
 }
 
 nav a:first-child img {

@@ -94,6 +94,10 @@
     color:#222;
     cursor: pointer;
     font-weight: 900;
+    transition: all 200ms cubic-bezier(0.2, 0.3, 0.25, 0.9);
+    -moz-transition: all 200ms cubic-bezier(0.2, 0.3, 0.25, 0.9);
+    -o-transition: all 200ms cubic-bezier(0.2, 0.3, 0.25, 0.9);
+    -webkit-transition: all 200ms cubic-bezier(0.2, 0.3, 0.25, 0.9);
      
 }
 
@@ -123,8 +127,9 @@
    color: rgba(255,255,255,0.6);
 }
 
-#registerButton{
-  position: absolute;
+
+.Button1{
+      position: absolute;
   top: calc(50% + 70px);
   left: calc(50% - 40px);
   width: 260px;
@@ -139,4 +144,14 @@
   font-weight: 400;
   padding: 6px;
   margin-top: 10px;
+}
+.Button1:hover{
+    opacity: 0.5;
+    color:#222;
+    cursor: pointer;
+    font-weight: 900;
+    transition: all 200ms cubic-bezier(0.2, 0.3, 0.25, 0.9);
+    -moz-transition: all 200ms cubic-bezier(0.2, 0.3, 0.25, 0.9);
+    -o-transition: all 200ms cubic-bezier(0.2, 0.3, 0.25, 0.9);
+    -webkit-transition: all 200ms cubic-bezier(0.2, 0.3, 0.25, 0.9);
 }
