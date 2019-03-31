@@ -62,7 +62,13 @@ function display_scrape(scrape){
 		for(i in scrape){
 	    		var li = document.createElement("li");
 	    		li.className = "scrape-data";
-	    		var text = document.createTextNode(scrape[i].scrapeName + ": " + scrape[i].sampleData);
+	    		var data;
+	    		if(scrape[i].sampleData){
+	    			data = scrape[i].sampleData;
+	    		}else if(scrape[i].resultValue){
+	    			data = scrape[i].resultValue;
+	    		}
+	    		var text = document.createTextNode(scrape[i].scrapeName + ": " + data);
 	    		li.appendChild(text);
 	    		ul.appendChild(li);
 	   	}
@@ -102,6 +108,7 @@ function getScrape(taskID){
     			console.log(response);
     			if(response != "no record"){
     	    			currentTaskScrape = JSON.parse(response);
+    	    			console.log(currentTaskScrape);
 				chrome.storage.local.set({"currentTaskScrape": currentTaskScrape});
     	    			display_scrape(currentTaskScrape);
     	    		}

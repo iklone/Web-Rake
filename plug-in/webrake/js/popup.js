@@ -13,7 +13,11 @@ chrome.storage.local.get(['logInFlag'], function(result) {
 	}
 });
 
-window.onload = function login() {
+window.onload = function initialize() {
+	document.getElementById("logo").addEventListener('click', function(){
+		window.open("http://192.168.64.2/web-app/php/home-page.php");
+//		window.open("http://avon.cs.nott.ac.uk/~psyjct/web-app/php/home-page.php"");
+	})
 	document.getElementById("btn_login").addEventListener('click', function(){
 		// get the value of username and password
 		var u = document.getElementById("username").value;

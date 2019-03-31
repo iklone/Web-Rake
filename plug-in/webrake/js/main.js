@@ -442,15 +442,15 @@ function homepage_btn(){
 			if(result.userInfoInWebapp){
 				console.log(result.userInfoInWebapp);
 				if(userName == result.userInfoInWebapp.userName && userPassword == result.userInfoInWebapp.userPassword){
-//					window.open("http://avon.cs.nott.ac.uk/~psyjct/web-app/php/home-page.php");
-					window.open("http://192.168.64.2/web-app/php/home-page.php");
+					//window.open("http://avon.cs.nott.ac.uk/~psyjct/web-app/php/editTask.php");
+					window.open("http://192.168.64.2/web-app/php/editTask.php");
 				}else{
 					chrome.storage.local.set({"logInFlag" : 1});
-//				  window.open("http://avon.cs.nott.ac.uk/~psyjct/web-app/html/index.html")
+				  	//window.open("http://avon.cs.nott.ac.uk/~psyjct/web-app/html/index.html")
 					window.open("http://192.168.64.2/web-app/html/index.html");
 				}
 			}else{
-//			  window.open("http://avon.cs.nott.ac.uk/~psyjct/web-app/html/index.html")
+				//window.open("http://avon.cs.nott.ac.uk/~psyjct/web-app/html/index.html")
 				window.open("http://192.168.64.2/web-app/html/index.html");
 			}
 		});

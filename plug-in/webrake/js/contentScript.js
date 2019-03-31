@@ -34,7 +34,6 @@ chrome.runtime.onMessage.addListener(
 		if(request.txt == "start contentScript"){
 			chrome.storage.local.get(['currentTask'], function(result) {
 				if(result.currentTask.taskURL == window.location.toString()){
-					console.log("caocaocaoc");
 					startContentScript();
 				}
 			})
@@ -120,27 +119,29 @@ function getClickedElement(){
 	
 	// put all scrape in scrapeWaitedßList into scrapeList, and update scrapeInTask list
 	for(i in scrapeWaitedList){
-		aiSearch();
 		var tmpScrape = scrapeWaitedList[i];
 		var content = tmpScrape.innerHTML;
-		console.log(content);
-		var scrapeName = prompt("Please enter name of scrape, sample data is " + content, "myScrape");
-		while (scrapeName == "") {
-			alert("the name shouldn't be empty");
-			scrapeName = prompt("Please enter name of scrape, sample data is " + content, "myScrape");
-		}
-		
-		if(scrapeName != "" && scrapeName != null){
-			var xPath = createXPathFromElement(tmpScrape);
-//			var path = getDomPath(tmpScrape);
-			console.log(xPath)
-			var newScrpae = {
-				scrapeName:scrapeName,
-				sampleData: content,
-				path : xPath
+		if(content.indexOf('<') == -1 && content.indexOf('>') == -1){
+			var scrapeName = prompt("Please enter name of scrape, sample data is " + content, "myScrape");
+			while (scrapeName == "") {
+				alert("the name shouldn't be empty");
+				scrapeName = prompt("Please enter name of scrape, sample data is " + content, "myScrape");
 			}
-			scrapeList.push(tmpScrape);
-			scrapeContentList.push(newScrpae);
+			
+			if(scrapeName != "" && scrapeName != null){
+				var xPath = createXPathFromElement(tmpScrape);
+	//			var path = getDomPath(tmpScrape);
+				console.log(xPath)
+				var newScrpae = {
+					scrapeName:scrapeName,
+					sampleData: content,
+					path : xPath
+				}
+				scrapeList.push(tmpScrape);
+				scrapeContentList.push(newScrpae);
+			}
+		}else{
+			alert("Oops,the space you have clicked is illegal, please click again. Reason may be that this space contains too much information ");
 		}
 		
 		tmpScrape.style.outline = "";
@@ -251,6 +252,10 @@ chrome.storage.local.get(['logInFlag'], function(result) {
 	}
 })
 
+/**
+ * function used to updata webapp info or extension info to make them accordance
+ * @author payne YU
+ */
 function updateWebappUserInfo(){
 //  if(window.location.toString() == "http://avon.cs.nott.ac.uk/~psyjct/web-app/html/index.html"){
 	if(window.location.toString() == "http://192.168.64.2/web-app/html/index.html"){
@@ -260,17 +265,12 @@ function updateWebappUserInfo(){
 			chrome.storage.local.set({ "userInfoInWebapp": {userName:userName, userPassword:userPassword}});
 			chrome.storage.local.set({ "logInFlag": 2});
 		}
-//	}else if(window.location.toString() == "http://avon.cs.nott.ac.uk/~psyjct/web-app/php/home-page.php"){
-	}else if(window.location.toString() == "http://192.168.64.2/web-app/php/home-page.php"){
+//	}else if(window.location.toString() == "http://avon.cs.nott.ac.uk/~psyjct/web-app/php/editTask.php"){
+	}else if(window.location.toString() == "http://192.168.64.2/web-app/php/editTask.php"){
 		chrome.storage.local.get(['logInFlag'], function(result) {
 			if(result.logInFlag == 2){
 				chrome.runtime.sendMessage({msg:"re-logInPlugIn"});
 			}
 		})
 	}
-}
-
-
-function aiSearch(){
-	
 }
