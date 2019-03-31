@@ -78,8 +78,8 @@ function displayTask(){
  */
 function getTaskInfo(){
 	let xhr = new XMLHttpRequest();
-	xhr.open("POST", "http://avon.cs.nott.ac.uk/~psyjct/plug-in/php/taskDisplay.php", true);
-//	xhr.open("POST", "http://192.168.64.2/plug-in/taskDisplay.php", true);
+//	xhr.open("POST", "http://avon.cs.nott.ac.uk/~psyjct/plug-in/php/taskDisplay.php", true);
+	xhr.open("POST", "http://192.168.64.2/plug-in/taskDisplay.php", true);
 	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
 	xhr.onreadystatechange = function() {
 	    	if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
@@ -395,23 +395,25 @@ function scrape_btn(){
 			// set current taks
 			chrome.storage.local.set({ "currentTask": {taskName:currentTaskName, taskID: currentTaskID, taskURL:currentTaskURL}});
 			
-			//change popup window url
-			openCurrentTask();
-			
-			// create context menu
-			startContextMenu();
-			
-			// if current url is not eqaul to currentTaskURL, then window.open(currentTaskURL)
+			// if current url is not eqaul to currentTaskURL, then window.open(currentTaskURL), else refresh page
 			var params = {
 				active: true,
 				currentWindow: true
 			}
 			chrome.tabs.query(params, getTabs);
 			function getTabs(tab){
+				console.log(tab);
+				chrome.storage.local.set({ "currentTabId": tab[0].id});
 				if(tab[0].url != currentTaskURL){
 					window.open(currentTaskURL);
 				}
 			}
+			
+			//change popup window url
+			openCurrentTask();
+			
+			// create context menu
+			startContextMenu();
 		}
 	}
 }
@@ -440,16 +442,16 @@ function homepage_btn(){
 			if(result.userInfoInWebapp){
 				console.log(result.userInfoInWebapp);
 				if(userName == result.userInfoInWebapp.userName && userPassword == result.userInfoInWebapp.userPassword){
-					window.open("http://avon.cs.nott.ac.uk/~psyjct/web-app/php/home-page.php")
-//					window.open("http://192.168.64.2/web-app/php/home-page.php");
+//					window.open("http://avon.cs.nott.ac.uk/~psyjct/web-app/php/home-page.php");
+					window.open("http://192.168.64.2/web-app/php/home-page.php");
 				}else{
 					chrome.storage.local.set({"logInFlag" : 1});
-				  window.open("http://avon.cs.nott.ac.uk/~psyjct/web-app/html/index.html")
-//					window.open("http://192.168.64.2/web-app/html/index.html");
+//				  window.open("http://avon.cs.nott.ac.uk/~psyjct/web-app/html/index.html")
+					window.open("http://192.168.64.2/web-app/html/index.html");
 				}
 			}else{
-			  window.open("http://avon.cs.nott.ac.uk/~psyjct/web-app/html/index.html")
-//				window.open("http://192.168.64.2/web-app/html/index.html");
+//			  window.open("http://avon.cs.nott.ac.uk/~psyjct/web-app/html/index.html")
+				window.open("http://192.168.64.2/web-app/html/index.html");
 			}
 		});
 	}
@@ -476,8 +478,8 @@ function checkTaskNameDuplicate(taskName){
 function deleteTaskInDatabase(taskID){
 	console.log('?');
 	let xhr = new XMLHttpRequest();
-	xhr.open("POST", "http://avon.cs.nott.ac.uk/~psyjct/plug-in/php/deleteTask.php", true);
-//	xhr.open("POST", "http://192.168.64.2/plug-in/deleteTask.php", true);
+//	xhr.open("POST", "http://avon.cs.nott.ac.uk/~psyjct/plug-in/php/deleteTask.php", true);
+	xhr.open("POST", "http://192.168.64.2/plug-in/deleteTask.php", true);
 	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
 	xhr.onreadystatechange = function() {
     		if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
@@ -506,8 +508,8 @@ function newtaskSender(taskName) {
 		var taskDescription = document.getElementById('decription-box').value;
 		
 		let xhr = new XMLHttpRequest();
-		xhr.open("POST", "http://avon.cs.nott.ac.uk/~psyjct/plug-in/php/addTask.php", true);
-//		xhr.open("POST", "http://192.168.64.2/plug-in/addTask.php", true);
+//		xhr.open("POST", "http://avon.cs.nott.ac.uk/~psyjct/plug-in/php/addTask.php", true);
+		xhr.open("POST", "http://192.168.64.2/plug-in/addTask.php", true);
 		xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
 		xhr.onreadystatechange = function() {
 			if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {

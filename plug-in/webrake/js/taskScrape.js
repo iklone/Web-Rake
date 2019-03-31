@@ -12,6 +12,7 @@ window.onload = function pageSet(){
 		chrome.storage.local.remove(['currentTaskScrape']);
 		chrome.storage.local.remove(['newTaskScrape']);
 		chrome.storage.local.remove(['currentTask']);
+		chrome.storage.local.remove(['currentTabId']);
 		
 		window.location.href ="../html/main.html";
 		chrome.browserAction.setPopup({popup: "../html/main.html"});
@@ -36,7 +37,7 @@ window.onload = function pageSet(){
 			  }else{
 		      	 getScrape(currentTaskID);
 			  }
-    	   	  });
+    	   	 });
    });
    
    chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
@@ -75,22 +76,15 @@ function display_scrape(scrape){
  */
 function ContentScriptController(flag){
 	// judge whether it is the current web page
-	let params = {
-		active: true,
-		currentWindow: true
-	}
-	chrome.tabs.query(params, getTabs);
-	
-	function getTabs(tab){
-		//send message to the content script
+	chrome.storage.local.get(['currentTabId'], function(result) {
 		var msg;
 		if(flag == true){
 			msg={txt: "start contentScript"};
 		}else{
 			msg={txt: "stop contentScript"};
 		}
-		chrome.tabs.sendMessage(tab[0].id, msg);
-	}
+		chrome.tabs.sendMessage(result.currentTabId, msg);
+	});
 }
 
 /**
@@ -99,12 +93,13 @@ function ContentScriptController(flag){
  */
 function getScrape(taskID){
 	let xhr = new XMLHttpRequest();
-	xhr.open("POST", "http://avon.cs.nott.ac.uk/~psyjct/plug-in/php/scrapeDisplay.php", true);
-//	xhr.open("POST", "http://192.168.64.2/plug-in/php/scrapeDisplay.php", true);
+//	xhr.open("POST", "http://avon.cs.nott.ac.uk/~psyjct/plug-in/php/scrapeDisplay.php", true);
+	xhr.open("POST", "http://192.168.64.2/plug-in/scrapeDisplay.php", true);
 	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
 	xhr.onreadystatechange = function() {
     		if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
     			let response = xhr.responseText;
+    			console.log(response);
     			if(response != "no record"){
     	    			currentTaskScrape = JSON.parse(response);
 				chrome.storage.local.set({"currentTaskScrape": currentTaskScrape});

@@ -9,7 +9,8 @@ updateWebappUserInfo();
 
 // initialize logInFlag 0:both web-app and plug-in have been loged in. 1:plug-in has been loged in
 //                      2:web-app has been loged in. 3:both has been loged in
-if(window.location.toString() == "http://avon.cs.nott.ac.uk/~psyjct/web-app/html/index.html"){
+//if(window.location.toString() == "http://avon.cs.nott.ac.uk/~psyjct/web-app/html/index.html"){
+if(window.location.toString() == "http://192.168.64.2/web-app/html/index.html"){
 	chrome.storage.local.get(['logInFlag'], function(result) {
 		if(!result.logInFlag){
 			chrome.storage.local.set({ "logInFlag": 0});
@@ -33,11 +34,11 @@ chrome.runtime.onMessage.addListener(
 		if(request.txt == "start contentScript"){
 			chrome.storage.local.get(['currentTask'], function(result) {
 				if(result.currentTask.taskURL == window.location.toString()){
+					console.log("caocaocaoc");
 					startContentScript();
 				}
 			})
-		}
-		if(request.contextMenuId){ // receive request from background(contextMenu)
+		}else if(request.contextMenuId){ // receive request from background(contextMenu)
 			// in this part using some method to check the data 
 			getClickedElement();
 		}else if(request.txt == "stop contentScript"){
@@ -119,13 +120,14 @@ function getClickedElement(){
 	
 	// put all scrape in scrapeWaitedßList into scrapeList, and update scrapeInTask list
 	for(i in scrapeWaitedList){
+		aiSearch();
 		var tmpScrape = scrapeWaitedList[i];
 		var content = tmpScrape.innerHTML;
 		console.log(content);
-		var scrapeName = prompt("Please enter name of scrape, sampe data is " + content, "myScrape");
+		var scrapeName = prompt("Please enter name of scrape, sample data is " + content, "myScrape");
 		while (scrapeName == "") {
 			alert("the name shouldn't be empty");
-			scrapeName = prompt("Please enter name of scrape, sampe data is " + content, "myScrape");
+			scrapeName = prompt("Please enter name of scrape, sample data is " + content, "myScrape");
 		}
 		
 		if(scrapeName != "" && scrapeName != null){
@@ -148,9 +150,11 @@ function getClickedElement(){
 	//re-set scrapeWaitedList
 	scrapeWaitedList = [];
 	// send new scrapes info to popup window(main.html)
-	setTaskContentInfo(scrapeContentList);
+	if(scrapeContentList != []){
+		setTaskContentInfo(scrapeContentList);
+		scrapeContentList = [];
+	}
 	
-	scrapeContentList = [];
 	document.getElementsByTagName('body')[0].style.opacity = "1";
 	document.getElementsByTagName('body')[0].style.zIndex = "";
 }
@@ -211,6 +215,7 @@ function setTaskContentInfo(list){
 	
 	chrome.storage.local.get([ "currentTaskScrape"],function(result){
 		var scrapeList = result.currentTaskScrape;
+		console.log(scrapeList);
 		for(i in list){
 			var scrape = {
 				scrapeName:list[i].scrapeName,
@@ -226,8 +231,8 @@ function setTaskContentInfo(list){
 
 chrome.storage.local.get(['logInFlag'], function(result) {
 	if(result.logInFlag == 1){
-		if(window.location.toString() == "http://avon.cs.nott.ac.uk/~psyjct/web-app/html/index.html"){
-//		if(window.location.toString() == "http://192.168.64.2/web-app/html/index.html"){
+//		if(window.location.toString() == "http://avon.cs.nott.ac.uk/~psyjct/web-app/html/index.html"){
+		if(window.location.toString() == "http://192.168.64.2/web-app/html/index.html"){
 			chrome.storage.local.get(['userInfoInPlugIn'], function(result) {
 		          var userName = result.userInfoInPlugIn.userName;
 		          var userPassword = result.userInfoInPlugIn.userPassword;
@@ -247,20 +252,25 @@ chrome.storage.local.get(['logInFlag'], function(result) {
 })
 
 function updateWebappUserInfo(){
-    if(window.location.toString() == "http://avon.cs.nott.ac.uk/~psyjct/web-app/html/index.html"){
-//	if(window.location.toString() == "http://192.168.64.2/web-app/html/index.html"){
+//  if(window.location.toString() == "http://avon.cs.nott.ac.uk/~psyjct/web-app/html/index.html"){
+	if(window.location.toString() == "http://192.168.64.2/web-app/html/index.html"){
 		document.getElementsByName("login")[0].onsubmit = function(){
 			var userName = document.getElementsByName("username")[0].value;
 			var userPassword = document.getElementsByName("password")[0].value;
 			chrome.storage.local.set({ "userInfoInWebapp": {userName:userName, userPassword:userPassword}});
 			chrome.storage.local.set({ "logInFlag": 2});
 		}
-	}else if(window.location.toString() == "http://avon.cs.nott.ac.uk/~psyjct/web-app/php/home-page.php"){
-//	}else if(window.location.toString() == "http://192.168.64.2/web-app/php/home-page.php"){
+//	}else if(window.location.toString() == "http://avon.cs.nott.ac.uk/~psyjct/web-app/php/home-page.php"){
+	}else if(window.location.toString() == "http://192.168.64.2/web-app/php/home-page.php"){
 		chrome.storage.local.get(['logInFlag'], function(result) {
 			if(result.logInFlag == 2){
 				chrome.runtime.sendMessage({msg:"re-logInPlugIn"});
 			}
 		})
 	}
+}
+
+
+function aiSearch(){
+	
 }
