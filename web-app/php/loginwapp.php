@@ -8,7 +8,7 @@ session_start();
 <?php
 include "login.php";
 if($pa == $password){
-	header('Location: home-page.php');
+	header('Location: editTask.php');
 } else {
 	header('Location: ../html/index.html');
 }

@@ -51,7 +51,6 @@ function displayTask(){
 			span.appendChild(text);
 			li.appendChild(span);
 			document.getElementById("all-ul").appendChild(li);
-			
 			var url = document.createTextNode(allTask[i].taskURL);
 			var urlSpan = document.createElement("span");
 			urlSpan.className = "url";
