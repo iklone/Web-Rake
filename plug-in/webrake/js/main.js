@@ -264,17 +264,17 @@ function addDelBtn(li){
 	li.appendChild(del_btn);
 }
 
-/**
- * Add a manage button
- * @author Ang Ding
- */
-function addManageBtn(li){
-	var manage_btn = document.createElement("button");
-	var txt = document.createTextNode("manage");
-	manage_btn.className = "manage-btn";
-	manage_btn.appendChild(txt);
-	li.appendChild(manage_btn);
-}
+///**
+// * Add a manage button
+// * @author Ang Ding
+// */
+//function addManageBtn(li){
+//	var manage_btn = document.createElement("button");
+//	var txt = document.createTextNode("manage");
+//	manage_btn.className = "manage-btn";
+//	manage_btn.appendChild(txt);
+//	li.appendChild(manage_btn);
+//}
 
 
 function addScrapeBtn(li){
@@ -293,7 +293,7 @@ function addScrapeBtn(li){
 function addBtnToAllTask(li){
 	addScrapeBtn(li);
 	addDelBtn(li);
-	addManageBtn(li);
+//	addManageBtn(li);
 }
 
 function taskSearcher() {
@@ -324,7 +324,7 @@ function taskSearcher() {
 function button_manager(){
 	delete_btn();
 	scrape_btn();
-	manage_btn();	
+//	manage_btn();
 }
 
 /**
@@ -417,17 +417,17 @@ function scrape_btn(){
 	}
 }
 
-/**
- * Implement the functionality of manage button
- * @author Ang Ding
- */
-function manage_btn(){
-	var manage = document.getElementsByClassName("manage-btn");
-	for (i = 0; i < manage.length; i++) {
-		manage[i].onclick = function() {
-		}
-	}
-}
+///**
+// * Implement the functionality of manage button
+// * @author Ang Ding
+// */
+//function manage_btn(){
+//	var manage = document.getElementsByClassName("manage-btn");
+//	for (i = 0; i < manage.length; i++) {
+//		manage[i].onclick = function() {
+//		}
+//	}
+//}
 /**
  * implement the functionality of homepage button
  * @author peichen YU
