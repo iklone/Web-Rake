@@ -9,8 +9,8 @@ updateWebappUserInfo();
 
 // initialize logInFlag 0:both web-app and plug-in have been loged in. 1:plug-in has been loged in
 //                      2:web-app has been loged in. 3:both has been loged in
-//if(window.location.toString() == "http://avon.cs.nott.ac.uk/~psyjct/web-app/html/index.html"){
-if(window.location.toString() == "http://192.168.64.2/web-app/html/index.html"){
+if(window.location.toString() == "http://avon.cs.nott.ac.uk/~psyjct/web-app/html/index.html"){
+//if(window.location.toString() == "http://192.168.64.2/web-app/html/index.html"){
 	chrome.storage.local.get(['logInFlag'], function(result) {
 		if(!result.logInFlag){
 			chrome.storage.local.set({ "logInFlag": 0});
@@ -39,7 +39,10 @@ chrome.runtime.onMessage.addListener(
 			})
 		}else if(request.contextMenuId){ // receive request from background(contextMenu)
 			// in this part using some method to check the data 
-			getClickedElement();
+			chrome.storage.local.get(['currentTaskScrape'], function(result) {
+				currentScrape = result.currentTaskScrape;
+				getClickedElement();
+			})
 		}else if(request.txt == "stop contentScript"){
 			// stop content script
 			for(i in scrapeWaitedList){
@@ -123,8 +126,7 @@ function getClickedElement(){
 		var content = tmpScrape.innerHTML;
 		if(content.indexOf('<') == -1 && content.indexOf('>') == -1){
 			var scrapeName = prompt("Please enter name of scrape, sample data is " + content, "myScrape");
-			while (scrapeName == "") {
-				alert("the name shouldn't be empty");
+			while(scrapeNameCheck(scrapeName)){
 				scrapeName = prompt("Please enter name of scrape, sample data is " + content, "myScrape");
 			}
 			
@@ -134,7 +136,7 @@ function getClickedElement(){
 				console.log(xPath)
 				var newScrpae = {
 					scrapeName:scrapeName,
-					sampleData: content,
+					data: content,
 					path : xPath
 				}
 				scrapeList.push(tmpScrape);
@@ -220,7 +222,7 @@ function setTaskContentInfo(list){
 		for(i in list){
 			var scrape = {
 				scrapeName:list[i].scrapeName,
-				sampleData:list[i].sampleData
+				data:list[i].data
 			}
 			scrapeList.push(scrape);
 		}
@@ -232,8 +234,8 @@ function setTaskContentInfo(list){
 
 chrome.storage.local.get(['logInFlag'], function(result) {
 	if(result.logInFlag == 1){
-//		if(window.location.toString() == "http://avon.cs.nott.ac.uk/~psyjct/web-app/html/index.html"){
-		if(window.location.toString() == "http://192.168.64.2/web-app/html/index.html"){
+		if(window.location.toString() == "http://avon.cs.nott.ac.uk/~psyjct/web-app/html/index.html"){
+//		if(window.location.toString() == "http://192.168.64.2/web-app/html/index.html"){
 			chrome.storage.local.get(['userInfoInPlugIn'], function(result) {
 		          var userName = result.userInfoInPlugIn.userName;
 		          var userPassword = result.userInfoInPlugIn.userPassword;
@@ -257,20 +259,41 @@ chrome.storage.local.get(['logInFlag'], function(result) {
  * @author payne YU
  */
 function updateWebappUserInfo(){
-//  if(window.location.toString() == "http://avon.cs.nott.ac.uk/~psyjct/web-app/html/index.html"){
-	if(window.location.toString() == "http://192.168.64.2/web-app/html/index.html"){
+    if(window.location.toString() == "http://avon.cs.nott.ac.uk/~psyjct/web-app/html/index.html"){
+//	if(window.location.toString() == "http://192.168.64.2/web-app/html/index.html"){
 		document.getElementsByName("login")[0].onsubmit = function(){
 			var userName = document.getElementsByName("username")[0].value;
 			var userPassword = document.getElementsByName("password")[0].value;
 			chrome.storage.local.set({ "userInfoInWebapp": {userName:userName, userPassword:userPassword}});
 			chrome.storage.local.set({ "logInFlag": 2});
 		}
-//	}else if(window.location.toString() == "http://avon.cs.nott.ac.uk/~psyjct/web-app/php/editTask.php"){
-	}else if(window.location.toString() == "http://192.168.64.2/web-app/php/editTask.php"){
+	}else if(window.location.toString() == "http://avon.cs.nott.ac.uk/~psyjct/web-app/php/editTask.php"){
+//	}else if(window.location.toString() == "http://192.168.64.2/web-app/php/editTask.php"){
 		chrome.storage.local.get(['logInFlag'], function(result) {
 			if(result.logInFlag == 2){
 				chrome.runtime.sendMessage({msg:"re-logInPlugIn"});
 			}
 		})
 	}
+}
+
+
+/**
+ *  check whether scrape name is empty or duplicate
+ * @author peichen YU
+ */
+function scrapeNameCheck(scrapeName){
+	if(scrapeName == ""){
+		alert("scrape name shouldn't be empty");
+		return true;
+	}
+	
+	for(i in currentScrape){
+		if(currentScrape[i].scrapeName == scrapeName){
+			alert("scrape name already exists in task!");
+			return true;
+		}
+	}
+	
+	return false;
 }

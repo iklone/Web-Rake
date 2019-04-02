@@ -63,9 +63,6 @@ function addDelBtnOnTask(li){
  * @author Ang Ding
  */
 function task_delete_btn(){
-	// to do
-	//taskID
-	//deleteTaskInDatabase(taskID);
 	var del = document.getElementsByClassName("task-del-btn");
 	for (var i = 0; i < del.length; i++) {
 		del[i].onclick = function() {
@@ -74,16 +71,14 @@ function task_delete_btn(){
 			var a = confirm("Delete the task " + name + " permanently?");
 			if(a == true){
 				div.style.display = "none";
-				for(i in allTask){
-					if(allTask[i].taskName == name){
-						taskID = allTask[i].taskID;
-						allTask.splice(i, 1);
+				for(i in taskList){
+					if(taskList[i].taskName == name){
+						taskID = taskList[i].taskID;
+						taskList.splice(i, 1);
 						break;
 					}
 				}
 				deleteTaskInDatabase(taskID);
-			}else{
-				
 			}
 		}
 	}
@@ -97,12 +92,11 @@ function task_delete_btn(){
 function deleteTaskInDatabase(taskID){
 	let xhr = new XMLHttpRequest();
 //	xhr.open("POST", "http://avon.cs.nott.ac.uk/~psyjct/webapp/php/deleteTask.php", true);
-	xhr.open("POST", "http://192.168.64.2/webapp/php/deleteTask.php", true);
+	xhr.open("POST", "http://192.168.64.2/web-app/php/deleteTask.php", true);
 	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
 	xhr.onreadystatechange = function() {
-    		if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
-    			console.log(allTask);
-			chrome.storage.local.set({ "allTask": allTask});
+   	if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+    		console.log(taskList);
 		}
 	}
 	xhr.send('taskID=' + taskID);
@@ -126,30 +120,32 @@ function addDelBtnOnScrape(li){
  * @author Ang Ding
  */
 function scrape_delete_btn(){
-	//to do
-	//scrapeID
-	//deleteScrapeInDatabase(scrapeID)
 	var del = document.getElementsByClassName("scrape-del-btn");
-	for (var i = 0; i < del.length; i++) {
+	for (var i = 0; i < del.length; i++)(function(i){
 		del[i].onclick = function() {
 			var div = this.parentElement;
-			//var name = allScrapeList[i].scrapeName;
+			var scrape = del[i].parentNode.children[0].innerHTML;
+			var name = scrape.substring(0, scrape.indexOf(":"));
 			var a = confirm("Delete the scrape " + name + " permanently?");
+			var scrapeID;
 			if(a == true){
 				div.style.display = "none";
 				for(i in allScrapeList){
-					if(allScrapeList[i].scrapeName == name){
-						scrapeID = allScrapeList[i].scrapeID;
-						allScrapeList.splice(i, 1);
-						break;
+					if(allScrapeList[i][0].taskID = currentTaskID){
+						for(j in allScrapeList[i]){
+							if(allScrapeList[i][j].scrapeName == name){
+								scrapeID = allScrapeList[i][j].scrapeID;
+								allScrapeList[i].splice(i, 1);
+								break;
+							}
+						}
 					}
 				}
+				console.log(scrapeID);
 				deleteScrapeInDatabase(scrapeID);
-			}else{
-				
 			}
 		}
-	}
+	})(i)
 }
 
 
@@ -160,12 +156,11 @@ function scrape_delete_btn(){
 function deleteScrapeInDatabase(scrapeID){
 	let xhr = new XMLHttpRequest();
 //	xhr.open("POST", "http://avon.cs.nott.ac.uk/~psyjct/webapp/php/deleteTask.php", true);
-	xhr.open("POST", "http://192.168.64.2/webapp/php/deleteScrape.php", true);
+	xhr.open("POST", "http://192.168.64.2/web-app/php/deleteScrape.php", true);
 	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
 	xhr.onreadystatechange = function() {
-    		if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
-    			console.log(allTask);
-			chrome.storage.local.set({ "allTask": allTask});
+    if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+			// console.log(allScrapeList);
 		}
 	}
 	xhr.send('scrapeID=' + scrapeID);
@@ -175,9 +170,26 @@ function deleteScrapeInDatabase(scrapeID){
  * function used to check the format of schedule form
  * @author peichen YU
  */
-function check(){
-	var type = document.schedule.elements[0].value;
-	if(type == "0"){
+function submit(){
+	var Type = document.getElementById('Type').value;
+	if(Type == "0"){
 		return false;
 	}
+
+	var Min = document.getElementById('Min').value;
+	var Hour = document.getElementById('Hour').value;
+	var DotW = document.getElementById('DotW').value;
+	var DotM = document.getElementById('DotM').value;
+	
+	let xhr = new XMLHttpRequest();
+	//	xhr.open("POST", "http://avon.cs.nott.ac.uk/~psyjct/webapp/php/schedule.php", true);
+	xhr.open("POST", "http://192.168.64.2/web-app/php/schedule.php", true);
+	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
+	xhr.onreadystatechange = function() {
+		if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+			document.getElementById("taskSchedule").style.display = "none";
+		}
+	}
+
+	xhr.send('taskID=' + currentTaskID + '&Type=' + Type + '&Min=' + Min + '&Hour=' + Hour + '&DotW=' + DotW + '&DotM=' + DotM);
 }

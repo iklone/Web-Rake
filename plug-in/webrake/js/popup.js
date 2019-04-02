@@ -66,8 +66,8 @@ function loginWithWebApp(){
 	    var p = result.userInfoInWebapp.userPassword;    		 
 	    	// XMLHttpRequest
 		var xhr = new XMLHttpRequest();
-//		xhr.open("POST", "http://avon.cs.nott.ac.uk/~psyjct/plug-in/php/login.php", true);
-		xhr.open("POST", "http://192.168.64.2/plug-in/login.php", true);
+		xhr.open("POST", "http://avon.cs.nott.ac.uk/~psyjct/plug-in/php/login.php", true);
+//		xhr.open("POST", "http://192.168.64.2/plug-in/login.php", true);
 		xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
 		console.log(xhr);
 		xhr.onreadystatechange = function() {

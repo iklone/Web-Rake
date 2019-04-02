@@ -62,12 +62,8 @@ function display_scrape(scrape){
 		for(i in scrape){
 	    		var li = document.createElement("li");
 	    		li.className = "scrape-data";
-	    		var data;
-	    		if(scrape[i].sampleData){
-	    			data = scrape[i].sampleData;
-	    		}else if(scrape[i].resultValue){
-	    			data = scrape[i].resultValue;
-	    		}
+	    		console.log(scrape);
+	    		var data = scrape[i].data
 	    		var text = document.createTextNode(scrape[i].scrapeName + ": " + data);
 	    		li.appendChild(text);
 	    		ul.appendChild(li);
@@ -99,8 +95,8 @@ function ContentScriptController(flag){
  */
 function getScrape(taskID){
 	let xhr = new XMLHttpRequest();
-//	xhr.open("POST", "http://avon.cs.nott.ac.uk/~psyjct/plug-in/php/scrapeDisplay.php", true);
-	xhr.open("POST", "http://192.168.64.2/plug-in/scrapeDisplay.php", true);
+	xhr.open("POST", "http://avon.cs.nott.ac.uk/~psyjct/plug-in/php/scrapeDisplay.php", true);
+//	xhr.open("POST", "http://192.168.64.2/plug-in/scrapeDisplay.php", true);
 	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
 	xhr.onreadystatechange = function() {
     		if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {

@@ -12,12 +12,7 @@ window.onload = function getUserInfo(){
    
     chrome.storage.local.get(['allTask'], function(result) {
 		console.log(result.allTask);
-		if(result.allTask){
-			allTask = result.allTask;
-		    displayTask();
-		}else{
-		  	getTaskInfo();
-		}
+		getTaskInfo();
     });
 		
 	chrome.storage.local.get(['bgColor'], function(result) {
@@ -77,8 +72,8 @@ function displayTask(){
  */
 function getTaskInfo(){
 	let xhr = new XMLHttpRequest();
-//	xhr.open("POST", "http://avon.cs.nott.ac.uk/~psyjct/plug-in/php/taskDisplay.php", true);
-	xhr.open("POST", "http://192.168.64.2/plug-in/taskDisplay.php", true);
+	xhr.open("POST", "http://avon.cs.nott.ac.uk/~psyjct/plug-in/php/taskDisplay.php", true);
+//	xhr.open("POST", "http://192.168.64.2/plug-in/taskDisplay.php", true);
 	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
 	xhr.onreadystatechange = function() {
 	    	if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
@@ -417,22 +412,11 @@ function scrape_btn(){
 	}
 }
 
-///**
-// * Implement the functionality of manage button
-// * @author Ang Ding
-// */
-//function manage_btn(){
-//	var manage = document.getElementsByClassName("manage-btn");
-//	for (i = 0; i < manage.length; i++) {
-//		manage[i].onclick = function() {
-//		}
-//	}
-//}
+
 /**
  * implement the functionality of homepage button
  * @author peichen YU
  */
-
 function homepage_btn(){
 	var homepage = document.getElementById("homePage-btn");
 	homepage.onclick = function(){
@@ -441,16 +425,16 @@ function homepage_btn(){
 			if(result.userInfoInWebapp){
 				console.log(result.userInfoInWebapp);
 				if(userName == result.userInfoInWebapp.userName && userPassword == result.userInfoInWebapp.userPassword){
-					//window.open("http://avon.cs.nott.ac.uk/~psyjct/web-app/php/editTask.php");
-					window.open("http://192.168.64.2/web-app/php/editTask.php");
+					window.open("http://avon.cs.nott.ac.uk/~psyjct/web-app/php/editTask.php");
+//					window.open("http://192.168.64.2/web-app/php/editTask.php");
 				}else{
 					chrome.storage.local.set({"logInFlag" : 1});
-				  	//window.open("http://avon.cs.nott.ac.uk/~psyjct/web-app/html/index.html")
-					window.open("http://192.168.64.2/web-app/html/index.html");
+				  	window.open("http://avon.cs.nott.ac.uk/~psyjct/web-app/html/index.html");
+//					window.open("http://192.168.64.2/web-app/html/index.html");
 				}
 			}else{
-				//window.open("http://avon.cs.nott.ac.uk/~psyjct/web-app/html/index.html")
-				window.open("http://192.168.64.2/web-app/html/index.html");
+				window.open("http://avon.cs.nott.ac.uk/~psyjct/web-app/html/index.html");
+//				window.open("http://192.168.64.2/web-app/html/index.html");
 			}
 		});
 	}
@@ -477,8 +461,8 @@ function checkTaskNameDuplicate(taskName){
 function deleteTaskInDatabase(taskID){
 	console.log('?');
 	let xhr = new XMLHttpRequest();
-//	xhr.open("POST", "http://avon.cs.nott.ac.uk/~psyjct/plug-in/php/deleteTask.php", true);
-	xhr.open("POST", "http://192.168.64.2/plug-in/deleteTask.php", true);
+	xhr.open("POST", "http://avon.cs.nott.ac.uk/~psyjct/plug-in/php/deleteTask.php", true);
+//	xhr.open("POST", "http://192.168.64.2/plug-in/deleteTask.php", true);
 	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
 	xhr.onreadystatechange = function() {
     		if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
@@ -507,8 +491,8 @@ function newtaskSender(taskName) {
 		var taskDescription = document.getElementById('decription-box').value;
 		
 		let xhr = new XMLHttpRequest();
-//		xhr.open("POST", "http://avon.cs.nott.ac.uk/~psyjct/plug-in/php/addTask.php", true);
-		xhr.open("POST", "http://192.168.64.2/plug-in/addTask.php", true);
+		xhr.open("POST", "http://avon.cs.nott.ac.uk/~psyjct/plug-in/php/addTask.php", true);
+//		xhr.open("POST", "http://192.168.64.2/plug-in/addTask.php", true);
 		xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
 		xhr.onreadystatechange = function() {
 			if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
@@ -516,6 +500,17 @@ function newtaskSender(taskName) {
 				allTask.unshift({"taskName":taskName, "taskID":newTaskId, taskURL:url});
 				chrome.storage.local.set({ "currentTask":{taskName: taskName, taskID:newTaskId, taskURL:url}});
 				chrome.storage.local.set({ "allTask": allTask});
+				// store the currentTabID
+				var params = {
+					active: true,
+					currentWindow: true
+				}
+				chrome.tabs.query(params, getTabs);
+				function getTabs(tab){
+					chrome.storage.local.set({ "currentTabId": tab[0].id});
+				}
+				
+				chrome.storage.local.set({ "currentTabId": tab[0].id});
 				
 				//open content script
 				ContentScriptController();

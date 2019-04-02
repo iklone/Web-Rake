@@ -19,7 +19,7 @@
 			<div class="taskArea">
 				<div id="taskList" class="left-list">
 					<div class="taskSearch">
-						<input type="text" class="taskSearch-box" placeholder="Search tasks...">
+						<input type="text" class="taskSearch-box" id="taskSearch" onkeyup="taskSearcher()" placeholder="Search tasks...">
 						<button id="taskSearch-btn">Search</button>
 					</div>
 					
@@ -38,42 +38,44 @@
 
 							// find the result
 							$results = mysqli_query($link, "select b.taskName, b.taskID, b.taskURL from UserAuthorisation a left join Task b on a.taskID = b.taskID where a.userID="."'"."$userId"."'");
-							
+
+							$taskList = [];
+							$allScrapeList = [];
+
 							if(mysqli_num_rows($results) >= 1){
-								$taskList = [];
 								while($task = mysqli_fetch_assoc($results)){
 									$taskList[] = $task;
 								}
 				
-							}
 
-						    $allScrapeList = [];
-						    foreach($taskList as $task){
-						    	$taskID = $task['taskID'];
+							    foreach($taskList as $task){
+							    	$taskID = $task['taskID'];
 
-								// find the result
-								$results = mysqli_query($link, "select scrapeName, scrapeID, sampleData from Scrape where taskID ="."'"."$taskID"."'");
+									// find the result
+									$results = mysqli_query($link, "select taskID, scrapeName, scrapeID, sampleData as data from Scrape where taskID ="."'"."$taskID"."'");
 
-								$scrapeList = [];
-								while($scrapeInfo = mysqli_fetch_assoc($results)) {
-									$id = $scrapeInfo['scrapeID'];
-									$values = mysqli_query($link, "SELECT b.scrapeName, a.resultValue FROM Result a left join Scrape b on a.scrapeID = b.scrapeID WHERE a.ScrapeID = "."'"."$id"."'"." order by resultTime DESC");
-									if(mysqli_num_rows($values) >= 1){
-										$value = mysqli_fetch_assoc($values);
-									}else{
-										$value = $scrapeInfo;
+									$scrapeList = [];
+									while($scrapeInfo = mysqli_fetch_assoc($results)) {
+										$id = $scrapeInfo['scrapeID'];
+										$values = mysqli_query($link, "SELECT b.taskID, b.scrapeName, b.scrapeID, a.resultValue as data FROM Result a left join Scrape b on a.scrapeID = b.scrapeID WHERE a.ScrapeID = "."'"."$id"."'"." order by resultTime DESC");
+										if(mysqli_num_rows($values) >= 1){
+											$value = mysqli_fetch_assoc($values);
+										}else{
+											$value = $scrapeInfo;
+										}
+								    	$scrapeList[] = $value;
 									}
-							    	$scrapeList[] = $value;
+									$allScrapeList[] = $scrapeList;
 								}
-								$allScrapeList[] = $scrapeList;
 							}
 						?>
 						var currentTaskID;
 						var currentTaskName;
-						var task_num = <?php echo count($taskList); ?>;
-						var ul = document.getElementById('task-ul');
 						var taskList = <?php echo json_encode($taskList); ?>;
 						var allScrapeList = <?php echo json_encode($allScrapeList); ?>;
+						console.log(allScrapeList);
+						var task_num = taskList.length;
+						var ul = document.getElementById('task-ul');
 						for (var i = 1; i <= task_num; i++){
 							var li = document.createElement('li');
 							li.className = "task-box";
@@ -89,11 +91,13 @@
 							li.appendChild(urlHref);
 							ul.appendChild(li);
 							addDelBtnOnTask(li);
+							task_delete_btn();
 						}
 						//task_delete_btn();
 						for (var i = 0; i < task_num; i++) (function(i){
 							var x = document.getElementsByClassName('task-box')[i];
 							x.onclick = function(){
+								var btn = document.getElementById("schedule-btn").style.display = "block";
 								for(j in taskList){
 									if(taskList[j].taskName == x.firstElementChild.innerHTML){
 										currentTaskID = taskList[j].taskID;
@@ -112,23 +116,23 @@
 								while(ul.firstChild){
 									ul.removeChild(ul.firstChild);
 								}
-								console.log(allScrapeList[index]);
-								if(allScrapeList[index].length != 0){
-									for(j in allScrapeList[index]){
-										var li = document.createElement("li");
-										li.className = "scrape-data";
-										var data;
-										if(allScrapeList[index][j].sampleData){
-											data = allScrapeList[index][j].sampleData;
-							    		}else if(allScrapeList[index][j].resultValue){
-							    			data = allScrapeList[index][j].resultValue;
-							    		}
-										var text = document.createTextNode(allScrapeList[index][j].scrapeName + ": " + data);
-										li.appendChild(text);
-										ul.appendChild(li);
-										addDelBtnOnScrape(li);
+								if(allScrapeList[index]){
+									if(allScrapeList[index].length != 0){
+										for(j in allScrapeList[index]){
+											var li = document.createElement("li");
+											li.className = "scrape-data";
+											var data = allScrapeList[index][j].data;
+											var text = document.createTextNode(allScrapeList[index][j].scrapeName + ": " + data);
+											var span = document.createElement("span");
+											span.className = "scrapeName";
+											span.appendChild(text);
+											li.appendChild(span);
+											ul.appendChild(li);
+											addDelBtnOnScrape(li);
+											scrape_delete_btn();
+										}
 									}
-								}	
+								}
 							}
 						})(i)
 						//scrape_delete_btn();
@@ -136,12 +140,12 @@
 				</div>
 				<div id="scrapeList" class="right-list">
 					<div class="scrapeSearch">
-						<input type="text" class="scrapeSearch-box" placeholder="Search scrapes...">
+						<input type="text" class="scrapeSearch-box" id="scrapeSearch" onkeyup="scrapeSearcher()" placeholder="Search scrapes...">
 						<button id="scrapeSearch-btn">Search</button>
 					</div>
 					<h1>Your scrape:</h1>
 					<div>
-						<button id="schedule-btn" class="scheduleBtn">Schedule</button>
+						<button id="schedule-btn" class="scheduleBtn" onclick="schedule()">Schedule</button>
 					</div>
 					
 					<div>
@@ -159,21 +163,20 @@
 					<div class="modal-body">
 						
 						<div>
-							<form name="schedule" action="schedule.php" method="post" onsubmit = "return check()">
-							Type:<select name="Tsype">
-								<option value="0" selected>(please select:)</option>
-								<option value="Minutely">Minutely</option>
-								<option value="Hourly">Hourly</option>
-								<option value="Daily">Daily</option>
-								<option value="Weekly">Weekly</option>
-							</select>
-							Min:<input type="number" min="0" max="59" name="Min">
-							Hour:<input type="number" min="0" max="23" name="Hour">
-							day:<input type="number" min="1" max="31" name="DotW">
-							month:<input type="number" min="1" max="12" name="DotM">
-							taskName:<input type="text" name="taskName">
-							<input type="submit" value="submit" >
-							</form>							
+							<div>
+						       Type:<select id="Type">
+						        <option value="0" selected>(please select:)</option>
+						        <option value="Minutely">Minutely</option>
+						        <option value="Hourly">Hourly</option>
+						        <option value="Daily">Daily</option>
+						        <option value="Weekly">Weekly</option>
+						       </select>
+						       Min:<input id="Min" type="number" min="0" max="59" name="Min">
+						       Hour:<input id="Hour"type="number" min="0" max="23" name="Hour">
+						       day:<input id="DotW"type="number" min="1" max="31" name="DotW">
+						       month:<input id="DotM" type="number" min="1" max="12" name="DotM">
+						       <input type="button" id="sub" value="submit" onclick="submit()"/>
+					    	</div>						
 						</div>
 					</div>
 					<div class="modal-footer">
@@ -190,9 +193,6 @@
 			var close = document.getElementById("schedule-close");
 			schedule_btn.onclick = function(){
 				schedule.style.display = "block";
-				if(currentTaskName){
-					document.schedule.elements[5].value = currentTaskName;
-				}
 			}
 			cancel_btn.onclick = function(){
 					schedule.style.display = "none";
