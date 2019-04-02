@@ -4,10 +4,10 @@
 	ini_set('display_errors', 'On');
 
 	/*relevant DB details*/
-	$db_host = 'mysql.cs.nott.ac.uk';
-	$db_user = 'psyjct';
-	$db_pass = '1234Fred';
-	$db_name = 'psyjct';
+    $db_host = '192.168.64.2';
+	$db_user = 'psypy1';
+	$db_pass = 'Ypc1998!';
+	$db_name = 'psypy1';
 
 	/*connect into DB*/
 	$link = mysqli_connect($db_host, $db_user, $db_pass, $db_name);

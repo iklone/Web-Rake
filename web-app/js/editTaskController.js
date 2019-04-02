@@ -75,3 +75,14 @@ function deleteScrapeInDatabase(scrapeID){
 	}
 	xhr.send('scrapeID=' + scrapeID);
 }
+
+/**
+ * function used to check the format of schedule form
+ * @author peichen YU
+ */
+function check(){
+	var type = document.schedule.elements[0].value;
+	if(type == "0"){
+		return false;
+	}
+}

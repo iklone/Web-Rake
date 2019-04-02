@@ -68,6 +68,8 @@
 								$allScrapeList[] = $scrapeList;
 							}
 						?>
+						var currentTaskID;
+						var currentTaskName;
 						var task_num = <?php echo count($taskList); ?>;
 						var ul = document.getElementById('task-ul');
 						var taskList = <?php echo json_encode($taskList); ?>;
@@ -80,15 +82,10 @@
 							span.className = "taskName";
 							span.appendChild(text);
 							li.appendChild(span);
-							//console.log(span);
-							//ul.appendChild(li);
-							
-							// var url = document.createTextNode("URL: " + taskList[i - 1].taskURL);
 							var urlHref = document.createElement("a");
 							urlHref.className = "url";
 							urlHref.href = taskList[i - 1].taskURL;
 							urlHref.innerText = taskList[i - 1].taskURL;
-							// urlHerf.appendChild(url);
 							li.appendChild(urlHref);
 							ul.appendChild(li);
 							addDelBtnOnTask(li);
@@ -97,6 +94,13 @@
 						for (var i = 0; i < task_num; i++) (function(i){
 							var x = document.getElementsByClassName('task-box')[i];
 							x.onclick = function(){
+								for(j in taskList){
+									if(taskList[j].taskName == x.firstElementChild.innerHTML){
+										currentTaskID = taskList[j].taskID;
+										currentTaskName = taskList[j].taskName;
+										break;
+									}
+								}
 								var taskName = x.childNodes[0].innerHTML;
 								var index;
 								for(z in taskList){
@@ -137,7 +141,7 @@
 					</div>
 					<h1>Your scrape:</h1>
 					<div>
-						<button id="schedule-btn" class="scheduleBtn" onclick="schedule()">Schedule</button>
+						<button id="schedule-btn" class="scheduleBtn">Schedule</button>
 					</div>
 					
 					<div>
@@ -145,30 +149,6 @@
 					</div>
 				</div>
 			</div>
-			<script>
-				function schedule(){
-					var schedule_btn = document.getElementById("schedule-btn");
-					var schedule = document.getElementById("taskSchedule");
-					var cancel_btn = document.getElementById("schedule-cancel-btn");
-					var ok_btn = document.getElementById("schedule-ok-btn");
-					var close = document.getElementById("schedule-close");
-					schedule_btn.onclick = function(){
-						schedule.style.display = "block";
-					}
-					cancel_btn.onclick = function(){
-							schedule.style.display = "none";
-						}
-					close.onclick = function() {
-						schedule.style.display = "none";
-					}
-					window.onclick = function(event) {
-						if (event.target == schedule) {
-							schedule.style.display = "none";
-						}
-					}
-				}
-				schedule();
-			</script>
 			
 			<div id="taskSchedule" class="schedule-modal">
 				<div class="modal-content">
@@ -179,39 +159,52 @@
 					<div class="modal-body">
 						
 						<div>
-							<p class="type">Type:</p>
-							<div class="radio">
-								<label class="container">Minutely
-									<input type="radio" checked="checked" name="radio">
-									<span class="checkmark"></span>
-									&nbsp &nbsp &nbsp
-								</label>
-								<label class="container">Hourly
-									<input type="radio" name="radio">
-									<span class="checkmark"></span>
-									&nbsp &nbsp &nbsp
-								</label>
-								<label class="container">Daily
-									<input type="radio" name="radio">
-									<span class="checkmark"></span>
-									&nbsp &nbsp &nbsp
-								</label>
-								<label class="container">Weekly
-									<input type="radio" name="radio">
-									<span class="checkmark"></span>
-								</label>
-							</div>
-							
+							<form name="schedule" action="schedule.php" method="post" onsubmit = "return check()">
+							Type:<select name="Tsype">
+								<option value="0" selected>(please select:)</option>
+								<option value="Minutely">Minutely</option>
+								<option value="Hourly">Hourly</option>
+								<option value="Daily">Daily</option>
+								<option value="Weekly">Weekly</option>
+							</select>
+							Min:<input type="number" min="0" max="59" name="Min">
+							Hour:<input type="number" min="0" max="23" name="Hour">
+							day:<input type="number" min="1" max="31" name="DotW">
+							month:<input type="number" min="1" max="12" name="DotM">
+							taskName:<input type="text" name="taskName">
+							<input type="submit" value="submit" >
+							</form>							
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button id="schedule-ok-btn">Apply</button>
 						<button id="schedule-cancel-btn">Cancel</button>
 					</div>
 				</div>
 			</div>
 		</div>
 		<script>
+			var schedule_btn = document.getElementById("schedule-btn");
+			var schedule = document.getElementById("taskSchedule");
+			var cancel_btn = document.getElementById("schedule-cancel-btn");
+			var ok_btn = document.getElementById("schedule-ok-btn");
+			var close = document.getElementById("schedule-close");
+			schedule_btn.onclick = function(){
+				schedule.style.display = "block";
+				if(currentTaskName){
+					document.schedule.elements[5].value = currentTaskName;
+				}
+			}
+			cancel_btn.onclick = function(){
+					schedule.style.display = "none";
+				}
+			close.onclick = function() {
+				schedule.style.display = "none";
+			}
+			window.onclick = function(event) {
+				if (event.target == schedule) {
+					schedule.style.display = "none";
+				}
+			}
 		</script>
 	</body>
 </html>
