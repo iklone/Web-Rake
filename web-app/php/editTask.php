@@ -3,7 +3,6 @@
 	<head>
 		<meta charset="utf-8">
 		<title></title>
-		<!-- <script src="../js/editTask.js"></script> -->
 		<link rel = 'stylesheet' type = 'text/css' href = '../css/editTask.css'>
 		<script type="text/javascript" src='../js/editTaskController.js'></script>
 	</head>
