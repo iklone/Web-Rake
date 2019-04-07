@@ -1,8 +1,16 @@
+ /**
+ * this is javascript code for currentTask.html
+ */
+
+
+//variable used to store taskName
 var taskName;
+//variable used to store all scrpae in current task
 var currentTaskScrape = [];
 
 /**
  * set the currentTask page's basic information
+ * @author peichen YU
  */
 window.onload = function pageSet(){
 	document.getElementById("back-btn").addEventListener('click', function(){

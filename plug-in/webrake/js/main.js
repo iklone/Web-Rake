@@ -1,4 +1,8 @@
 /**
+ * this is javascript code for main.html
+ */
+
+/**
  * get all user information from the background
  * @author Ang Ding, Peichen Yu
  */
@@ -67,7 +71,7 @@ function displayTask(){
 
 
 /**
- * link to database get all user's task
+ * link to database to get all task for current user
  * @author peichen YU
  */
 function getTaskInfo(){
@@ -92,7 +96,7 @@ function getTaskInfo(){
 
 
 /** 
- * This function shows the window of adding new task.
+ * This function is used to shows the window of adding new task.
  * @author Ang Ding
  */
 function add_new_task(){
@@ -145,7 +149,7 @@ function add_new_task(){
 }
 
 /**
- * This function shows setting  window
+ * This function is used to shows setting window
  * @author: Ang Ding
  */
 function setting(){
@@ -187,7 +191,7 @@ function setting(){
 
 
 /**
- * Creates a new task
+ * this function is used to create new task
  * @author Ang Ding
  */
 function newElement() {
@@ -248,7 +252,8 @@ function newElement() {
 }
 
 /**
- * Add a delete button
+ * this function is used to add a delete button
+ * @param {Object} li
  * @author Ang Ding
  */
 function addDelBtn(li){
@@ -259,19 +264,11 @@ function addDelBtn(li){
 	li.appendChild(del_btn);
 }
 
-///**
-// * Add a manage button
-// * @author Ang Ding
-// */
-//function addManageBtn(li){
-//	var manage_btn = document.createElement("button");
-//	var txt = document.createTextNode("manage");
-//	manage_btn.className = "manage-btn";
-//	manage_btn.appendChild(txt);
-//	li.appendChild(manage_btn);
-//}
-
-
+/**
+ * this function is used to add a scrape button
+ * @param {Object} li
+ *  * @author Ang Ding
+ */
 function addScrapeBtn(li){
 	var scrape_btn = document.createElement("button");
 	var txt = document.createTextNode("scrape");
@@ -283,14 +280,18 @@ function addScrapeBtn(li){
 
 /**
  * Add buttons to a task in the AllTask list
+ * @param {Object} li
  * @author Ang Ding
  */
 function addBtnToAllTask(li){
 	addScrapeBtn(li);
 	addDelBtn(li);
-//	addManageBtn(li);
 }
 
+/**
+ * function used for searching local task
+ * @author Ang Ding
+ */
 function taskSearcher() {
 	document.getElementById("search").addEventListener('keyup', function(){
   		// Declare variables

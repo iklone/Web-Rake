@@ -1,3 +1,12 @@
+/**
+ * the is used for chrome background
+ */
+
+
+/** 
+ * listener: used to receive request from contextMenu and send information back to the web page
+ * @author peichen YU
+ */
 chrome.contextMenus.onClicked.addListener(function addScriptOnClick(info, tab){
 	if(tab){
 		chrome.tabs.sendMessage(tab.id, {'contextMenuId': info.menuItemId, 'info': info}, function(response) {});
@@ -5,6 +14,10 @@ chrome.contextMenus.onClicked.addListener(function addScriptOnClick(info, tab){
 	return Promise.resolve("Dummy response to keep the console quiet");
 });
 
+/**
+ * listener: used to receive request from popup or contenScript
+ * @author peichen YU
+ */
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
    	if(request.msg == "scrapeUpdate"){
 		chrome.storage.local.get(['newTaskScrape'], function(result) {
@@ -50,7 +63,10 @@ function sendScrape(scrape){
 	})
 }
 
-
+/**
+ * listener: used to receive request contenScript, and send request back to web page in order to stop or start content script.
+ * @author peichen YU
+ */
 chrome.tabs.onUpdated.addListener(
 	function(tabId, changeInfo, tab) {
 		chrome.storage.local.get(['currentTask'], function(result) {
@@ -63,7 +79,6 @@ chrome.tabs.onUpdated.addListener(
 					msg = {txt: "start contentScript"};
 					chrome.storage.local.set({ "currentTabId": tabId});
 				}
-				console.log(msg);
 				
 				chrome.tabs.sendMessage(tabId, msg);
 			}

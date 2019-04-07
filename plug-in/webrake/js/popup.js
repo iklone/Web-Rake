@@ -1,3 +1,11 @@
+ /**
+ * this is javascript code for popUp.html
+ */
+
+/**
+ * remove info stored in chrome.storage.local
+ * @author peichen YU
+ */
 chrome.storage.local.remove(["userInfoInPlugIn","allTask",'currentTabId','currentTask','newTaskScrape','newTaskScrape'],function(){
 	var error = chrome.runtime.lastError;
 	if (error) {
@@ -5,6 +13,10 @@ chrome.storage.local.remove(["userInfoInPlugIn","allTask",'currentTabId','curren
 	}
 })
 
+/**
+ * check log in flag, if flag = 2 log in plug in automatically
+ * @author peichen YU
+ */
 chrome.storage.local.get(['logInFlag'], function(result) {
 	if(!result.logInFlag || result.logInFlag == 1){
 		chrome.storage.local.set({ "logInFlag": 0});
@@ -13,6 +25,10 @@ chrome.storage.local.get(['logInFlag'], function(result) {
 	}
 });
 
+/**
+ * function used to initilize log in interface and functionality
+ * @author peichen YU
+ */
 window.onload = function initialize() {
 	document.getElementById("logo").addEventListener('click', function(){
 //		window.open("http://192.168.64.2/web-app/php/home-page.php");
@@ -56,7 +72,7 @@ window.onload = function initialize() {
 }
 
 /**
- * automatically login in after loging in the web app
+ * automatically login in plug-in when web app has been logged in
  * @author peichenYU
  */
 function loginWithWebApp(){

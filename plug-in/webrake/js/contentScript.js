@@ -1,3 +1,7 @@
+/**
+ * this is content script code inserted into web page
+ */
+
 // used store all scrape waited to be push into scrapeList
 var scrapeWaitedList = [];
 // used store all scrape has already been created by user
@@ -7,8 +11,12 @@ var scrapeContentList = [];
 // function used to store webapp userInfo
 updateWebappUserInfo();
 
-// initialize logInFlag 0:both web-app and plug-in have been loged in. 1:plug-in has been loged in
-//                      2:web-app has been loged in. 3:both has been loged in
+
+/**
+ * initialize logInFlag 0:both web-app and plug-in have been loged in. 1:plug-in has been loged in
+ *                      2:web-app has been loged in. 3:both has been loged in
+ * @author peichen YU
+ */
 if(window.location.toString() == "http://avon.cs.nott.ac.uk/~psyjct/web-app/html/index.html"){
 //if(window.location.toString() == "http://192.168.64.2/web-app/html/index.html"){
 	chrome.storage.local.get(['logInFlag'], function(result) {
@@ -18,7 +26,10 @@ if(window.location.toString() == "http://avon.cs.nott.ac.uk/~psyjct/web-app/html
 	});
 }
 
-
+/**
+ * check the current web url. if url is for current task then start content script
+ * @author peichen YU
+ */
 chrome.storage.local.get(['currentTask'], function(result) {
 	if(result.currentTask){
 		if(result.currentTask.taskURL == window.location.toString()){
@@ -27,7 +38,10 @@ chrome.storage.local.get(['currentTask'], function(result) {
 	}
 })
 
-
+/**
+ * listener used to receive request from background and popup in order to start/stop main functionality of content script
+ * @author peichen YU
+ */
 chrome.runtime.onMessage.addListener(
 	function(request, sender, response){ 
 		console.log(request.txt);
@@ -102,7 +116,7 @@ function startContentScript(){
 
 /**
   * function used to get all scrape in scrapeWaiting and put them into scrapeList with the name user add
-  * if the scrape already exits in scrapeList then alert warnnin information
+  * if the scrape already exits in scrapeList then alert warnning information
   * @author payne YU
   */
 function getClickedElement(){
@@ -162,9 +176,11 @@ function getClickedElement(){
 	document.getElementsByTagName('body')[0].style.zIndex = "";
 }
 
+
 /**
  * function used to get xPath of the element
- * @param {Object} click target
+ * @param {Object} clicked target
+ * @author peichen YU
  */
 function createXPathFromElement(elm) { 
     var allNodes = document.getElementsByTagName('*');
@@ -195,20 +211,13 @@ function createXPathFromElement(elm) {
     var xPath = segs.length ? '/' + segs.join('/') : null;
     console.log(xPath);
     return xPath;
-
-//below is another way to get xPath 
-//if (typeof el == "string") return document.evaluate(el, document, null, 0, null)
-//if (!el || el.nodeType != 1) return ''
-//if (el.id) return "//*[@id='" + el.id + "']"
-//var sames = [].filter.call(el.parentNode.children, function (x) { return x.tagName == el.tagName })
-//return createXPathFromElement(el.parentNode) + '/' + el.tagName.toLowerCase() + (sames.length > 1 ? '['+([].indexOf.call(sames, el)+1)+']' : '')
 }
 
 
 /**
  * function used send new scrapes info to popup window(main.html)
  * @param {Object} content for each scrape
- * @author payne YU
+ * @author peichen YU
  */
 function setTaskContentInfo(list){
 	// send new scrape info to pop up window
@@ -231,7 +240,9 @@ function setTaskContentInfo(list){
 	
 }
 
-
+/**
+ * if LogInFlag == 1 and user is in webapp login page, then use content Script automatically log in web app
+ */
 chrome.storage.local.get(['logInFlag'], function(result) {
 	if(result.logInFlag == 1){
 		if(window.location.toString() == "http://avon.cs.nott.ac.uk/~psyjct/web-app/html/index.html"){
