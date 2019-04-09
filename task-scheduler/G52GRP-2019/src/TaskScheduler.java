@@ -21,7 +21,9 @@ public class TaskScheduler {
 
     	    MAX_RESULT_STORAGE_IN_MB = Integer.parseInt(lineSplit[1]);
     	    System.out.println("The max storage size is: " + MAX_RESULT_STORAGE_IN_MB + "MB");
-    	} catch (IOException e) {
+    	}
+    	catch (IOException e) {
+			System.out.println("Failed to read settings.txt file.");
 			e.printStackTrace();
 			return;
 		}
@@ -41,11 +43,11 @@ public class TaskScheduler {
     			Statement stmt = null;
     			
     			try {
-    				System.out.println("Connecting to database...");
+    				System.out.println("Connecting to database (to check if any tasks are scheduled)...");
     				conn = ConnectionManager.getConnection();
 
-    				//Execute a query
-    				System.out.println("Creating statement...");
+    				//Execute query
+    				System.out.println("Creating statement (to check if any tasks are scheduled)...");
     				stmt = conn.createStatement();
 
     				String sql = "SELECT * FROM (Task, Schedule) WHERE (Task.taskID = Schedule.taskID)";
@@ -85,13 +87,13 @@ public class TaskScheduler {
     								tp.submit(new ElementSearchThread(taskID, urlStr));
     							}
     						default:		 
-    					}
-    				}
+    					} // end switch
+    				} // end while rs.next
     				
     				if (MAX_RESULT_STORAGE_IN_MB != -1)
     					freeSpace(stmt);
     				
-					//Clean-up environment, do we need these here if they're in finally?
+					//Clean-up environment
 					rs.close();
 					stmt.close();
 					conn.close();
@@ -115,33 +117,31 @@ public class TaskScheduler {
 					catch(SQLException se) {
 						se.printStackTrace();
 					}//end finally try
-				}//end try	   
-    		}
-    	}
+				}//end try	
+    		} // end if
+    	} // end while
     }
     
     public static void freeSpace(Statement stmt) {
-		//Execute a query
+    	//Execute a query
     	try {
-    		int nTotalResults = 0;
-    		
 			String sql = "SELECT table_name AS `Result`, round(((data_length + index_length) / 1024 / 1024), 2) `Size in MB` FROM information_schema.TABLES WHERE table_schema = \"psyjct\" AND table_name = \"Result\"";
-	
 			ResultSet rs = stmt.executeQuery(sql);
 			
 			int tableSizeInMB = 0;
-			//Extract data from result set
 			while(rs.next()) {
 				tableSizeInMB = rs.getInt("Size in MB");
 			}
 			
 			sql = "SELECT COUNT(*) FROM Result";
+			rs = stmt.executeQuery(sql);
 			
-			int nResultsToDelete = 0;
-			//Extract data from result set
+    		int nTotalResults = 0;
 			while(rs.next()) {
 				nTotalResults = rs.getInt("COUNT(*)");
 			}
+			
+			int nResultsToDelete = 0;
 			nResultsToDelete = nTotalResults / 5;
 			
 			if (tableSizeInMB > MAX_RESULT_STORAGE_IN_MB) {
@@ -150,6 +150,7 @@ public class TaskScheduler {
     	}
 		catch(SQLException se) { // which of these catches do we need here?
 			//Handle errors for JDBC
+			System.out.println("Failed to free space. Exception in freeSpace().");
 			se.printStackTrace();
 		}
     }

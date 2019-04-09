@@ -33,7 +33,7 @@ public class ElementSearchThread implements Runnable {
 		this.result = new ScrapeResult();
 		createWebClient();
 	}
-	
+
 	@Override
 	public void run() {
 	    try {
@@ -81,7 +81,8 @@ public class ElementSearchThread implements Runnable {
 				}//end finally try
 		   }
 			return;
-		}  
+		}
+	    
 		insertResultIntoDatabase();
 	   	webClient.close(); // plug memory leaks
 	}
@@ -91,7 +92,7 @@ public class ElementSearchThread implements Runnable {
 		java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.OFF);
 	    java.util.logging.Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
 	    
-	    // create webclient
+	    // create webclient and configure settings
 	   	WebClient webClient = new WebClient();
 	   	webClient.getOptions().setTimeout(60000); // ??
 		webClient.waitForBackgroundJavaScript(10000);
@@ -121,13 +122,12 @@ public class ElementSearchThread implements Runnable {
 				elementID = rs.getString("elementID");
 				flag = rs.getInt("flag");
 				sampleData = rs.getString("sampleData");
-				scrapeName = rs.getString("scrapeName");
 				System.out.println("taskID: " + this.taskID + ", scrapeID: " + this.scrapeID + ", Scraping element: " + element + " from: " + this.urlStr);
 				
 				if (flag != 2)
 					scrapeElement();
 				else
-					System.out.println("taskID: " + this.taskID + ", scrapeID: " + this.scrapeID + ", Did not scrape - flag set to 2");
+					System.out.println("taskID: " + this.taskID + ", scrapeID: " + this.scrapeID + ", Did not scrape because scrape flag is 2");
 				
 			    long scrapeEndTime = System.currentTimeMillis();
 			   	System.out.println("taskID: " + this.taskID + ", scrapeID: " + this.scrapeID + ", Time taken: " + (scrapeEndTime - scrapeStartTime) + " milliseconds");
@@ -184,7 +184,7 @@ public class ElementSearchThread implements Runnable {
 			
 			if (result.getElement() == null) {
 				value = "Element not found.";
-				System.out.println("taskID: " + this.taskID + ", scrapeID: " + this.scrapeID + ", The element was not found, New flag: " + result.getFlag());
+				System.out.println("taskID: " + this.taskID + ", scrapeID: " + this.scrapeID + ", After regular and AI scrape attempts, the element was not found, New flag: " + result.getFlag());
 			}
 			else {
 				value = result.getElement();
@@ -426,7 +426,7 @@ public class ElementSearchThread implements Runnable {
 		int depth = 0;
 		int i;
 		
-		System.out.println("taskID: " + this.taskID + ", scrapeID: " + this.scrapeID + ", searchAIFind called.");
+		System.out.println("taskID: " + this.taskID + ", scrapeID: " + this.scrapeID + ", searchAIFind() called.");
 		
 		try {
 			conn = ConnectionManager.getConnection();
@@ -437,7 +437,7 @@ public class ElementSearchThread implements Runnable {
 			while(rs.next()) {
 				depth = rs.getInt("AVG(Depth)") + 1; //Adds 1 to avoid a 0 depth search
 			}
-			System.out.println("taskID: " + this.taskID + ", scrapeID: " + this.scrapeID + ", Average depth from Intervention table: " + depth);
+			System.out.println("\ttaskID: " + this.taskID + ", scrapeID: " + this.scrapeID + ", Average depth from Intervention table: " + depth);
 			
 		    rs.close();
 			stmt.close();
@@ -470,28 +470,27 @@ public class ElementSearchThread implements Runnable {
 	   }//end try
 
 		for (i = 0; i < depth + 1; i++) {
-			System.out.println("taskID: " + this.taskID + ", scrapeID: " + this.scrapeID + ", depth attempt " + i);
+			System.out.println("\ttaskID: " + this.taskID + ", scrapeID: " + this.scrapeID + ", depth attempt " + i);
 			
 			element = findParent(element);
-			System.out.println("taskID: " + this.taskID + ", scrapeID: " + this.scrapeID + ", parent xpath: " + element);
+			System.out.println("\ttaskID: " + this.taskID + ", scrapeID: " + this.scrapeID + ", parent xpath: " + element);
 			
 			HtmlElement parent = page.getFirstByXPath(element);
 			
 			if (parent == null) {
-				System.out.println("taskID: " + this.taskID + ", scrapeID: " + this.scrapeID + ", Parent not found. Continue.");
+				System.out.println("\ttaskID: " + this.taskID + ", scrapeID: " + this.scrapeID + ", Parent not found. Continue.");
 				continue;
 			}
 			if (checkElements(parent, i)) {
 				return true;
 			}
 			
-			System.out.println("taskID: " + this.taskID + ", scrapeID: " + this.scrapeID + ", parent asText(): " + parent.asText());
+			System.out.println("\ttaskID: " + this.taskID + ", scrapeID: " + this.scrapeID + ", parent asText(): " + parent.asText());
+			System.out.println("\ttaskID: " + this.taskID + ", scrapeID: " + this.scrapeID + ", parent has: " + parent.getChildElementCount() + " children");
 			
 			Iterable<HtmlElement> childList = parent.getHtmlElementDescendants();
-			System.out.println("taskID: " + this.taskID + ", scrapeID: " + this.scrapeID + ", parent has: " + parent.getChildElementCount() + " children");
-			
 			for (DomElement e : childList) {
-				System.out.println("taskID: " + this.taskID + ", scrapeID: " + this.scrapeID + ", testing child. asText(): " + e.asText() + ", child id: " + e.getId());
+				System.out.println("\ttaskID: " + this.taskID + ", scrapeID: " + this.scrapeID + ", Testing child with asText(): " + e.asText() + ", child id: " + e.getId());
 				if (checkElements(e, i)) {
 					return true;
 				}
@@ -502,19 +501,18 @@ public class ElementSearchThread implements Runnable {
 	
 	public boolean checkElements(DomElement e, int depth) {
 		boolean passed = false;
+		
 		if (elementID != "") {
 			if (e.getId().toString().equals(elementID) && unchangedType(e.asText())) {
-				System.out.println("taskID: " + this.taskID + ", scrapeID: " + this.scrapeID + ", child id is equals: " + e.getId());
-
-				passed = true;
-			}
-		} else {
-			if (unchangedType(e.asText())) {
 				passed = true;
 			}
 		}
+		else if (unchangedType(e.asText())) {
+				passed = true;
+		}
 		
 		if (passed) {
+			System.out.println("\ttaskID: " + this.taskID + ", scrapeID: " + this.scrapeID + ", A child element passed, updating XPath and adding intervention.");
 			updateXPath(e.getCanonicalXPath(), depth);
 			result.setResult(e.asText());
 			return true;
@@ -534,11 +532,11 @@ public class ElementSearchThread implements Runnable {
 			
 			String sql = "UPDATE Scrape SET Element = \"" + updatedXPath + "\" WHERE ScrapeID = " + this.scrapeID;
 			stmt.executeUpdate(sql);
-			System.out.println("taskID: " + this.taskID + ", scrapeID: " + this.scrapeID + ", Updated Scrape table with new Element XPath.");
+			System.out.println("\ttaskID: " + this.taskID + ", scrapeID: " + this.scrapeID + ", Updated Scrape table with new Element XPath.");
 			
 			sql = "INSERT INTO Intervention (scrapeID, Depth) VALUES (" + scrapeID + "," + depth + ")";
 			stmt.executeUpdate(sql);
-			System.out.println("taskID: " + this.taskID + ", scrapeID: " + this.scrapeID + ", Inserted AI intervention into Intervention table.");
+			System.out.println("\ttaskID: " + this.taskID + ", scrapeID: " + this.scrapeID + ", Inserted AI intervention into Intervention table.");
 			
 			stmt.close();
 			conn.close();
