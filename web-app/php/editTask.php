@@ -61,12 +61,12 @@
 							    	$taskID = $task['taskID'];
 
 									// find the result
-									$results = mysqli_query($link, "select taskID, scrapeName, scrapeID, sampleData as data from Scrape where taskID ="."'"."$taskID"."'");
+									$results = mysqli_query($link, "select taskID, scrapeName, scrapeID, sampleData as data, flag from Scrape where taskID ="."'"."$taskID"."'");
 
 									$scrapeList = [];
 									while($scrapeInfo = mysqli_fetch_assoc($results)) {
 										$id = $scrapeInfo['scrapeID'];
-										$values = mysqli_query($link, "SELECT b.taskID, b.scrapeName, b.scrapeID, a.resultValue as data FROM Result a left join Scrape b on a.scrapeID = b.scrapeID WHERE a.ScrapeID = "."'"."$id"."'"." order by resultTime DESC");
+										$values = mysqli_query($link, "SELECT b.taskID, b.scrapeName, b.scrapeID, a.resultValue as data, b.flag FROM Result a left join Scrape b on a.scrapeID = b.scrapeID WHERE a.ScrapeID = "."'"."$id"."'"." order by resultTime DESC");
 										if(mysqli_num_rows($values) >= 1){
 											$value = mysqli_fetch_assoc($values);
 										}else{
@@ -131,9 +131,17 @@
 											var li = document.createElement("li");
 											li.className = "scrape-data";
 											var data = allScrapeList[index][j].data;
-											var text = document.createTextNode(allScrapeList[index][j].scrapeName + ": " + data);
+											var s = allScrapeList[index][j].scrapeName + ": " + data;
 											var span = document.createElement("span");
 											span.className = "scrapeName";
+											if(allScrapeList[index][j].flag == 1){
+												s = s + " (AI has changed the scrape)";
+												span.style.color = "blue";
+											}else if(allScrapeList[index][j].flag == 2){
+												s = s + " (Scrape has failed)"
+												span.style.color = "red";
+											}
+											var text = document.createTextNode(s);
 											span.appendChild(text);
 											li.appendChild(span);
 											ul.appendChild(li);
@@ -144,7 +152,6 @@
 								}
 							}
 						})(i)
-						//scrape_delete_btn();
 					</script>
 				</div>
 				<div id="scrapeList" class="right-list">

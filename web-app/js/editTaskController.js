@@ -91,8 +91,8 @@ function task_delete_btn(){
  */
 function deleteTaskInDatabase(taskID){
 	let xhr = new XMLHttpRequest();
-//	xhr.open("POST", "http://avon.cs.nott.ac.uk/~psyjct/webapp/php/deleteTask.php", true);
-	xhr.open("POST", "http://192.168.64.2/web-app/php/deleteTask.php", true);
+	xhr.open("POST", "http://avon.cs.nott.ac.uk/~psyjct/web-app/php/deleteTask.php", true);
+//	xhr.open("POST", "http://192.168.64.2/web-app/php/deleteTask.php", true);
 	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
 	xhr.onreadystatechange = function() {
    	if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
@@ -135,7 +135,7 @@ function scrape_delete_btn(){
 						for(j in allScrapeList[i]){
 							if(allScrapeList[i][j].scrapeName == name){
 								scrapeID = allScrapeList[i][j].scrapeID;
-								allScrapeList[i].splice(i, 1);
+								allScrapeList[i].splice(j, 1);
 								break;
 							}
 						}
@@ -155,8 +155,8 @@ function scrape_delete_btn(){
  */
 function deleteScrapeInDatabase(scrapeID){
 	let xhr = new XMLHttpRequest();
-//	xhr.open("POST", "http://avon.cs.nott.ac.uk/~psyjct/webapp/php/deleteTask.php", true);
-	xhr.open("POST", "http://192.168.64.2/web-app/php/deleteScrape.php", true);
+	xhr.open("POST", "http://avon.cs.nott.ac.uk/~psyjct/web-app/php/deleteScrape.php", true);
+//	xhr.open("POST", "http://192.168.64.2/web-app/php/deleteScrape.php", true);
 	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
 	xhr.onreadystatechange = function() {
     if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
@@ -182,8 +182,8 @@ function submit(){
 	var DotM = document.getElementById('DotM').value;
 	
 	let xhr = new XMLHttpRequest();
-	//	xhr.open("POST", "http://avon.cs.nott.ac.uk/~psyjct/webapp/php/schedule.php", true);
-	xhr.open("POST", "http://192.168.64.2/web-app/php/schedule.php", true);
+	xhr.open("POST", "http://avon.cs.nott.ac.uk/~psyjct/web-app/php/schedule.php", true);
+//	xhr.open("POST", "http://192.168.64.2/web-app/php/schedule.php", true);
 	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
 	xhr.onreadystatechange = function() {
 		if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
