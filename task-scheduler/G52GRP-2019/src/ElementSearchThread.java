@@ -1,14 +1,10 @@
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.DomElement;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
@@ -25,7 +21,6 @@ public class ElementSearchThread implements Runnable {
 	private String elementID;
 	private int flag;
 	private String sampleData;
-	private String scrapeName;
 	private ScrapeResult result;
 	private String value;
 	private WebClient webClient;
