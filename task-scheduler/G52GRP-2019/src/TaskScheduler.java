@@ -37,6 +37,7 @@ public class TaskScheduler {
     			currentMin = LocalDateTime.now().getMinute();
     			int currentHour = LocalDateTime.now().getHour();
     			int currentDotW = LocalDateTime.now().getDayOfWeek().getValue();
+    			int currentDotM = LocalDateTime.now().getDayOfMonth();
    
     			Connection conn = null;
     			Statement stmt = null;
@@ -82,7 +83,7 @@ public class TaskScheduler {
     						case "Monthly":
     							resultHour = rs.getInt("Hour");
     							int resultDotM = rs.getInt("DotM");
-    							if (resultDotM == currentDotW && resultHour == currentHour && resultMin == currentMin) {
+    							if (resultDotM == currentDotM && resultHour == currentHour && resultMin == currentMin) {
     								tp.submit(new ElementSearchThread(taskID, urlStr));
     							}
     						default:		 
