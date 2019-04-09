@@ -79,7 +79,7 @@ chrome.tabs.onUpdated.addListener(
 					msg = {txt: "start contentScript"};
 					chrome.storage.local.set({ "currentTabId": tabId});
 				}
-				
+				chrome.storage.local.get(['currentTabId'], function(result) { console.log(result.currentTabId)});				
 				chrome.tabs.sendMessage(tabId, msg);
 			}
 		});

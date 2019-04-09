@@ -398,9 +398,9 @@ function scrape_btn(){
 			chrome.tabs.query(params, getTabs);
 			function getTabs(tab){
 				console.log(tab);
-				chrome.storage.local.set({ "currentTabId": tab[0].id});
 				if(tab[0].url != currentTaskURL){
 					window.open(currentTaskURL);
+					chrome.storage.local.set({ "currentTabId": tab[0].id});
 				}
 			}
 			
@@ -510,8 +510,6 @@ function newtaskSender(taskName) {
 				function getTabs(tab){
 					chrome.storage.local.set({ "currentTabId": tab[0].id});
 				}
-				
-				chrome.storage.local.set({ "currentTabId": tab[0].id});
 				
 				//open content script
 				ContentScriptController();

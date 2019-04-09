@@ -63,7 +63,11 @@ chrome.runtime.onMessage.addListener(
 			})
 		}else if(request.txt == "stop contentScript"){
 			// stop content script
-			enableLinks();
+			chrome.storage.local.get(['currentTask'], function(result) {
+				if(result.currentTask.taskURL == window.location.toString()){
+					enableLinks();
+				}
+			})
 			for(i in scrapeWaitedList){
 				scrapeWaitedList[i].style.background = "";
 				scrapeWaitedList[i].style.outline = "";
@@ -325,8 +329,9 @@ function disableLinks() {
 	for (var i = 0; i < links.length; i++) (function(i){
 		link = links[i];
 		if(link.href){
-			href = link.href
+			href = link.href;
 			linkList.push([i, href]);
+			console.log(link);
 			link.removeAttribute('href');
 		}
 	})(i)
