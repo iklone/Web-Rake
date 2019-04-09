@@ -312,7 +312,7 @@ public class ElementSearchThread implements Runnable {
 	}
 	
 	public Boolean isNumeric(String element) {
-		if (Pattern.matches("^(\\d+|\\d{1,3}(,\\d{3})*)(\\.\\d+)?$", element)) {
+		if (Pattern.matches("^[ ]*(\\d+|\\d{1,3}(,\\d{3})*)(\\.\\d+)?[ ]*$", element)) {
 			return true;
 		}
 		return false;
@@ -336,34 +336,34 @@ public class ElementSearchThread implements Runnable {
 	}
 	
 	public Boolean isDateTime(String element) {
-		if (Pattern.matches("[0-9]{2}[\\/\\-,.][0-9]{2}[\\/\\-,.](19|20)[0-9]{2}", element)) { //01/01/1998
+		if (Pattern.matches("^[ ]*[0-9]{2}[\\/\\-,.][0-9]{2}[\\/\\-,.](19|20)[0-9]{2}[ ]*$", element)) { //01/01/1998
 			return true;
 		}
-		else if (Pattern.matches("(19|20)[0-9]{2}[\\/\\-,.][0-9]{2}[\\/\\-,.][0-9]{2}", element)) { // 1998/01/01
+		else if (Pattern.matches("^[ ]*(19|20)[0-9]{2}[\\/\\-,.][0-9]{2}[\\/\\-,.][0-9]{2}[ ]*$", element)) { // 1998/01/01
 			return true;
 		}
-		else if (Pattern.matches("[0-9]{2}[\\/\\-,.][0-9]{2}[\\/\\-,.][0-9]{2}", element)) { // 01/01/98
+		else if (Pattern.matches("^[ ]*[0-9]{2}[\\/\\-,.][0-9]{2}[\\/\\-,.][0-9]{2}[ ]*$", element)) { // 01/01/98
 			return true;
 		}
-		else if (Pattern.matches("[0-9]{2}[\\/\\-,.][A-Z|a-z]{3}[\\/\\-,.][0-9]{2}", element)) { // 01-JAN-98
+		else if (Pattern.matches("^[ ]*[0-9]{2}[\\/\\-,.][A-Z|a-z]{3}[\\/\\-,.][0-9]{2}[ ]*$", element)) { // 01-JAN-98
 			return true;
 		}
-		else if (Pattern.matches("[0-9]{2}[\\/\\-,.][A-Z|a-z]{3}[\\/\\-,.](19|20)[0-9]{2}", element)) { // 01-JAN-1998
+		else if (Pattern.matches("^[ ]*[0-9]{2}[\\/\\-,.][A-Z|a-z]{3}[\\/\\-,.](19|20)[0-9]{2}[ ]*$", element)) { // 01-JAN-1998
 			return true;
 		}
-		else if (Pattern.matches("[0-9]{2}[\\/\\-,.][A-Z|a-z]{3}[\\/\\-,.](19|20)[0-9]{2} [0-2][0-9]:[0-5][0-9]", element)) { // 01-JAN-1998 08:59
+		else if (Pattern.matches("^[ ]*[0-9]{2}[\\/\\-,.][A-Z|a-z]{3}[\\/\\-,.](19|20)[0-9]{2} [0-2][0-9]:[0-5][0-9][ ]*$", element)) { // 01-JAN-1998 08:59
 			return true;
 		}
-		else if (Pattern.matches("[0-9]{2}[\\/\\-,.][A-Z|a-z]{3}[\\/\\-,.](19|20)[0-9]{2} [0-2][0-9]:[0-5][0-9]:[0-5][0-9]", element)) { // 01-JAN-1998 08:59:00
+		else if (Pattern.matches("^[ ]*[0-9]{2}[\\/\\-,.][A-Z|a-z]{3}[\\/\\-,.](19|20)[0-9]{2} [0-2][0-9]:[0-5][0-9]:[0-5][0-9][ ]*$", element)) { // 01-JAN-1998 08:59:00
 			return true;
 		} //START OF REGEXS MATCHING EXAMPLE WEBSITES
-		else if (Pattern.matches("[0-3]{0,1}[0-9]([s|n|r|t][t|d|h]){0,1}[\\/\\-,. ][A-Z|a-z]{3}.{0,1}[\\/\\-,. ](19|20){0,1}[0-9][0-9]", element)) { // 1st Jan 2019
+		else if (Pattern.matches("^[ ]*[0-3]{0,1}[0-9]([s|n|r|t][t|d|h]){0,1}[\\/\\-,. ][A-Z|a-z]{3}.{0,1}[\\/\\-,. ](19|20){0,1}[0-9][0-9][ ]*$", element)) { // 1st Jan 2019
 			return true;
 		}
-		else if (Pattern.matches("[0-9]{2}[\\/\\-,.][0-9]{2}[\\/\\-,.](19|20)[0-9]{2}[ ]{0,1}[-]{1}[ ]{0,1}[0-9]{2}[\\/\\-,.][0-9]{2}[\\/\\-,.](19|20)[0-9]{2}", element)) { // 01/01/1999 - 01/01/1999
+		else if (Pattern.matches("^[ ]*[0-9]{2}[\\/\\-,.][0-9]{2}[\\/\\-,.](19|20)[0-9]{2}[ ]{0,1}[-]{1}[ ]{0,1}[0-9]{2}[\\/\\-,.][0-9]{2}[\\/\\-,.](19|20)[0-9]{2}[ ]*$", element)) { // 01/01/1999 - 01/01/1999
 			return true;
 		}
-		else if (Pattern.matches("[0-9]{2}[\\/\\-,.][A-Z|a-z]{3}[\\/\\-,.](19|20)[0-9]{2} [0-2][0-9]:[0-5][0-9]:[0-5][0-9].[0-9]*", element)) { // 19-Feb-2019 08:05:33.000000000000000
+		else if (Pattern.matches("^[ ]*[0-9]{2}[\\/\\-,.][A-Z|a-z]{3}[\\/\\-,.](19|20)[0-9]{2} [0-2][0-9]:[0-5][0-9]:[0-5][0-9].[0-9]*[ ]*$", element)) { // 19-Feb-2019 08:05:33.000000000000000
 			return true;
 		}
 		return false;
@@ -390,10 +390,10 @@ public class ElementSearchThread implements Runnable {
 		String currSymbols = "\\$|US\\$|\\€|\\¥|\\£|A\\$|C\\$|Fr|\\?|kr|NZ\\$|S\\$|HK\\$|R\\$|R";
 		String currAbbs = "USD|EUR|JPY|GBP|AUD|CAD|CHF|CNY|SEK|NZD|MXN|SGD|HKD|NOK|KRW|TRY|RUB|INR|BRL|ZAR";
 		
-		if (Pattern.matches("(" + currSymbols + "|" + currAbbs + "){0,1} {0,1}(\\d+|\\d{1,3}(,\\d{3})*)(\\.\\d+)?$", element)) {
+		if (Pattern.matches("^[ ]*(" + currSymbols + "|" + currAbbs + "){0,1} {0,1}(\\d+|\\d{1,3}(,\\d{3})*)(\\.\\d+)?[ ]*$", element)) {
 			return true;
 		}
-		if (Pattern.matches("(\\d+|\\d{1,3}(,\\d{3})*)(\\.\\d+)? {0,1}(" + currAbbs + "){0,1}$", element)) {
+		if (Pattern.matches("^[ ]*(\\d+|\\d{1,3}(,\\d{3})*)(\\.\\d+)? {0,1}(" + currAbbs + "){0,1}[ ]*$", element)) {
 			return true;
 		}
 		return false;
