@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html>
-    <head>
-    <title>WebRake</title>
-        <link rel = 'stylesheet' type = 'text/css' href = '../css/home-page.css'>
-        <link href='https://unpkg.com/ionicons@4.4.4/dist/css/ionicons.min.css' rel='stylesheet'>
-        <link href='https://fonts.googleapis.com/css?family=Raleway:700' rel='stylesheet' type='text/css'>
-        <link href='https://fonts.googleapis.com/css?family=Raleway:400' rel='stylesheet' type='text/css'>
-        <link href='https://fonts.googleapis.com/css?family=Raleway:300' rel='stylesheet' type='text/css'>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-		<script src="../js/functions.js"></script>
-        
-         
-    </head>
-<body>
 
+<head>
+    <title>FinRake</title>
+	<link rel = 'stylesheet' type = 'text/css' href = '../css/home-page.css'>
+	<link rel = 'stylesheet' type = 'text/css' href = '../css/home-page.css'>
+	<link href='https://unpkg.com/ionicons@4.4.4/dist/css/ionicons.min.css' rel='stylesheet'>
+	<link href='https://fonts.googleapis.com/css?family=Raleway:700' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Raleway:400' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Raleway:300' rel='stylesheet' type='text/css'>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="../js/functions.js"></script>
+</head>
+	
+<body>
     <div id="navMenu">
         <p id='navClose' class='close'>
         <ion-icon name="close"></ion-icon>
@@ -66,57 +66,53 @@
             </p>
         </div>
     </div>
-<header>
-  
-        
-            <nav>
-           
-                <div class=logo1 >
-               
-                <a href='../php/home-page.php'>
-                    <img src='../img/logo.png'/>
-                </a>
-                    
-                </div>
-            
-        <div id="login">
-            <a href='../html/index.html'>
-            Login
-            </a>
-            </div>
-               <div id="signUp"> 
-            <a href='../html/register.html'>
-            Sign Up
-            </a>
-                </div>
-                <a href='javascript:void(0)' id='slide-menu'>
-                    <ion-icon name='menu'></ion-icon>
-                    <i class='icon ion-md-menu'></i>
-                
-                </a>
-        </nav>
-    <!-- <h1 id='brief'> TEXT THAT SHOWS WHAT THE PURPOSE OF WEBSCRAPE IS.</h1> -->
-	<div class="intro">
-		<div class="brief-intro">
-			<h1 class="intro-text1">Financial technology<br />Data<br />Expertise<br /></h1>
-			<h2 class="intro-text2">some text....................................................................</h2>
+	
+	<header>
+			<nav>
+				<div class=logo1 >
+					<a href='https://www.refinitiv.com'>
+						<img src='../img/logo.png'/>
+					</a>
+				</div>
+				
+				<div id="login">
+					<a href='../html/index.html'>
+					Login
+					</a>
+				</div>
+				
+				<div id="signUp"> 
+					<a href='../html/register.html'>
+					Sign Up
+					</a>
+				</div>
+				<a href='javascript:void(0)' id='slide-menu'>
+					<ion-icon name='menu'></ion-icon>
+					<i class='icon ion-md-menu'></i>
+				</a>
+			</nav>
+		<!-- <h1 id='brief'> TEXT THAT SHOWS WHAT THE PURPOSE OF WEBSCRAPE IS.</h1> -->
+		<div class="intro">
+			<div class="brief-intro">
+				<h1 class="intro-text1">FinRake<br /></h1>
+				<h2 class="intro-text2">An Expert Data Scraping Tool Built for Finance</h2>
+			</div>
+			<div class="plugin-image">
+				<img src="../img/plugin_image.png" />
+			</div>
 		</div>
-		<div class="plugin-image">
-			<img src="../img/plugin_image.png" />
-		</div>
-	</div>
-    <h4 id='underHeaderText'>
-        <br />
-        <br />
-        Text to show what this website is for in more detail.
-        <br />
-        Some more text about the PlugIn?
-        <br />
-        And even more text?
-    </h4>
-    <p id='clickForPlugin'>Click the button to access PlugIn</p>
-     <a href='javascript:void(0)' id='clickForPluginButton'>Access PlugIn</a>
-</header>
+		<h4 id='underHeaderText'>
+			<br />
+			<br />
+			An intuitive web-scraping tool: simple but powerful
+			<br />
+			Built with financial use in mind
+			<br />
+			Automatic scrape managing keeps up with dynamic web-pages
+		</h4>
+		<p id='clickForPlugin'>Install the Plugin here:</p>
+		<a href='../../plug-in/finrake.zip' id='clickForPluginButton'>Download PlugIn</a>
+	</header>
         
 <!--
 <div id='tasks' class='clearfix'>
@@ -161,11 +157,10 @@
 <footer class='clearfix'>
     <div class='footer1'>
         <h3>About</h3>
-        <a href="javascript:void(0)">Our Story</a>
+        Built for Refinitiv under supervision by<br>
+        the University of Nottingham<br>
         <br />
-        <br />
-        <br />
-        <p><span>2019 G52GRP31 Doe All Rights Reserved</span></p>
+        <p><span>2019 G52GRP31</span></p>
     </div>
     <div class='footer1'>
         <h3>Contact</h3>

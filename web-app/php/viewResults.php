@@ -9,20 +9,10 @@
 	<body>
 		<div class="main">
 			<div class="logo-holder">
-				<span id="helpbut">
-					<a href='javascript:void(0)'>
-					Help
-					</a>
-				</span>
 				<img src="../img/logo.png" />
-				<span id="logout">
-					<a href='../php/home-page.php'>
-					Log Out
-					</a>
-				</span>
 			</div>
 			<div class="title">
-				<h1>Task List</h1>
+				<h1>Scrape Results</h1>
 			</div>
 			
 			<div class="taskArea">
@@ -32,7 +22,7 @@
 						<button id="taskSearch-btn">Search</button>
 					</div>
 					
-					<h1>Your Tasks:</h1>
+					<h1>Your Task:</h1>
 					<div>
 						<ul id="task-ul"></ul>
 					</div>
@@ -152,7 +142,7 @@
 						<input type="text" class="scrapeSearch-box" id="scrapeSearch" onkeyup="scrapeSearcher()" placeholder="Search scrapes...">
 						<button id="scrapeSearch-btn">Search</button>
 					</div>
-					<h1>Your Scrapes:</h1>
+					<h1>Scrape Results:</h1>
 					<div>
 						<button id="schedule-btn" class="scheduleBtn" onclick="schedule()">Schedule</button>
 					</div>

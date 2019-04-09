@@ -1,5 +1,6 @@
 body {
     margin: 0;    
+	font-family: sans-serif;
 }
 
 body.moved{
@@ -126,19 +127,24 @@ header.moved{
     overflow: hidden;
 } 
 
+.intro-text1 {
+	font-size: 75px;
+}
+
 .brief-intro{
-		text-align: -webkit-left;
+	text-align: -webkit-left;
     position: relative;
     top: -24px;
     left: 6%;
-		width: 40%;
+	width: 40%;
 }
 .plugin-image{
-	  position: absolute;
+	position: absolute;
     text-align: -webkit-right;
     top: 150px;
-    right: 8%;
-    width: 40%;
+    right: 15%;
+    max-height: 10px;
+	max-width: 30%;
 } img{width: 100%;}
 
 /* for the top header bar*/
