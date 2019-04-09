@@ -8,6 +8,8 @@ var scrapeWaitedList = [];
 var scrapeList = [];
 // used store content of scrape, including name, path, sample data, which will be sent to popup window and database
 var scrapeContentList = [];
+// array to store all the links and their position of current page
+var linkList = [];
 // function used to store webapp userInfo
 updateWebappUserInfo();
 
@@ -33,6 +35,7 @@ if(window.location.toString() == "http://avon.cs.nott.ac.uk/~psyjct/web-app/html
 chrome.storage.local.get(['currentTask'], function(result) {
 	if(result.currentTask){
 		if(result.currentTask.taskURL == window.location.toString()){
+			disableLinks();
 			startContentScript();
 		}
 	}
@@ -48,6 +51,7 @@ chrome.runtime.onMessage.addListener(
 		if(request.txt == "start contentScript"){
 			chrome.storage.local.get(['currentTask'], function(result) {
 				if(result.currentTask.taskURL == window.location.toString()){
+					disableLinks();
 					startContentScript();
 				}
 			})
@@ -59,6 +63,7 @@ chrome.runtime.onMessage.addListener(
 			})
 		}else if(request.txt == "stop contentScript"){
 			// stop content script
+			enableLinks();
 			for(i in scrapeWaitedList){
 				scrapeWaitedList[i].style.background = "";
 				scrapeWaitedList[i].style.outline = "";
@@ -117,7 +122,7 @@ function startContentScript(){
 /**
   * function used to get all scrape in scrapeWaiting and put them into scrapeList with the name user add
   * if the scrape already exits in scrapeList then alert warnning information
-  * @author payne YU
+  * @author peichen YU
   */
 function getClickedElement(){
 	// alert the duplicate scrape information
@@ -307,4 +312,33 @@ function scrapeNameCheck(scrapeName){
 	}
 	
 	return false;
+}
+
+/**
+ * function used to disable all the links in current page
+ * @author peichen Yu
+ */
+function disableLinks() {
+	var links = document.getElementsByTagName('a');
+	var link;
+	var href;
+	for (var i = 0; i < links.length; i++) (function(i){
+		link = links[i];
+		if(link.href){
+			href = link.href
+			linkList.push([i, href]);
+			link.removeAttribute('href');
+		}
+	})(i)
+}
+/**
+ * function used to enable all the links in current page
+ * @author peichen YU
+ */
+function enableLinks() {
+	var links = document.getElementsByTagName('a');
+	for (var i = 0; i < linkList.length; i++) {
+		link = links[linkList[i][0]];
+		link.setAttribute('href', linkList[i][1]);
+	}
 }
