@@ -390,7 +390,7 @@ function scrape_btn(){
 			// set current taks
 			chrome.storage.local.set({ "currentTask": {taskName:currentTaskName, taskID: currentTaskID, taskURL:currentTaskURL}});
 			
-			// if current url is not eqaul to currentTaskURL, then window.open(currentTaskURL), else refresh page
+			// if current url is not eqaul to currentTaskURL, then window.open(currentTaskURL)
 			var params = {
 				active: true,
 				currentWindow: true
@@ -400,6 +400,7 @@ function scrape_btn(){
 				console.log(tab);
 				if(tab[0].url != currentTaskURL){
 					window.open(currentTaskURL);
+				}else{
 					chrome.storage.local.set({ "currentTabId": tab[0].id});
 				}
 			}

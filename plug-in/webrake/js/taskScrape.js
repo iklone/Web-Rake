@@ -91,7 +91,7 @@ function ContentScriptController(flag){
 		if(flag == true){
 			msg={txt: "start contentScript"};
 		}else{
-			msg={txt: "stop contentScript"};
+			msg={txt: "stop contentScript permanently"};
 		}
 		chrome.tabs.sendMessage(result.currentTabId, msg);
 	});

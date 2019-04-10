@@ -6,7 +6,7 @@
  * remove info stored in chrome.storage.local
  * @author peichen YU
  */
-chrome.storage.local.remove(["userInfoInPlugIn","allTask",'currentTabId','currentTask','newTaskScrape','newTaskScrape'],function(){
+chrome.storage.local.remove(["userInfoInPlugIn","allTask",'currentTabId','currentTask','newTaskScrape','currentTaskScrape'],function(){
 	var error = chrome.runtime.lastError;
 	if (error) {
     		console.error(error);
