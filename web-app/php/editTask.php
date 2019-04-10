@@ -45,7 +45,7 @@
 							$userId = $_SESSION["userId"];
 
 							// find the result
-							$results = mysqli_query($link, "select b.taskName, b.taskID, b.taskURL from UserAuthorisation a left join Task b on a.taskID = b.taskID where a.userID="."'"."$userId"."'");
+							$results = mysqli_query($link, "select b.taskName, b.taskID, b.taskURL, b.taskDescription, GROUP_CONCAT(c.type) as type from UserAuthorisation a left join Task b on a.taskID = b.taskID left join Schedule c on a.taskID = c.taskID where a.userID="."'"."$userId"."'");
 
 							$taskList = [];
 							$allScrapeList = [];
@@ -86,7 +86,9 @@
 						var currentTaskName;
 						var taskList = <?php echo json_encode($taskList); ?>;
 						var allScrapeList = <?php echo json_encode($allScrapeList); ?>;
-						allScrapeList = listOperator(allScrapeList);
+						if(allScrapeList.length != 0){
+							allScrapeList = listOperator(allScrapeList);
+						}
 						console.log(allScrapeList);
 						var task_num = taskList.length;
 						var ul = document.getElementById('task-ul');
