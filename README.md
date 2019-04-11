@@ -11,12 +11,12 @@ FinRake is a software that allows users to specify recurring data scrapes from t
 6.
 
 ### Information
+**Documentation** (Documentation including meeting minutes):
+https://drive.google.com/drive/folders/1EX1vB4HS_wlRFo400OSxiWG9pjdIpTf1
+
 **Trello** (Kanban Board and evidence of task allocation):
 https://trello.com/g52grp10
 https://trello.com/invite/b/Y7sU5hU1/2dee15d4f9db714a19ef0140916c7592/web-rake
-
-**Documentation** (Documentation including meeting minutes):
-https://drive.google.com/drive/folders/1EX1vB4HS_wlRFo400OSxiWG9pjdIpTf1
 
 Google Coding Guidelines (exception*):
 https://google.github.io/styleguide/cppguide.html#General_Naming_Rules
