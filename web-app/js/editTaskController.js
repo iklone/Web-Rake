@@ -53,13 +53,13 @@ function scrapeSearcher() {
  */
 function addBtnOnTask(li){
 	var del_btn = document.createElement("button");
-	var txt = document.createTextNode("delete");
+	var txt = document.createTextNode("Delete");
 	del_btn.className = "task-del-btn";
 	del_btn.appendChild(txt);
 	li.appendChild(del_btn);
 	
 	var info_btn = document.createElement("button");
-	var text = document.createTextNode("task_info");
+	var text = document.createTextNode("Task Info");
 	info_btn.className = "task-info-btn";
 	info_btn.appendChild(text);
 	li.appendChild(info_btn);
