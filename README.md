@@ -2,7 +2,7 @@
 ### G52GRP - Group 31
 FinRake is a software that allows users to specify recurring data scrapes from the internet. These scrapes will be automatic, variable and easy to modify. Primarily built to serve Refinitiv data analysts working in the financial field.
 
-### Installation
+### Installation TODO
 1.
 2.
 3.
@@ -30,7 +30,7 @@ https://stackoverflow.com/questions/273695/git-branch-naming-best-practices
 
 ### Requirements
 #### Software
-Windows 10 64-bit
+Java
 
 #### Hardware
 CPU, RAM, STORAGE
@@ -49,4 +49,5 @@ MySQL
 
 ### Sponsors
 Internal Supervisor: Brian Logan (Associate Professor, University of Nottingham)
+
 External Sponsor: James Millen (Lead Technical Specialist, Refinitiv)
