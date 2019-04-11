@@ -11,6 +11,13 @@
 	<link href='https://fonts.googleapis.com/css?family=Raleway:300' rel='stylesheet' type='text/css'>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="../js/functions.js"></script>
+	<script>
+		setTimeout(timeoutnotif, 60000);
+		
+		function timeoutnotif() {
+			alert("There may be more recent scrapes. Refresh the page to view them.");
+		}
+	</script>
 </head>
 	
 <body>
@@ -69,23 +76,24 @@
 	
 	<header>
 			<nav>
-				<div class=logo1 >
+				<span id=logol >
 					<a href='https://www.refinitiv.com'>
 						<img src='../img/logo.png'/>
 					</a>
-				</div>
-				
-				<div id="login">
-					<a href='../html/index.html'>
-					Login
-					</a>
-				</div>
-				
-				<div id="signUp"> 
-					<a href='../html/register.html'>
-					Sign Up
-					</a>
-				</div>
+				</span>
+				<span id=signin>
+					<span id="login">
+						<a href='../html/index.html'>
+						Login
+						</a>
+					</span>
+					
+					<span id="signUp"> 
+						<a href='../html/register.html'>
+						Sign Up
+						</a>
+					</span>
+				</span>
 				<a href='javascript:void(0)' id='slide-menu'>
 					<ion-icon name='menu'></ion-icon>
 					<i class='icon ion-md-menu'></i>
@@ -114,60 +122,20 @@
 		<a href='../../plug-in/finrake.zip' id='clickForPluginButton'>Download PlugIn</a>
 	</header>
         
-<!--
-<div id='tasks' class='clearfix'>
-    <h1 id='taskTitle'><php echo $_SESSION["userName"];?>'s Tasks</h1>
-    <h1>
-        
-    <p id="task1"></p>
-        
-        
-<script>
-	var j = <php echo count($taskList); ?>;
-	var position = document.getElementById('tasks');
-	var taskList = <php echo json_encode($taskList); ?>;
-	for (var i = 1; i <= j; i++) {
-		var a = document.createElement('a');
-		a.href = "javascript:void(0)";
-		a.innerHTML = taskList[i - 1];
-		console.log(a.innerHTML);
-		
-		var innerDiv = document.createElement('div');
-		innerDiv.id = 'task' + i + 'info';
-		innerDiv.appendChild(a);
-		
-		var outerDiv = document.createElement('div');
-		if(i % 2 == 1){
-			outerDiv.className ="taskBox left";
-		}else{
-			outerDiv.className = "taskBox right";
-		}
-		outerDiv.id = 'task' + i;
-		outerDiv.appendChild(innerDiv);
-		
-		position.appendChild(outerDiv);
-	}
-
-    
-    
-</script>
-
-</div>
--->
-<footer class='clearfix'>
-    <div class='footer1'>
-        <h3>About</h3>
-        Built for Refinitiv under supervision by<br>
-        the University of Nottingham<br>
-        <br />
-        <p><span>2019 G52GRP31</span></p>
-    </div>
-    <div class='footer1'>
-        <h3>Contact</h3>
-        <a href="javascript:void(0)">Contact us</a>
-        <a href="javascript:void(0)">FAQ</a>
-        <a href="javascript:void(0)">Write for us</a>
-    </div>
-</footer>
+	<footer class='clearfix'>
+		<div class='footer1'>
+			<h3>About</h3>
+			Built for Refinitiv under supervision by<br>
+			the University of Nottingham<br>
+			<br />
+			<p><span>2019 G52GRP31</span></p>
+		</div>
+		<div class='footer1'>
+			<h3>Contact</h3>
+			<a href="javascript:void(0)">Contact us</a>
+			<a href="javascript:void(0)">FAQ</a>
+			<a href="javascript:void(0)">Write for us</a>
+		</div>
+	</footer>
 </body>
 </html>

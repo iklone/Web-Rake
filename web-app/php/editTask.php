@@ -5,6 +5,13 @@
 		<title>FinRake</title>
 		<link rel = 'stylesheet' type = 'text/css' href = '../css/editTask.css'>
 		<script type="text/javascript" src='../js/editTaskController.js'></script>
+		<script>
+			setTimeout(timeoutnotif, 60000);
+			
+			function timeoutnotif() {
+				alert("There may be more recent scrapes. Refresh the page to view them.");
+			}
+		</script>
 	</head>
 	<body>
 		<div class="main">
@@ -29,10 +36,9 @@
 				<div id="taskList" class="left-list">
 					<div class="taskSearch">
 						<input type="text" class="taskSearch-box" id="taskSearch" onkeyup="taskSearcher()" placeholder="Search tasks...">
-						<button id="taskSearch-btn">Search</button>
 					</div>
 					
-					<h1>Your Tasks:</h1>
+					<h1>Tasks:</h1>
 					<div>
 						<ul id="task-ul"></ul>
 					</div>
@@ -46,7 +52,7 @@
 							$userId = $_SESSION["userId"];
 
 							// find the result
-							$results = mysqli_query($link, "select b.taskName, b.taskID, b.taskURL from UserAuthorisation a left join Task b on a.taskID = b.taskID where a.userID="."'"."$userId"."'");
+							$results = mysqli_query($link, "select b.taskName, b.taskID, b.taskURL, b.taskDescription, GROUP_CONCAT(c.type) as type from UserAuthorisation a left join Task b on a.taskID = b.taskID left join Schedule c on a.taskID = c.taskID where a.userID="."'"."$userId"."'");
 
 							$taskList = [];
 							$allScrapeList = [];
@@ -65,14 +71,19 @@
 
 									$scrapeList = [];
 									while($scrapeInfo = mysqli_fetch_assoc($results)) {
+										$counter = 0;
 										$id = $scrapeInfo['scrapeID'];
 										$values = mysqli_query($link, "SELECT b.taskID, b.scrapeName, b.scrapeID, a.resultValue as data, b.flag FROM Result a left join Scrape b on a.scrapeID = b.scrapeID WHERE a.ScrapeID = "."'"."$id"."'"." order by resultTime DESC");
 										if(mysqli_num_rows($values) >= 1){
-											$value = mysqli_fetch_assoc($values);
+											while($counter < 10){
+												$value = mysqli_fetch_assoc($values);
+												$scrapeList[] = $value;
+												$counter++;
+											}
 										}else{
 											$value = $scrapeInfo;
+											$scrapeList[] = $value;
 										}
-								    	$scrapeList[] = $value;
 									}
 									$allScrapeList[] = $scrapeList;
 								}
@@ -82,9 +93,15 @@
 						var currentTaskName;
 						var taskList = <?php echo json_encode($taskList); ?>;
 						var allScrapeList = <?php echo json_encode($allScrapeList); ?>;
+						if(allScrapeList.length != 0){
+							allScrapeList = listOperator(allScrapeList);
+						}
 						console.log(allScrapeList);
 						var task_num = taskList.length;
 						var ul = document.getElementById('task-ul');
+						console.log(taskList);
+
+						//display all tasks
 						for (var i = 1; i <= task_num; i++){
 							var li = document.createElement('li');
 							li.className = "task-box";
@@ -99,14 +116,17 @@
 							urlHref.innerText = taskList[i - 1].taskURL;
 							li.appendChild(urlHref);
 							ul.appendChild(li);
-							addDelBtnOnTask(li);
+							addBtnOnTask(li);
 							task_delete_btn();
+							task_info(taskList);
 						}
-						//task_delete_btn();
+
+						//display each scrape in each task
 						for (var i = 0; i < task_num; i++) (function(i){
 							var x = document.getElementsByClassName('task-box')[i];
 							x.onclick = function(){
 								var btn = document.getElementById("schedule-btn").style.display = "block";
+								// compare the taskName in order to find the index
 								for(j in taskList){
 									if(taskList[j].taskName == x.firstElementChild.innerHTML){
 										currentTaskID = taskList[j].taskID;
@@ -121,16 +141,19 @@
 										index = z;
 									}
 								}
-								var ul = document.getElementById("scrape-ul");
-								while(ul.firstChild){
-									ul.removeChild(ul.firstChild);
+								var scrapeUl = document.getElementById("scrape-ul");
+								while(scrapeUl.firstChild){
+									scrapeUl.removeChild(scrapeUl.firstChild);
 								}
+								// display the scrape for specific task
 								if(allScrapeList[index]){
 									if(allScrapeList[index].length != 0){
-										for(j in allScrapeList[index]){
-											var li = document.createElement("li");
-											li.className = "scrape-data";
-											var data = allScrapeList[index][j].data;
+										var scrapeID = allScrapeList[index][0].scrapeID;
+										for(j in allScrapeList[index])(function(j){
+											// display the scrape
+											var scrapeli = document.createElement("li");
+											scrapeli.className = "scrape-data";
+											var data = allScrapeList[index][j].data[0];
 											var s = allScrapeList[index][j].scrapeName + ": " + data;
 											var span = document.createElement("span");
 											span.className = "scrapeName";
@@ -143,11 +166,34 @@
 											}
 											var text = document.createTextNode(s);
 											span.appendChild(text);
-											li.appendChild(span);
-											ul.appendChild(li);
-											addDelBtnOnScrape(li);
+											scrapeli.appendChild(span);
+											scrapeUl.appendChild(scrapeli);
+											addDelBtnOnScrape(scrapeli);
 											scrape_delete_btn();
-										}
+
+											//display historical data of this scrape
+											listUl = document.createElement("ul");
+											listUl.className = "list-ul";
+											scrapeli.appendChild(listUl);
+											for(var z = 1; z < allScrapeList[index][j].data.length; z++){
+												var li = document.createElement("li");
+												var text = document.createTextNode(allScrapeList[index][j].data[z]);
+												var span = document.createElement("span");
+												span.className = "listName";
+												span.appendChild(text);
+												li.appendChild(span);
+												listUl.appendChild(li);
+											}
+											listUl.style.display = "none";
+											scrapeli.onclick = function(){
+												css = document.getElementsByClassName("list-ul")[j];
+												if(css.style.display === "block"){
+													css.style.display = "none";
+												}else{
+													css.style.display = "block";
+												}
+											}
+										})(j)
 									}
 								}
 							}
@@ -157,15 +203,31 @@
 				<div id="scrapeList" class="right-list">
 					<div class="scrapeSearch">
 						<input type="text" class="scrapeSearch-box" id="scrapeSearch" onkeyup="scrapeSearcher()" placeholder="Search scrapes...">
-						<button id="scrapeSearch-btn">Search</button>
 					</div>
-					<h1>Your Scrapes:</h1>
+					<h1>Scrapes:</h1>
 					<div>
 						<button id="schedule-btn" class="scheduleBtn" onclick="schedule()">Schedule</button>
 					</div>
 					
 					<div>
 						<ul id="scrape-ul"></ul>
+					</div>
+				</div>
+			</div>
+			
+			<div id="task-info-modal" class="schedule-modal">
+				<div class="modal-content">
+					<div class="modal-header">
+						<span id="task-info-close" class="close">&times;</span>
+						<h2>Task Information</h2>
+					</div>
+					<div id="info-body" class="modal-body">
+						<p class="info-p"></p>
+						<p class="info-p"></p>
+						<p class="info-p"></p>
+						<p class="info-p"></p>
+					</div>
+					<div class="modal-footer">
 					</div>
 				</div>
 			</div>
@@ -219,6 +281,24 @@
 			window.onclick = function(event) {
 				if (event.target == schedule) {
 					schedule.style.display = "none";
+				}
+			}
+			
+			var info_modal = document.getElementById("task-info-modal");
+			var p = document.getElementsByClassName("info-p");
+			var close = document.getElementById("task-info-close");
+			close.onclick = function() {
+				info_modal.style.display = "none";
+				for(var i = 0;i < 4; i++){
+					p[i].innerText = "";
+				}
+			}
+			window.onclick = function(event) {
+				if (event.target == info_modal) {
+					info_modal.style.display = "none";
+					for(var i = 0;i < 4; i++){
+						p[i].innerText = "";
+					}
 				}
 			}
 		</script>

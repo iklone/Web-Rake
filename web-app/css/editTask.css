@@ -6,6 +6,7 @@ body {
 	background-color: #AED6F1;
 	height: 100%;
 	width: 100%;
+	overflow: hidden;
 }
 .logo-holder{
 	position: relative;
@@ -45,14 +46,12 @@ body {
 	left: 20px;
 	height: 41px;
 } input{height: 30px;} 
-.taskSearch button{height: 36px;width: 85px;}
 .scrapeSearch{
 	position: relative;
 	top: 20px;
 	left: 20px;
 	height: 41px;
 } input{height: 30px;} 
-.scrapeSearch button{height: 36px;width: 85px;}
 .task-box{
 	border: 1px solid black;
 	border-radius: 7px;
@@ -84,6 +83,8 @@ body {
 	border: 1px solid darkblue;
 	overflow: auto;
 }
+.scrape-data:hover{background-color: darkgray;cursor: pointer;}
+.list-ul{position: relative;display: none; overflow: auto;}
 .scheduleBtn{
 	display: none;
 	position: absolute;
@@ -188,4 +189,10 @@ cursor: pointer;
 
 #helpbut{
     float: left;
+}
+
+.task-info-btn{
+ position: absolute;
+    left: 70%;
+    top: 12px;
 }
