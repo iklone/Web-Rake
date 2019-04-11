@@ -102,6 +102,10 @@ body {
 	position: absolute;
 	left: 90%;
 }
+.scrape-confirm-btn{
+	position: absolute;
+	left: 81%;
+}
 .schedule-modal {
 	display: none;
 	position: fixed; 

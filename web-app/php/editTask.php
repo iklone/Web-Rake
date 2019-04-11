@@ -163,6 +163,14 @@
 											span.className = "scrapeName";
 											if(allScrapeList[index][j].flag == 1){
 												s = s + " (AI has changed the scrape)";
+												var blue_btn = document.createElement("button");
+												var blue_btn_text = document.createTextNode("Confirm");
+												blue_btn.className = "scrape-confirm-btn";
+												blue_btn.appendChild(blue_btn_text);
+												scrapeli.appendChild(blue_btn);
+												blue_btn.onclick = function(){
+													confirmAI(allScrapeList[index][j].scrapeID);
+												}
 												span.style.color = "blue";
 											}else if(allScrapeList[index][j].flag == 2){
 												s = s + " (Scrape has failed)"

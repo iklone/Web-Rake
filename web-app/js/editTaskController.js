@@ -274,3 +274,28 @@ function task_info(taskList){
 		}
 	})(i)
 }
+
+/**
+ * This function used to confirm AI
+ * @author Ang Ding
+ */
+ function confirmAI(scrapeID){
+	var a = confirm("update scrape by using AI?");
+	if(a == true){
+		let xhr = new XMLHttpRequest();
+		xhr.open("POST", "http://avon.cs.nott.ac.uk/~psyjct/web-app/php/confirmAI.php", true);
+		xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
+		xhr.onreadystatechange = function() {
+		if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+				location.reload();
+			}
+		}
+		xhr.send('scrapeID=' + scrapeID);
+	}
+ }
+ 
+ 
+ 
+ 
+ 
+ 

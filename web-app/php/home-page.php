@@ -14,58 +14,6 @@
 </head>
 	
 <body>
-    <div id="navMenu">
-        <p id='navClose' class='close'>
-        <ion-icon name="close"></ion-icon>
-        <ion-icon ios="ios-close" md="md-close"></ion-icon>
-        <i class="icon ion-md-close"></i>
-        </p>
-        <div id='navContent'>
-            <h1>Our Story</h1>
-            <a href='../html/about.html'>
-            &nbsp;&nbsp;About Us
-            </a>
-            <a href='../php/home-page.php'>
-            &nbsp;&nbsp;Home
-            </a>
-            <a href='javascript:void(0)'>
-            &nbsp;&nbsp;Nav Button Tag 3
-            </a>
-            <a href='javascript:void(0)'>
-            &nbsp;&nbsp;Nav Button Tag 4
-            </a>
-            <a href='javascript:void(0)'>
-            &nbsp;&nbsp;Nav Button Tag 5
-            </a>
-            <br />
-            <br />
-            <h1>FAQ</h1>
-            <a href='javascript:void(0)'>
-            &nbsp;&nbsp;Nav Button Tag 1.1
-            </a>
-            <a href='javascript:void(0)'>
-            &nbsp;&nbsp;Nav Button Tag 1.2
-            </a>
-            <a href='javascript:void(0)'>
-            &nbsp;&nbsp;Nav Button Tag 1.3
-            </a>
-            <a href='javascript:void(0)'>
-            &nbsp;&nbsp;Nav Button Tag 1.4
-            </a>
-            <a href='javascript:void(0)'>
-            &nbsp;&nbsp;Nav Button Tag 1.5
-            </a>
-            <br />
-            <br />
-            <hr />
-            <br />
-            <br />
-            <h1>Contact us</h1>
-            <p id=contactInfo>
-            e-mail etc....
-            </p>
-        </div>
-    </div>
 	
 	<header>
 			<nav>
@@ -90,10 +38,6 @@
 						</span>
 					</a>
 				</span>
-				<a href='javascript:void(0)' id='slide-menu'>
-					<ion-icon name='menu'></ion-icon>
-					<i class='icon ion-md-menu'></i>
-				</a>
 			</nav>
 		<!-- <h1 id='brief'> TEXT THAT SHOWS WHAT THE PURPOSE OF WEBSCRAPE IS.</h1> -->
 		<div class="intro">
@@ -128,9 +72,10 @@
 		</div>
 		<div class='footer1'>
 			<h3>Contact</h3>
-			<a href="javascript:void(0)">Contact us</a>
-			<a href="javascript:void(0)">FAQ</a>
-			<a href="javascript:void(0)">Write for us</a>
+			<p>
+			Contact us:
+			psyad10@nottingham.ac.uk
+			</p>
 		</div>
 	</footer>
 </body>
