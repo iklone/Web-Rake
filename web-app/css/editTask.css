@@ -190,3 +190,9 @@ cursor: pointer;
 #helpbut{
     float: left;
 }
+
+.task-info-btn{
+ position: absolute;
+    left: 70%;
+    top: 12px;
+}
