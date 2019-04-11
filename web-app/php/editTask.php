@@ -16,17 +16,19 @@
 	<body>
 		<div class="main">
 			<div class="logo-holder">
-				<span id="helpbut">
-					<a href='javascript:void(0)'>
-					Help
-					</a>
-				</span>
+				<a href='javascript:void(0)'>
+					<span id="helpbut">
+						Help
+					</span>
+				</a>
+				
 				<img src="../img/logo.png" />
-				<span id="logout">
-					<a href='../php/home-page.php'>
-					Log Out
-					</a>
-				</span>
+				
+				<a href='../php/home-page.php'>
+					<span id="logout">
+						Log Out
+					</span>
+				</a>
 			</div>
 			<div class="title">
 				<h1>Task List</h1>
