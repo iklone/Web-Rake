@@ -38,7 +38,7 @@ function scrapeSearcher() {
 		for (i = 0; i < li.length; i++) {
 			a = li[i].getElementsByTagName("span")[0];
 			var s = a.innerHTML;
-			var scrapeName = s.substring(0, s.indexOf(":"));
+			var scrapeName = s.substring(0, s.indexOf("["));
 			if (scrapeName.toUpperCase().indexOf(filter) > -1) {
 				li[i].style.display = "";
 			} else {
