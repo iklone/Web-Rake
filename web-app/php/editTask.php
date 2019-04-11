@@ -108,8 +108,9 @@
 							urlHref.innerText = taskList[i - 1].taskURL;
 							li.appendChild(urlHref);
 							ul.appendChild(li);
-							addDelBtnOnTask(li);
+							addBtnOnTask(li);
 							task_delete_btn();
+							task_info();
 						}
 
 						//display each scrape in each task
@@ -206,6 +207,23 @@
 				</div>
 			</div>
 			
+			<div id="task-info-modal" class="schedule-modal">
+				<div class="modal-content">
+					<div class="modal-header">
+						<span id="task-info-close" class="close">&times;</span>
+						<h2>Task Information</h2>
+					</div>
+					<div id="info-body" class="modal-body">
+						<p class="info-p"></p>
+						<p class="info-p"></p>
+						<p class="info-p"></p>
+						<p class="info-p"></p>
+					</div>
+					<div class="modal-footer">
+					</div>
+				</div>
+			</div>
+			
 			<div id="taskSchedule" class="schedule-modal">
 				<div class="modal-content">
 					<div class="modal-header">
@@ -255,6 +273,24 @@
 			window.onclick = function(event) {
 				if (event.target == schedule) {
 					schedule.style.display = "none";
+				}
+			}
+			
+			var info_modal = document.getElementById("task-info-modal");
+			var p = document.getElementsByClassName("info-p");
+			var close = document.getElementById("task-info-close");
+			close.onclick = function() {
+				info_modal.style.display = "none";
+				for(var i = 0;i < 4; i++){
+					p[i].innerText = "";
+				}
+			}
+			window.onclick = function(event) {
+				if (event.target == info_modal) {
+					info_modal.style.display = "none";
+					for(var i = 0;i < 4; i++){
+						p[i].innerText = "";
+					}
 				}
 			}
 		</script>

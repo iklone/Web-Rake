@@ -105,15 +105,21 @@ function deleteTaskInDatabase(taskID){
 }
 
 
-/** function used to add scrape delete button
+/** function used to add task delete button
  * @author Ang Ding
  */
-function addDelBtnOnScrape(li){
+function addBtnOnTask(li){
 	var del_btn = document.createElement("button");
 	var txt = document.createTextNode("delete");
-	del_btn.className = "scrape-del-btn";
+	del_btn.className = "task-del-btn";
 	del_btn.appendChild(txt);
 	li.appendChild(del_btn);
+	
+	var info_btn = document.createElement("button");
+	var text = document.createTextNode("task_info");
+	info_btn.className = "task-info-btn";
+	info_btn.appendChild(text);
+	li.appendChild(info_btn);
 }
 
 
@@ -240,4 +246,33 @@ function listOperator(allScrapeList){
 		newAllScrapeList.push(scrapeListForTask);
 	} 
 	return newAllScrapeList;
+}
+
+/**
+ * This function shows task description and task schedule type
+ * @author Ang Ding
+ */
+function task_info(taskList){
+	var info = document.getElementsByClassName("task-info-btn");
+	var info_modal = document.getElementById("task-info-modal");
+	for(var i = 0; i < info.length; i++)(function(i){
+		info[i].onclick = function(){
+			console.log("i =" + i);
+			var info_modal = document.getElementById("task-info-modal");
+			info_modal.style.display = "block";
+			console.log(taskList);
+			console.log(i);
+			console.log(info.length);
+			var text1 = document.createTextNode("Task Name: " + taskList[i].taskName);
+			var text2 = document.createTextNode("Task Type: " + taskList[i].type);
+			var text3 = document.createTextNode("Task URL: " + taskList[i].taskURL);
+			var text4 = document.createTextNode("Task Description: " + taskList[i].taskDescription);
+			// var body = document.getElementById("info-body");
+			var p = document.getElementsByClassName("info-p");
+			p[0].appendChild(text1);
+			p[1].appendChild(text2);
+			p[2].appendChild(text3);
+			p[3].appendChild(text4);
+		}
+	})(i)
 }
