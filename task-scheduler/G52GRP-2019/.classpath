@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="Z:/git/web-rake/task-scheduler/G52GRP-2019/lib/mysql-connector-java-8.0.15.jar"/>
+	<classpathentry kind="lib" path="Z:/git/web-rake/task-scheduler/G52GRP-2019/lib/jsoup-1.11.3.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="Z:/git/web-rake/task-scheduler/G52GRP-2019/lib/htmlunit-2.33.jar"/>
+	<classpathentry kind="lib" path="Z:/git/web-rake/task-scheduler/G52GRP-2019/lib/httpclient-4.5.6.jar"/>
+	<classpathentry kind="lib" path="Z:/git/web-rake/task-scheduler/G52GRP-2019/lib/htmlunit-cssparser-1.2.0.jar"/>
+	<classpathentry kind="lib" path="Z:/git/web-rake/task-scheduler/G52GRP-2019/lib/commons-codec-1.10.jar"/>
+	<classpathentry kind="lib" path="Z:/git/web-rake/task-scheduler/G52GRP-2019/lib/commons-io-2.6.jar"/>
+	<classpathentry kind="lib" path="Z:/git/web-rake/task-scheduler/G52GRP-2019/lib/commons-lang3-3.8.jar"/>
+	<classpathentry kind="lib" path="Z:/git/web-rake/task-scheduler/G52GRP-2019/lib/commons-logging-1.2.jar"/>
+	<classpathentry kind="lib" path="Z:/git/web-rake/task-scheduler/G52GRP-2019/lib/commons-net-3.6.jar"/>
+	<classpathentry kind="lib" path="Z:/git/web-rake/task-scheduler/G52GRP-2019/lib/commons-text-1.4.jar"/>
+	<classpathentry kind="lib" path="Z:/git/web-rake/task-scheduler/G52GRP-2019/lib/htmlunit-core-js-2.33.jar"/>
+	<classpathentry kind="lib" path="Z:/git/web-rake/task-scheduler/G52GRP-2019/lib/httpmime-4.5.6.jar"/>
+	<classpathentry kind="lib" path="Z:/git/web-rake/task-scheduler/G52GRP-2019/lib/neko-htmlunit-2.33.jar"/>
+	<classpathentry kind="lib" path="Z:/git/web-rake/task-scheduler/G52GRP-2019/lib/websocket-client-9.4.12.v20180830.jar"/>
+	<classpathentry kind="lib" path="Z:/git/web-rake/task-scheduler/G52GRP-2019/lib/xalan-2.7.2.jar"/>
+	<classpathentry kind="lib" path="Z:/git/web-rake/task-scheduler/G52GRP-2019/lib/httpcore-4.4.10.jar"/>
+	<classpathentry kind="lib" path="Z:/git/web-rake/task-scheduler/G52GRP-2019/lib/jetty-client-9.4.12.v20180830.jar"/>
+	<classpathentry kind="lib" path="Z:/git/web-rake/task-scheduler/G52GRP-2019/lib/jetty-http-9.4.12.v20180830.jar"/>
+	<classpathentry kind="lib" path="Z:/git/web-rake/task-scheduler/G52GRP-2019/lib/jetty-io-9.4.12.v20180830.jar"/>
+	<classpathentry kind="lib" path="Z:/git/web-rake/task-scheduler/G52GRP-2019/lib/jetty-util-9.4.12.v20180830.jar"/>
+	<classpathentry kind="lib" path="Z:/git/web-rake/task-scheduler/G52GRP-2019/lib/jetty-xml-9.4.12.v20180830.jar"/>
+	<classpathentry kind="lib" path="Z:/git/web-rake/task-scheduler/G52GRP-2019/lib/serializer-2.7.2.jar"/>
+	<classpathentry kind="lib" path="Z:/git/web-rake/task-scheduler/G52GRP-2019/lib/websocket-api-9.4.12.v20180830.jar"/>
+	<classpathentry kind="lib" path="Z:/git/web-rake/task-scheduler/G52GRP-2019/lib/websocket-common-9.4.12.v20180830.jar"/>
+	<classpathentry kind="lib" path="Z:/git/web-rake/task-scheduler/G52GRP-2019/lib/xercesImpl-2.12.0.jar"/>
+	<classpathentry kind="lib" path="Z:/git/web-rake/task-scheduler/G52GRP-2019/lib/xml-apis-1.4.01.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
