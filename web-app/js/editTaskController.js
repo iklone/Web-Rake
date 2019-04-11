@@ -133,7 +133,7 @@ function scrape_delete_btn(){
 		del[i].onclick = function() {
 			var div = this.parentElement;
 			var scrape = del[i].parentNode.children[0].innerHTML;
-			var name = scrape.substring(0, scrape.indexOf(":"));
+			var name = scrape.substring(0, scrape.indexOf(" ["));
 			var a = confirm("Delete the scrape " + name + " permanently?");
 			var scrapeID;
 			if(a == true){
