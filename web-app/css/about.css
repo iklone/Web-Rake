@@ -1,0 +1,602 @@
+body {
+    margin: 0;    
+}
+
+body.moved{
+    overflow: hidden;
+}
+
+.clearfix::after{
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* side menu*/
+
+#navMenu{
+    position: absolute;
+    width: 330px;
+    height: 100vh;
+    background-color: white;
+    right: 0;
+    overflow-y: hidden;
+}
+
+#navMenu.moved{
+    overflow-y: scroll;
+}
+
+#navClose{
+    position: absolute;
+    cursor: pointer;
+    font-size: 35px;
+    right: 35px;
+    top: 10px;
+    font-weight: bold;
+}
+
+#navContent{
+    max-width: 330px;
+    height: auto;
+    padding: 30px;
+    margin-top: 25px;
+}
+
+#navContent h1{
+    font-size: 20px;
+    margin-bottom: 25px;
+    margin-top: 0;
+    color: #333;
+    font-family: 'Raleway',sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    font-weight: bold;
+}
+
+#navContent a:link{
+    text-decoration: none;
+    color: #333;
+    display: block;
+    line-height: 1.55;
+    margin-bottom: 10px;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+}
+
+#navContent a:visited{
+    text-decoration: none;
+    color: #333;
+}
+
+#navContent a:hover{
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    background-color: aquamarine;
+    border-radius: 20px;
+    transition: all 300ms ease-in-out; 
+    -webkit-transition: all 300ms ease-in-out;
+    -soz-transition: all 300ms ease-in-out;
+    -o-transition: all 300ms ease-in-out;  
+}
+
+#navContent hr{
+    border: 1px solid #333;
+}
+
+#contactInfo{
+    text-decoration: none;
+    color: #333;
+    display: block;
+    line-height: 1.55;
+    margin-bottom: 10px;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+}
+
+/* css for header */
+
+header {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    margin-bottom: 0px;
+    background-color: #AED6F1;
+    background-size: cover;
+    background-repeat: no-repeat;
+    text-align: center;
+    padding-bottom: 110px;
+    transition: all 200ms cubic-bezier(0.2, 0.3, 0.25, 0.9);
+    -moz-transition: all 200ms cubic-bezier(0.2, 0.3, 0.25, 0.9);
+    -o-transition: all 200ms cubic-bezier(0.2, 0.3, 0.25, 0.9);
+    -webkit-transition: all 200ms cubic-bezier(0.2, 0.3, 0.25, 0.9);
+    z-index: 100;
+    margin: 0;
+}
+
+
+
+header.moved{
+    left: -330px;
+    max-height: 100vh;
+    overflow: hidden;
+} 
+
+.brief-intro{
+		text-align: -webkit-left;
+    position: relative;
+    top: -24px;
+    left: 6%;
+		width: 40%;
+}
+.plugin-image{
+	  position: absolute;
+    text-align: -webkit-right;
+    top: 150px;
+    right: 8%;
+    width: 40%;
+} img{width: 100%;}
+
+/* for the top header bar*/
+nav {
+    position: relative;
+    width: 100%;
+    height: 150px;
+    top: 0;
+    text-align: center;
+}
+
+nav a:first-child:link {
+/*
+    color: #fff;
+    text-decoration: none;
+*/
+}
+
+nav a:first-child:visited {
+/*
+    color: #fff;
+    text-decoration: none;
+*/
+}
+
+#login{
+  margin-right: -1100px;
+    background: #3775d0;
+    border: none;
+    border-radius: 4px !important;
+    color: #ffffff;
+    padding: 12px 20px;
+    text-decoration: none;
+    
+    font-weight: 300;   
+}
+
+
+#signUp{
+   margin-right: -900px;
+    background: transparent;
+    border: 1px solid black;
+    border-radius: 4px !important;
+    color: #ffffff;
+    padding: 12px 20px;
+    text-decoration: none;
+    font-weight: 300;  
+    display: inline-block;
+}
+
+nav a:first-child img {
+    width: 198px;
+    height: 40px;
+    margin-top: 40px;
+    margin-left: -1300px;
+}
+
+#slide-menu:link {
+    position: absolute;
+    right: 30px;
+    top: 40px;
+    font-size: 38px;
+    color: white;
+    text-decoration: none;
+}
+
+#slide-menu:visited {
+    color: white;
+    text-decoration: none;
+}
+
+/* header stuff */
+
+#brief{
+    font-size: 65px;
+    line-height: 1.3;
+    color: black;
+    text-align: center;
+    font-family: 'Raleway', sans-serif;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    max-width: 970px;
+    margin: 50px auto 50px auto;
+}
+
+#underHeaderText{
+    font-size: 20px;
+    line-height: 1.8;
+    color: black;
+    text-align: center;
+    font-family: 'Raleway', sans-serif;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    max-width: 1800px;
+    font-weight: lighter;
+    margin: 50px auto 20px auto;
+    font-family: 700;
+    font-weight: 700;
+      
+}
+
+#clickForPlugin{
+    font-size: 20px;
+    line-height: 1.8;
+    color: black;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 300;
+    text-align: center;
+    margin-bottom: 80px;
+    
+}
+
+#clickForPluginButton:link{
+    color: black;
+    text-decoration: none;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    padding: 22px 40px;
+    border: 2px solid black;
+    background: transparent;
+    text-transform: uppercase;
+    font-size: 20px;
+    margin-bottom: 100px;
+    border-radius: 30px;
+    transition: all 200ms ease-in-out; 
+    -webkit-transition: all 200ms ease-in-out;
+    -soz-transition: all 200ms ease-in-out;
+    -o-transition: all 200ms ease-in-out;  
+        
+}
+
+#clickForPluginButton:visited{
+    color: black;
+    text-decoration: none;
+    font-family: 'Raleway', sans-serif;
+    
+}
+
+ #clickForPluginButton:hover{
+    background-color: aquamarine;
+}
+
+/* tasks */
+#tasks{
+    position: relative;
+    width: 100%;
+    background-color: ghostwhite;
+    top: 0;    
+}
+
+#taskTitle{
+    position: relative;
+    margin: 0 auto;
+    padding: 50px 0;
+    text-align: center;
+    font-family: 'Raleway', sans-serif;
+    max-width: 970px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-size: 30px;
+}
+
+.taskBox {
+    position: relative;
+    width: 50%;
+    height: 100px;
+    margin: 0;
+    border-bottom: 1px solid black;
+    border-top: 2px solid black; 
+    border-radius: 2px;
+}
+
+.taskBox.left{
+    float: left;
+    left: 0;
+    background-color: lightgrey;
+}
+
+.taskBox.right{
+    float: right;
+    right: 0;
+    background-color: darkgrey;
+}
+
+.taskBox a:link{
+    color: black;
+    text-decoration: none;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 700;
+    font-size: 25px;
+    line-height: 1;
+    letter-spacing: 0.1em;
+}
+
+.taskBox a:visited{
+    color: black;
+    text-decoration: none;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 700;
+}
+
+.taskBox a:hover{
+    opacity: 0.4;  
+}
+
+#task1{
+    background-image: url(../img/taskbk.png);
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    opacity: 1;
+}
+
+#task1info{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(57, 30, 57, 0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#task2{
+    background-image: url(../img/taskbk.png);
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    opacity: 1;    
+}
+
+#task2info{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#task3{
+     background-image: url(../img/taskbk.png);
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    opacity: 1;   
+}
+
+#task3info{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#task4{
+    background-image: url(../img/taskbk.png);
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    opacity: 1;    
+}
+
+#task4info{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(57, 30, 57, 0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#task5{
+    background-image: url(../img/taskbk.png);
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    opacity: 1;    
+}
+
+#task5info{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(57, 30, 57, 0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#task6{
+    background-image: url(../img/taskbk.png);
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    opacity: 1;    
+}
+
+#task6info{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#task7{
+    background-image: url(../img/taskbk.png);
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    opacity: 1;    
+}
+
+#task7info{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#task8{
+    background-image: url(../img/taskbk.png);
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    opacity: 1;    
+}
+
+#task8info{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(57, 30, 57, 0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#task9{
+    background-image: url(../img/taskbk.png);
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    opacity: 1;    
+}
+
+#task9info{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(57, 30, 57, 0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#task10{
+    background-image: url(../img/taskbk.png);
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    opacity: 1;    
+}
+
+#task10info{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+/* css for footer */
+
+footer {
+    position: relative;
+    max-width: 970px;
+    margin: 60px auto 0 auto;
+    
+}
+
+.footer1{
+    width: 50%;
+    height: auto;
+    float: left;
+}
+
+footer h3 {
+    margin: 0;
+    font-size: 20px;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    color: #333;
+    line-height: 1.55;
+    margin: 0 15px 60px 15px;
+}
+
+footer p {
+    display: block;
+    font-size: 15px;
+    text-decoration: none;
+    color: #333;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 400;
+    margin-bottom: 25px;
+    margin: 0 15px 25px 15px;
+}
+
+footer a:link{
+    display: block;
+    font-size: 15px;
+    text-decoration: none;
+    color: black;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 400;
+    margin-bottom: 25px;
+    margin: 0 15px 25px 15px;
+}
+
+footer a:visited {
+    text-decoration: none;
+    color: black;
+}
+
+footer a:hover {
+    font-weight: bold;
+}
+
+footer p span{
+    font-size: 13px;
+}
+
+
+
+

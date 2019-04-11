@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <link rel="stylesheet" href="../css/index.css">
+  <script type="text/javascript" src='../js/indexController.js'></script>
+</head>
+
+<body oncontextmenu="return false">
+  <div class="body"></div>
+	<div class="grad"></div>
+	<div class="header">
+		<image src="../img/logo.png" height="50" width="200"></image>
+	</div>
+	<br>
+	<form name="login" action="../php/loginwapp.php" method="post" onsubmit = "return check()">
+		<div class="login">
+			<input type="text" placeholder=" Username" name="username"><br>
+			<input type="password" placeholder=" Password" name="password"><br>
+			<input type="submit" value="Log In">
+		</div>
+	</form>
+	<button class= "Button1" id='registerButton'>Register</button>
+</body>
+</html>

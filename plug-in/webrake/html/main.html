@@ -1,0 +1,125 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>our web rake website</title>
+		<link rel="stylesheet" type="text/css" href="../css/main.css">
+		<link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.0/css/all.css' integrity='sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ' crossorigin='anonymous'>
+		<script src="../js/main.js"></script>
+	</head>
+	<body>
+		<div id="main">
+			<div class="search-box">
+				<input class="search-box-holder" type="text" id="search" placeholder="Search...">
+				<button class="search-box-btn">SEARCH</button>
+			</div>
+			
+			<!-- add a new task -->
+			<div>
+				<button id="newTask-btn" class="newtask">+ New Task</button>
+			</div>
+			<div>
+				<button id="setting-btn" class="setting">Setting</button>
+			</div>
+			<div>
+				<button id="homePage-btn" class="homePage">Home Page</button>
+			</div>
+			
+			<div id="setting-modal" class="modal">
+				<!-- Modal content -->
+				<div class="modal-content">
+					<div class="modal-header">
+						<span id="setting-close" class="close">&times;</span>
+						<h2>Setting</h2>
+					</div>
+					<div class="modal-body">			
+							<p><label class="taskname">scrape background color: </label></p>
+							<div class="bgColor-select">
+								<select id="scrape-bgColor" class="bgColor-selecter">
+									<!-- <option value="0">Select Color:</option> -->
+									<option value="0" style="background-color: aqua;">Blue</option>
+									<option value="1" style="background-color: red;">Red</option>
+									<option value="2" style="background-color: greenyellow;">Green</option>
+									<option value="3" style="background-color: yellow;">Yellow</option>
+								</select>
+							</div>
+							
+					</div>
+					<div class="modal-footer">
+						<button id="setting-apply-btn" name="add_task">Apply</button>
+						<button id="setting-cancel-btn" name="cancel_task">Cancel</button>
+					</div>
+				</div>
+			</div>
+			
+			<!--modal -->
+			<div id="addtask-modal" class="modal">
+				
+				<!-- Modal content -->
+				<div class="modal-content">
+					<div class="modal-header">
+						<span id="addTask-close" class="close">&times;</span>
+						<h2>Please add a new task</h2>
+					</div>
+					<div class="modal-body">			
+							<p><label class="taskname">task name: </label></p>
+							<input type="text" id="taskname" name="taskname" class="taskname-holder" placeholder="Please enter you task name..." autocomplete="off" />
+							<p><label class="description">Description:</label></p>
+							<textarea type="text" id="decription-box" class="description-holder" placeholder="Please enter task description.." autocomplete="off"></textarea>
+					</div>
+					<div class="modal-footer">
+						<button id="add-btn" name="add_task">Add</button>
+						<button id="cancel-btn" name="cancel_task">Cancel</button>
+					</div>
+					
+					<div id="alert-noTaskName" class="alert-modal">
+						<div class="alert-content">
+							<div class="alert-header">
+								<span id="alert-noTask-close" class="alert-close">&times;</span>
+							</div>
+							<div id="alert-noTask-body" class="alert-body">Please enter your task name!</div>
+							<div class="alert-footer">
+								<button class="alert-onlyOk" id="alert-null-ok">OK</button>
+							</div>
+						</div>
+					</div>
+					
+					<div id="alert-dupTaskName" class="alert-modal">
+						<div class="alert-content">
+							<div class="alert-header">
+								<span id="alert-dup-close" class="alert-close">&times;</span>
+							</div>
+							<div id="alert-dup-body" class="alert-body">Duplicate Task name not allowed!</div>
+							<div class="alert-footer">
+								<button class="alert-onlyOk" id="alert-dup-ok">OK</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			
+			<div id="delete-modal" class="alert-modal">
+				<div class="alert-content">
+					<div class="alert-header">
+						<span id="delete-close" class="alert-close">&times;</span>
+					</div>
+					<div id="alert-delete-body" class="alert-body"></div>
+					<div class="alert-footer">
+						<button class="alert-yes" id="delete-btn-yes">Yes</button>
+						<button class="alert-cancel" id="delete-btn-cancel">Cancel</button>
+					</div>
+				</div>
+			</div>
+			
+			
+			
+			<div id="task-screen" class="task-show">
+				
+				<div id="all-task" class="alltask">
+					<h1 class="title">All Tasks</h1>
+					<ul id="all-ul"></ul>
+				</div>
+			</div>
+		</div>	
+	</body>
+</html>

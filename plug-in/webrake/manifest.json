@@ -1,8 +1,8 @@
 {
     "name": "Web Rake",
     "version": "1.0",
-    "description": "This is Chrome plug-in for team31 group work",
-    "permissions": ["tabs","<all_urls>","declarativeContent", "storage"],
+    "description": "This is the plug-in for FinRake",
+    "permissions": ["tabs","<all_urls>","declarativeContent", "storage", "activeTab", "contextMenus"],
     "background": {
       "scripts": ["js/background.js"],
       "persistent": false
@@ -10,13 +10,15 @@
     "content_scripts": [
         {
         "matches": ["http://*/*","https://*/*"],
-        "js": ["js/contentScript.js", "js/popup.js"],
-        "run_at": "document_end"         // allow the content script runs when the page has been fully loaded
+        "js": ["js/contentScript.js"]
         }
     ], 
   	"browser_action": {
 		"default_title": "Web Rake", // The title that shows up when a user hovers on your icon
-	    "default_popup": "html/popup.html" // The URL of your popup page
+	    "default_popup": "html/logIn.html" // The URL of your popup page
 	},
+	"icons": { "16": "img/logo16.png",
+           	   "48": "img/logo48.png",
+              "128": "img/logo128.png" },
     "manifest_version":2
 }

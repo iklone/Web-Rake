@@ -1,0 +1,95 @@
+body {
+    font-family: Arial, Helvetica, sans-serif
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 10px
+}
+
+.split {
+  width: 50%;
+  position: fixed;
+  z-index: 1;
+  top: 100;
+  overflow-x: hidden;
+}
+
+/* Control the left side */
+.left {
+  left: 0;
+  background-color: lightblue;
+  height: 100%;
+}
+
+/* Control the right side */
+.right {
+  right: 0;
+  background-color: pink;
+  height: 100%;
+}
+
+/* If you want the content centered horizontally and vertically */
+.centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+article {
+    margin: 15px;
+    padding: 10px;
+    border-style: solid;
+    border-width: 1px;
+    background-color: white;
+}
+
+article .taskName {
+    font-size: 175%;
+}
+
+article .taskMeta {
+    float: right;
+    font-style: italic;
+}
+.newTask {
+    width: 25%;
+}
+
+.leftTopBar {
+    float: left;
+}
+
+.rightTopBar {
+    float: right;
+}
+
+.selectedTaskName {
+    font-size: 200%;
+}
+
+.rightbuttons {
+    float: right;
+}
+
+.taskURL {
+    border-style: solid;
+    border-width: 2px;
+    padding: 5px;
+}
+
+.right table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.right td, th{
+    border: 1px solid;
+    padding: 5px;
+}
+
+.right tr:nth-child(even) {
+    background-color: white;
+}
