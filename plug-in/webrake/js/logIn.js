@@ -1,5 +1,5 @@
  /**
- * this is javascript code for popUp.html
+ * this is javascript code for logIn.html
  */
 
 /**

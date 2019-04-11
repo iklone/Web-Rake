@@ -34,7 +34,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
 			}
 		});
 		chrome.storage.local.set({ "logInFlag": 2});
-   		chrome.browserAction.setPopup({popup: "../html/popup.html"});
+   		chrome.browserAction.setPopup({popup: "../html/logIn.html"});
    	}
    	
    	return Promise.resolve("Dummy response to keep the console quiet");
