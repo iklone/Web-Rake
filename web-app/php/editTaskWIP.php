@@ -154,9 +154,9 @@
 											// display the scrape
 											var scrapeli = document.createElement("li");
 											scrapeli.className = "scrape-data";
-											var time = allScrapeList[index][j].data[0][0];
-											var data = allScrapeList[index][j].data[0][1];
-										    var s = allScrapeList[index][j].scrapeName + " [" + time + "] : " + data;
+											var time = allScrapeList[index][j].data[0];
+											var data = allScrapeList[index][j].data[1];
+										    var s = allScrapeList[index][j].scrapeName + ": [" + time + "]" + data;
 											var span = document.createElement("span");
 											span.className = "scrapeName";
 											if(allScrapeList[index][j].flag == 1){
@@ -179,7 +179,7 @@
 											scrapeli.appendChild(listUl);
 											for(var z = 1; z < allScrapeList[index][j].data.length; z++){
 												var li = document.createElement("li");
-												var text = document.createTextNode("[" + allScrapeList[index][j].data[z][0] + "] : "+ allScrapeList[index][j].data[z][1]);
+												var text = document.createTextNode(allScrapeList[index][j].data[z]);
 												var span = document.createElement("span");
 												span.className = "listName";
 												span.appendChild(text);

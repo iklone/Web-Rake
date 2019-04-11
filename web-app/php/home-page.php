@@ -11,13 +11,6 @@
 	<link href='https://fonts.googleapis.com/css?family=Raleway:300' rel='stylesheet' type='text/css'>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="../js/functions.js"></script>
-	<script>
-		setTimeout(timeoutnotif, 60000);
-		
-		function timeoutnotif() {
-			alert("There may be more recent scrapes. Refresh the page to view them.");
-		}
-	</script>
 </head>
 	
 <body>
@@ -82,17 +75,17 @@
 					</a>
 				</span>
 				<span id=signin>
-					<span id="login">
-						<a href='../html/index.html'>
-						Login
-						</a>
-					</span>
+					<a href='../html/index.html'>
+						<span id="login">
+							Login
+						</span>
+					</a>
 					
-					<span id="signUp"> 
-						<a href='../html/register.html'>
-						Sign Up
-						</a>
-					</span>
+					<a href='../html/index.html'>
+						<span id="signUp"> 
+							Sign Up
+						</span>
+					</a>
 				</span>
 				<a href='javascript:void(0)' id='slide-menu'>
 					<ion-icon name='menu'></ion-icon>

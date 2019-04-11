@@ -74,7 +74,7 @@ chrome.tabs.onUpdated.addListener(
 				var currentTaskURL = result.currentTask.taskURL;
 				var msg;
 				if(changeInfo.url != currentTaskURL){
-					msg = {txt: "stop contentScript"};
+					msg = {txt: "stop contentScript temporarily"};
 				}else{
 					msg = {txt: "start contentScript"};
 					chrome.storage.local.set({ "currentTabId": tabId});

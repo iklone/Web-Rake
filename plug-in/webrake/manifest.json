@@ -1,7 +1,7 @@
 {
     "name": "Web Rake",
     "version": "1.0",
-    "description": "This is Chrome plug-in for team31 group work",
+    "description": "This is the plug-in for FinRake",
     "permissions": ["tabs","<all_urls>","declarativeContent", "storage", "activeTab", "contextMenus"],
     "background": {
       "scripts": ["js/background.js"],

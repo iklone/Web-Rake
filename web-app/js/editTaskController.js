@@ -230,7 +230,7 @@ function listOperator(allScrapeList){
 				var scrape = {scrapeName:scrapeName, data:data, flag:flag, scrapeID:scrapeID, taskID:taskID};
 				scrapeListForTask.push(scrape);
 				data = [];
-				data.push(allScrapeList[i][j].data);
+				data.push([allScrapeList[i][j].time, allScrapeList[i][j].data]);
 				var scrapeID = allScrapeList[i][j].scrapeID;
 				var scrapeName = allScrapeList[i][j].scrapeName;
 				var flag = allScrapeList[i][j].flag;
@@ -239,7 +239,7 @@ function listOperator(allScrapeList){
 					scrapeListForTask.push(scrape);
 				}
 			}else{
-				data.push(allScrapeList[i][j].data);
+				data.push([allScrapeList[i][j].time, allScrapeList[i][j].data]);
 			}
 
 		}
@@ -258,12 +258,8 @@ function task_info(taskList){
 	var info_modal = document.getElementById("task-info-modal");
 	for(var i = 0; i < info.length;i++)(function(i){
 		info[i].onclick = function(){
-			console.log("i =" + i);
 			var info_modal = document.getElementById("task-info-modal");
 			info_modal.style.display = "block";
-			console.log(taskList);
-			console.log(i);
-			console.log(info.length);
 			var text1 = document.createTextNode("Task Name: " + taskList[i].taskName);
 			var text2 = document.createTextNode("Task Type: " + taskList[i].type);
 			var text3 = document.createTextNode("Task URL: " + taskList[i].taskURL);

@@ -153,12 +153,12 @@ nav {
     height: 150px;
 }
 
-nav a:first-child:link {
+nav a {
     color: #fff;
     text-decoration: none;
 }
 
-nav a:first-child:visited {
+nav a {
     color: #fff;
     text-decoration: none;
 }
