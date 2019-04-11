@@ -122,6 +122,9 @@ public class TaskScheduler {
     	} // end while
     }
     
+    /*
+     * Deletes rows from the Result table if the size of the table exceeds the MAX_RESULT_STORAGE_IN_MB
+     */
     public static void freeSpace(Statement stmt) {
     	//Execute a query
     	try {

@@ -25,7 +25,10 @@ public class ElementSearchThread implements Runnable {
 	private String value;
 	private WebClient webClient;
 	private HtmlPage page;
-   
+	
+	/*
+	 * Constructor
+	 */
 	public ElementSearchThread(int taskID, String urlStr) {
 		this.taskID = taskID;
 		this.urlStr = urlStr;
@@ -87,6 +90,9 @@ public class ElementSearchThread implements Runnable {
 	   	webClient.close(); // plug memory leaks
 	}
 	
+	/*
+	 * Create the HtmlUnit WebClient, choose it's settings and set the newly created WebClient to the member variable
+	 */
 	public void createWebClient() {
 		// turn off HtmlUnit warnings
 		java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.OFF);
@@ -104,6 +110,11 @@ public class ElementSearchThread implements Runnable {
 	    this.webClient = webClient;
 	}
 	
+	/*
+	 * Finds all the scrapes for the task,
+	 * For each scrape, call scrapeElement() iff flag != 2
+	 * 
+	 */
 	public void insertResultIntoDatabase() {
 		Connection conn = null;
 		Statement stmt = null;
@@ -164,6 +175,11 @@ public class ElementSearchThread implements Runnable {
 	   }//end try 
 	}
 	
+	/*
+	 * Call regularScrapeFind, if that didn't work, call searchAIFind
+	 * Set flags to 1 and 2 respectively
+	 * Insert result into database and update the flag
+	 */
 	public void scrapeElement() {
 		Connection conn = null;
 		Statement stmt = null;
@@ -229,7 +245,10 @@ public class ElementSearchThread implements Runnable {
 			}//end finally try
 	   }//end try 
 	}
-	
+
+	/*
+	 * 
+	 */
 	public Boolean regularScrapeFind() {
 		
 		try {    
@@ -299,6 +318,9 @@ public class ElementSearchThread implements Runnable {
 		return false;
 	}
 	
+	/*
+	 * Check if element is unchangedType
+	 */
 	public Boolean unchangedType(String element) {
 		if (unchangedNumericness(element) && unchangedDateTimeness(element) && unchangedCurrencyness(element)) {
 			return true;
@@ -306,6 +328,9 @@ public class ElementSearchThread implements Runnable {
 		return false;
 	}
 	
+	/*
+	 * 
+	 */
 	public Boolean isNumeric(String element) {
 		if (Pattern.matches("^[ ]*(\\d+|\\d{1,3}(,\\d{3})*)(\\.\\d+)?[ ]*$", element)) {
 			return true;
@@ -313,6 +338,9 @@ public class ElementSearchThread implements Runnable {
 		return false;
 	}
 	
+	/*
+	 * 
+	 */
 	public Boolean unchangedNumericness(String scrapedElement) {
 		Boolean hasNotChanged = true;
 		
@@ -330,6 +358,9 @@ public class ElementSearchThread implements Runnable {
 		return hasNotChanged;
 	}
 	
+	/*
+	 * 
+	 */
 	public Boolean isDateTime(String element) {
 		if (Pattern.matches("^[ ]*[0-9]{2}[\\/\\-,.][0-9]{2}[\\/\\-,.](19|20)[0-9]{2}[ ]*$", element)) { //01/01/1998
 			return true;
@@ -364,6 +395,9 @@ public class ElementSearchThread implements Runnable {
 		return false;
 	}
 	
+	/*
+	 * 
+	 */
 	public Boolean unchangedDateTimeness(String scrapedElement) {
 		Boolean hasNotChanged = true;
 		
@@ -381,6 +415,9 @@ public class ElementSearchThread implements Runnable {
 		return hasNotChanged;
 	}
 	
+	/*
+	 * 
+	 */
 	public Boolean isCurrency(String element) {
 		String currSymbols = "\\$|US\\$|\\€|\\¥|\\£|A\\$|C\\$|Fr|\\?|kr|NZ\\$|S\\$|HK\\$|R\\$|R";
 		String currAbbs = "USD|EUR|JPY|GBP|AUD|CAD|CHF|CNY|SEK|NZD|MXN|SGD|HKD|NOK|KRW|TRY|RUB|INR|BRL|ZAR";
@@ -394,6 +431,9 @@ public class ElementSearchThread implements Runnable {
 		return false;
 	}
 	
+	/*
+	 * 
+	 */
 	public Boolean unchangedCurrencyness(String scrapedElement) {
 		Boolean hasNotChanged = true;
 		
@@ -411,6 +451,9 @@ public class ElementSearchThread implements Runnable {
 		return hasNotChanged;
 	}
 	
+	/*
+	 * 
+	 */
 	public String findParent(String element) {
 		int index = element.lastIndexOf("/");
 		if (index != 0) {
@@ -419,6 +462,10 @@ public class ElementSearchThread implements Runnable {
 		return element;
 	}
 	
+	/*
+	 * Get the average depth from the intervention table,
+	 * Traverse tree from element, return true if element is found with same type or false if element not found
+	 */
 	public Boolean searchAIFind(String element, String elementID, HtmlPage page) {
 		Connection conn = null;
 		Statement stmt = null;
@@ -499,6 +546,9 @@ public class ElementSearchThread implements Runnable {
 		return false;
 	}
 	
+	/*
+	 * Return true if e is the same type
+	 */
 	public boolean checkElements(DomElement e, int depth) {
 		boolean passed = false;
 		
@@ -520,6 +570,10 @@ public class ElementSearchThread implements Runnable {
 		return false;
 	}
 	
+	/*
+	 * Upon successful AI, update the xpath in the database,
+	 * add the new intervention to the database
+	 */
 	public void updateXPath(String updatedXPath, int depth) {
 		Connection conn = null;
 		Statement stmt = null;
