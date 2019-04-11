@@ -116,7 +116,7 @@ function deleteTaskInDatabase(taskID){
  */
 function addDelBtnOnScrape(li){
 	var del_btn = document.createElement("button");
-	var txt = document.createTextNode("delete");
+	var txt = document.createTextNode("Delete");
 	del_btn.className = "scrape-del-btn";
 	del_btn.appendChild(txt);
 	li.appendChild(del_btn);
@@ -134,6 +134,7 @@ function scrape_delete_btn(){
 			var div = this.parentElement;
 			var scrape = del[i].parentNode.children[0].innerHTML;
 			var name = scrape.substring(0, scrape.indexOf(" ["));
+			console.log(name);
 			var a = confirm("Delete the scrape " + name + " permanently?");
 			var scrapeID;
 			if(a == true){

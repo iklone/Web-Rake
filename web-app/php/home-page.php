@@ -74,6 +74,9 @@
 						<img src='../img/logo.png'/>
 					</a>
 				</span>
+				
+				<img src='../img/logo250.png' style="width:100px; height:100px; margin:20px;">
+				
 				<span id=signin>
 					<a href='../html/index.html'>
 						<span id="login">
