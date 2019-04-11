@@ -3,6 +3,12 @@
 FinRake is a software that allows users to specify recurring data scrapes from the internet. These scrapes will be automatic, variable and easy to modify. Primarily built to serve Refinitiv data analysts working in the financial field.
 
 ### Installation
+1.
+2.
+3.
+4.
+5.
+6.
 
 ### Information
 **Trello** (Kanban Board and evidence of task allocation):
@@ -23,17 +29,17 @@ https://stackoverflow.com/questions/273695/git-branch-naming-best-practices
 ### FAQ
 
 ### Requirements
-## Software
+#### Software
 Windows 10 64-bit
 
-## Hardware
+#### Hardware
 CPU, RAM, STORAGE
 
-## Database
+#### Database
 MySQL
 
 ### Authors
-## Group 31, Comprising of Members:
+#### Group 31, Comprising of Members:
 - James Thackway (Leader)
 - Olasubomi Awolesi (Administrator)
 - Hashim Hussain (Repository Manager)
@@ -41,6 +47,6 @@ MySQL
 - Ang "Andy" Ding
 - Peichen "Payne" Yu
 
-## Sponsors
+### Sponsors
 Internal Supervisor: Brian Logan (Associate Professor, University of Nottingham)
 External Sponsor: James Millen (Lead Technical Specialist, Refinitiv)
