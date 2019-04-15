@@ -86,7 +86,7 @@ public class ElementSearchThread implements Runnable {
 			return;
 		}
 	    
-		insertResultIntoDatabase();
+		serviceAllScrapesForTask();
 	   	webClient.close(); // plug memory leaks
 	}
 	
@@ -111,11 +111,10 @@ public class ElementSearchThread implements Runnable {
 	}
 	
 	/*
-	 * Finds all the scrapes for the task,
-	 * For each scrape, call scrapeElement() iff flag != 2
-	 * 
+	 * Finds all the scrapes for the task and for each scrape, if scrape flag is 
+	 * not equal to 2, call scrapeElement(), otherwise just print a message
 	 */
-	public void insertResultIntoDatabase() {
+	public void serviceAllScrapesForTask() {
 		Connection conn = null;
 		Statement stmt = null;
 		
@@ -171,9 +170,12 @@ public class ElementSearchThread implements Runnable {
 	}
 	
 	/*
-	 * Call regularScrapeFind, if that didn't work, call searchAIFind
-	 * Set flags to 1 and 2 respectively
-	 * Insert result into database and update the flag
+	 * Try a regular scrape by calling regularScrapeFind(), if that fails, call 
+	 * searchAIFind().
+	 * Also set Result flag to: 
+	 * 		1 if regularScrapeFind() failed and searchAIFind() succeeded
+	 * 		2 if regularScrapeFind() and searchAIFind() both failed
+	 * Also Insert result into database and update the flag } extract method
 	 */
 	public void scrapeElement() {
 		Connection conn = null;
@@ -242,7 +244,10 @@ public class ElementSearchThread implements Runnable {
 	}
 
 	/*
-	 * 
+	 * Attempts to find the element on the page. In the first case, when that 
+	 * fails, attempts to bypass any consent forms and scrape the following pages. 
+	 * If the element was found, set the result value and flag to 0 and return true.
+	 * Otherwise, return false.
 	 */
 	public Boolean regularScrapeFind() {
 		
@@ -267,7 +272,7 @@ public class ElementSearchThread implements Runnable {
 						}
 					}
 					
-					if (acceptButtonFound) {
+					if (acceptButtonFound) { // Unnecessary since we do this at 268?
 						break;
 					}
 				}
@@ -315,7 +320,9 @@ public class ElementSearchThread implements Runnable {
 	}
 	
 	/*
-	 * Check if element is unchangedType
+	 * Returns true if the (scraped) element's type has not changed (compared to 
+	 * the sample data from the database), otherwise return false. This method 
+	 * only checks for numeric, date/time and currency types.
 	 */
 	public Boolean unchangedType(String element) {
 		if (unchangedNumericness(element) && unchangedDateTimeness(element) && unchangedCurrencyness(element)) {
@@ -325,7 +332,7 @@ public class ElementSearchThread implements Runnable {
 	}
 	
 	/*
-	 * 
+	 * Returns true if the element is numeric, otherwise returns false.
 	 */
 	public Boolean isNumeric(String element) {
 		if (Pattern.matches("^[ ]*(\\d+|\\d{1,3}(,\\d{3})*)(\\.\\d+)?[ ]*$", element)) {
@@ -335,7 +342,9 @@ public class ElementSearchThread implements Runnable {
 	}
 	
 	/*
-	 * 
+ 	 * Returns true if the (scraped) element's type has not changed (compared to 
+	 * the sample data from the database), otherwise return false. This method 
+	 * only checks for numeric types.
 	 */
 	public Boolean unchangedNumericness(String scrapedElement) {
 		Boolean hasNotChanged = true;
@@ -355,7 +364,8 @@ public class ElementSearchThread implements Runnable {
 	}
 	
 	/*
-	 * 
+	 * Returns true if the element's data type is date/time, otherwise returns 
+	 * false.
 	 */
 	public Boolean isDateTime(String element) {
 		if (Pattern.matches("^[ ]*[0-9]{2}[\\/\\-,.][0-9]{2}[\\/\\-,.](19|20)[0-9]{2}[ ]*$", element)) { //01/01/1998
@@ -392,7 +402,9 @@ public class ElementSearchThread implements Runnable {
 	}
 	
 	/*
-	 * 
+ 	 * Returns true if the (scraped) element's type has not changed (compared to 
+	 * the sample data from the database), otherwise return false. This method 
+	 * only checks for date/time types.
 	 */
 	public Boolean unchangedDateTimeness(String scrapedElement) {
 		Boolean hasNotChanged = true;
@@ -412,7 +424,7 @@ public class ElementSearchThread implements Runnable {
 	}
 	
 	/*
-	 * 
+	 * Returns true if the element is a currency, otherwise returns false.
 	 */
 	public Boolean isCurrency(String element) {
 		String currSymbols = "\\$|US\\$|\\€|\\¥|\\£|A\\$|C\\$|Fr|\\?|kr|NZ\\$|S\\$|HK\\$|R\\$|R";
@@ -428,7 +440,9 @@ public class ElementSearchThread implements Runnable {
 	}
 	
 	/*
-	 * 
+ 	 * Returns true if the (scraped) element's type has not changed (compared to 
+	 * the sample data from the database), otherwise return false. This method 
+	 * only checks for currency types.
 	 */
 	public Boolean unchangedCurrencyness(String scrapedElement) {
 		Boolean hasNotChanged = true;
@@ -448,7 +462,8 @@ public class ElementSearchThread implements Runnable {
 	}
 	
 	/*
-	 * 
+	 * Truncates the xpath of the element, removing everything from and including 
+	 * the last forward slash "/".
 	 */
 	public String findParent(String element) {
 		int index = element.lastIndexOf("/");
@@ -459,7 +474,7 @@ public class ElementSearchThread implements Runnable {
 	}
 	
 	/*
-	 * Return the average depth from the intervention table
+	 * Returns the average depth from the intervention table
 	 */
 	public int getAverageDepth() {
 		Connection conn = null;
@@ -509,7 +524,8 @@ public class ElementSearchThread implements Runnable {
 	}
 
 	/*
-	 * Traverse tree from element, return true if element is found with same type or false if element not found
+	 * Traverse the tree from element, return true if element is found with same 
+	 * type, otherwise return false if element not found
 	 */
 	public Boolean searchAIFind(String element, String elementID, HtmlPage page) {	
 		int depth = getAverageDepth();
@@ -549,7 +565,8 @@ public class ElementSearchThread implements Runnable {
 	}
 	
 	/*
-	 * Return true if e is the same type
+	 * Return true if the element is the ID or type we're looking for, otherwise 
+	 * return false.
 	 */
 	public boolean checkElements(DomElement e, int depth) {
 		boolean passed = false;
