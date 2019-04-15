@@ -34,7 +34,7 @@ public class ElementSearchThread implements Runnable {
 		this.urlStr = urlStr;
 		this.page = null;
 		this.result = new ScrapeResult();
-		createWebClient();
+		this.webClient = createWebClient();
 	}
 
 	@Override
@@ -91,14 +91,14 @@ public class ElementSearchThread implements Runnable {
 	}
 	
 	/*
-	 * Create the HtmlUnit WebClient, choose it's settings and set the newly created WebClient to the member variable
+	 * Create and configure the HtmlUnit WebClient
 	 */
-	public void createWebClient() {
-		// turn off HtmlUnit warnings
+	public WebClient createWebClient() {
+		// Turn off HtmlUnit warnings
 		java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.OFF);
 	    java.util.logging.Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
 	    
-	    // create webclient and configure settings
+	    // create WebClient and configure settings
 	   	WebClient webClient = new WebClient();
 	   	webClient.getOptions().setTimeout(60000); // ??
 		webClient.waitForBackgroundJavaScript(10000);
@@ -107,7 +107,7 @@ public class ElementSearchThread implements Runnable {
 	    webClient.getOptions().setThrowExceptionOnScriptError(false);
 	    webClient.getOptions().setCssEnabled(false);
 	    webClient.getOptions().setUseInsecureSSL(true);
-	    this.webClient = webClient;
+	    return webClient;
 	}
 	
 	/*
@@ -126,8 +126,6 @@ public class ElementSearchThread implements Runnable {
 			ResultSet rs = stmt.executeQuery(sql);
 			
 			while(rs.next()) {
-			   	long scrapeStartTime = System.currentTimeMillis();
-			   	
 				scrapeID = rs.getInt("scrapeID");
 				element = rs.getString("Element");
 				elementID = rs.getString("elementID");
@@ -139,9 +137,6 @@ public class ElementSearchThread implements Runnable {
 					scrapeElement();
 				else
 					System.out.println("taskID: " + this.taskID + ", scrapeID: " + this.scrapeID + ", Did not scrape because scrape flag is 2");
-				
-			    long scrapeEndTime = System.currentTimeMillis();
-			   	System.out.println("taskID: " + this.taskID + ", scrapeID: " + this.scrapeID + ", Time taken: " + (scrapeEndTime - scrapeStartTime) + " milliseconds");
 			}
 
 		    rs.close();
@@ -302,8 +297,9 @@ public class ElementSearchThread implements Runnable {
 					}
 				}
 			}
+			
 			if (e != null) {
-				// check the type and neighbours to ensure the element is still the same, if not return false
+				// check the type and neighbours to ensure the element is still the same type, if not return false
 				if (unchangedType(e.asText())) {
 					result.setResult(e.getTextContent());
 					result.setFlag(0);
@@ -463,18 +459,12 @@ public class ElementSearchThread implements Runnable {
 	}
 	
 	/*
-	 * Get the average depth from the intervention table,
-	 * Traverse tree from element, return true if element is found with same type or false if element not found
+	 * Return the average depth from the intervention table
 	 */
-	public Boolean searchAIFind(String element, String elementID, HtmlPage page) {
+	public int getAverageDepth() {
 		Connection conn = null;
 		Statement stmt = null;
-		
 		int depth = 0;
-		int i;
-		
-		System.out.println("taskID: " + this.taskID + ", scrapeID: " + this.scrapeID + ", searchAIFind() called.");
-		
 		try {
 			conn = ConnectionManager.getConnection();
 			stmt = conn.createStatement();
@@ -514,7 +504,18 @@ public class ElementSearchThread implements Runnable {
 			catch(SQLException se) {
 				se.printStackTrace();
 			}//end finally try
-	   }//end try
+		}//end try
+		return depth;
+	}
+
+	/*
+	 * Traverse tree from element, return true if element is found with same type or false if element not found
+	 */
+	public Boolean searchAIFind(String element, String elementID, HtmlPage page) {	
+		int depth = getAverageDepth();
+		int i;
+		
+		System.out.println("taskID: " + this.taskID + ", scrapeID: " + this.scrapeID + ", searchAIFind() called.");
 
 		for (i = 0; i < depth + 1; i++) {
 			System.out.println("\ttaskID: " + this.taskID + ", scrapeID: " + this.scrapeID + ", depth attempt " + i);
@@ -528,6 +529,7 @@ public class ElementSearchThread implements Runnable {
 				System.out.println("\ttaskID: " + this.taskID + ", scrapeID: " + this.scrapeID + ", Parent not found. Continue.");
 				continue;
 			}
+			
 			if (checkElements(parent, i)) {
 				return true;
 			}
@@ -565,13 +567,13 @@ public class ElementSearchThread implements Runnable {
 			System.out.println("\ttaskID: " + this.taskID + ", scrapeID: " + this.scrapeID + ", A child element passed, updating XPath and adding intervention.");
 			updateXPath(e.getCanonicalXPath(), depth);
 			result.setResult(e.asText());
-			return true;
 		}
-		return false;
+		return passed;
 	}
 	
 	/*
-	 * Upon successful AI, update the xpath in the database,
+	 * Upon successful AI,
+	 * update the xpath in the database,
 	 * add the new intervention to the database
 	 */
 	public void updateXPath(String updatedXPath, int depth) {
