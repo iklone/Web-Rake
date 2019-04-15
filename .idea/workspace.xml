@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
+<<<<<<< HEAD
     <list default="true" id="182daac6-6c7f-4a0f-9568-f2b3a57bde3a" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web-app/my-app/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/web-app/my-app/src/App.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web-app/my-app/src/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/web-app/my-app/src/package.json" afterDir="false" />
     </list>
+=======
+    <list default="true" id="182daac6-6c7f-4a0f-9568-f2b3a57bde3a" name="Default Changelist" comment="" />
+>>>>>>> b4d448b... REST API completed for Retrieve in CRUD
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -80,8 +84,13 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/web-app/my-app/src/serverNode.js">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="85">
               <caret line="5" selection-start-line="5" selection-end-line="5" />
+=======
+            <state relative-caret-position="374">
+              <caret line="22" column="6" selection-start-line="22" selection-start-column="6" selection-end-line="22" selection-end-column="6" />
+>>>>>>> b4d448b... REST API completed for Retrieve in CRUD
             </state>
           </provider>
         </entry>
@@ -226,15 +235,23 @@
       <workItem from="1553419216925" duration="1337000" />
       <workItem from="1553422365003" duration="4143000" />
       <workItem from="1553435159230" duration="2251000" />
+<<<<<<< HEAD
       <workItem from="1553511291410" duration="3453000" />
       <workItem from="1553696019233" duration="720000" />
       <workItem from="1554131667989" duration="744000" />
       <workItem from="1554203258221" duration="2799000" />
+=======
+      <workItem from="1553511291410" duration="2783000" />
+>>>>>>> b4d448b... REST API completed for Retrieve in CRUD
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
+<<<<<<< HEAD
     <option name="totallyTimeSpent" value="46142000" />
+=======
+    <option name="totallyTimeSpent" value="41209000" />
+>>>>>>> b4d448b... REST API completed for Retrieve in CRUD
   </component>
   <component name="ToolWindowManager">
     <frame x="762" y="0" width="781" height="838" extended-state="0" />
@@ -339,6 +356,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/web-app/my-app/src/serverNode.js">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="85">
           <caret line="5" selection-start-line="5" selection-end-line="5" />
         </state>
@@ -361,6 +379,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="170">
           <caret line="10" column="4" selection-start-line="10" selection-start-column="4" selection-end-line="10" selection-end-column="4" />
+=======
+        <state relative-caret-position="374">
+          <caret line="22" column="6" selection-start-line="22" selection-start-column="6" selection-end-line="22" selection-end-column="6" />
+>>>>>>> b4d448b... REST API completed for Retrieve in CRUD
         </state>
       </provider>
     </entry>
