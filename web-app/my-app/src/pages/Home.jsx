@@ -3,7 +3,7 @@ import './Home.scss'
 
 class Home extends Component {
     constructor(props) {
-        super(props)
+        super(props);
         this.state = {
             tasks: []
         }
@@ -56,3 +56,5 @@ class Home extends Component {
         );
     }
 }
+
+export default Home;
