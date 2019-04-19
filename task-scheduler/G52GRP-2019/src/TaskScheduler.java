@@ -6,10 +6,36 @@ import java.time.LocalDateTime;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * This class contains the infinite loop where the program sits. In this loop, 
+ * any tasks that are due are submitted to a thread pool so that their scrapes 
+ * can be serviced using the ElementSearchThread class. This class is also 
+ * responsible for freeing up space (using the max space specified in the 
+ * settings.txt file.
+ * 
+ * @author psyhh1
+ * @author psyjct
+ * @see ElementSearchThread
+ */
+
 public class TaskScheduler {
 	
 	private static int MAX_RESULT_STORAGE_IN_MB = -1;
 	
+	/**
+	 * This method reads the settings file to find the max storage size and 
+	 * initialises the thread pool before sitting in an infinite loop where all 
+	 * of the tasks from the database are selected and if any are due, they are 
+	 * submitted to the thread pool. Tasks are considered due when their 
+	 * schedules (records in the Schedule table, each associated with a specific 
+	 * task) match with the current system time. This method also calls the 
+	 * freeSpace method.
+	 * 
+	 * @param args unused.
+	 * @throws IOException if the settings.txt file could not be read.
+	 * @throws SQLException if there are any errors when selecting the tasks 
+	 * 		   and their schedules from the database.
+	 */
     public static void main(String[] args) {
     	System.out.println("Scheduler booted.");
     	
@@ -122,8 +148,11 @@ public class TaskScheduler {
     	} // end while
     }
     
-    /*
+    /**
      * Deletes rows from the Result table if the size of the table exceeds the MAX_RESULT_STORAGE_IN_MB
+     * 
+     * @param stmt the Statement object which is used to execute queries.
+     * @throws SQLException if there are any database errors with any SQL queries.
      */
     public static void freeSpace(Statement stmt) {
     	//Execute a query

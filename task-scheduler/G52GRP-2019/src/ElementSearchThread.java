@@ -406,7 +406,7 @@ public class ElementSearchThread implements Runnable {
 	 * Tests that the type of the element that is passed in hasn't changed from/to 
 	 * a numeric type.
 	 * 
-	 * @param element the element that is being tested.
+	 * @param scrapedElement the element that is being tested.
 	 * @return true if the type of the element has not changed it's type from/to 
 	 * 			numeric otherwise returns false.
 	 */
@@ -472,7 +472,7 @@ public class ElementSearchThread implements Runnable {
 	 * Tests that the type of the element that is passed in hasn't changed from/to 
 	 * a date/time type.
 	 * 
-	 * @param element the element that is being tested.
+	 * @param scrapedElement the element that is being tested.
 	 * @return true if the type of the element has not changed it's type from/to 
 	 * 			date/time otherwise returns false.
 	 */
@@ -516,7 +516,7 @@ public class ElementSearchThread implements Runnable {
 	 * Tests that the type of the element that is passed in hasn't changed from/to 
 	 * a currency type.
 	 * 
-	 * @param element the element that is being tested.
+	 * @param scrapedElement the element that is being tested.
 	 * @return true if the type of the element has not changed it's type from/to 
 	 * 			currency otherwise returns false.
 	 */
@@ -556,6 +556,7 @@ public class ElementSearchThread implements Runnable {
 	/**
 	 * Find the average depth from the Intervention table and increment it by 1.
 	 * 
+	 * @return the average depth of all records in the Intervention table, plus 1.
 	 * @throws SQLException if there are any database errors when getting the 
 	 * 		   average depth.
 	 * @throws Exception if there are any Class.forName errors when getting the 
@@ -615,6 +616,10 @@ public class ElementSearchThread implements Runnable {
 	 * until an element is found matching the above criteria or the number of 
 	 * parents visited exceeds the average depth from the intervention table.
 	 * 
+	 * @param element the element that is currently being searched for.
+	 * @param elementID the HTML id attribute associated with the current scrape.
+	 * 		  This may be an empty string if an ID wasn't given in the Scrape table.
+	 * @param page the current page that is being searched.
 	 * @return true if an element with the same HTML id attribute or same type
 	 * 		   found, otherwise return false.
 	 */
@@ -660,7 +665,7 @@ public class ElementSearchThread implements Runnable {
 	 * type as the element currently being scraped (stored in the member variables).
 	 * 
 	 * @param e the element to be compared with the current scrape.
-	 * @depth the number of parents that have been visited to get to this element.
+	 * @param depth the number of parents that have been visited to get to this element.
 	 * @return true if the passed element has the same HTML id attribute or type 
 	 * 		   as the element currently being scraped.
 	 */
@@ -690,7 +695,7 @@ public class ElementSearchThread implements Runnable {
 	 * the searchAIFind method finding a suitable candidate element.
 	 * 
 	 * @param updatedXPath the new XPath that the scrape will be set to.
-	 * @depth the number of parents that have been visited to get to this element.
+	 * @param depth the number of parents that have been visited to get to this element.
 	 * @throws SQLException if there are any database errors when updating the XPath 
 	 * 		   or inserting the new intervention.
 	 * @throws Exception if there are any Class.forName errors when updating the 

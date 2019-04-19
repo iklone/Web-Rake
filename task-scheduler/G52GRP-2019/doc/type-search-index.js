@@ -1,0 +1,1 @@
+typeSearchIndex = [{"p":"<Unnamed>","l":"ConnectionManager"},{"p":"<Unnamed>","l":"ElementSearchThread"},{"p":"<Unnamed>","l":"ScrapeResult"},{"p":"<Unnamed>","l":"TaskScheduler"}]
