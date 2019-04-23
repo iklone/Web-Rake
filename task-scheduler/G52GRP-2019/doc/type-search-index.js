@@ -1,1 +1,1 @@
-typeSearchIndex = [{"p":"<Unnamed>","l":"ConnectionManager"},{"p":"<Unnamed>","l":"ElementSearchThread"},{"p":"<Unnamed>","l":"ScrapeResult"},{"p":"<Unnamed>","l":"TaskScheduler"}]
+typeSearchIndex = [{"p":"com.Finrake","l":"ConnectionManager"},{"p":"com.Finrake","l":"ElementSearchThread"},{"p":"com.Finrake","l":"ScrapeResult"},{"p":"com.Finrake","l":"TaskScheduler"},{"p":"com.Finrake","l":"TestElementSearchThread"}]

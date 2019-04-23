@@ -1,3 +1,4 @@
+package com.Finrake;
 /**
  * This class is intended to act as a c-like struct, consisting of two member 
  * variables which align with each of our scrapes in the Scrape table - the value 
