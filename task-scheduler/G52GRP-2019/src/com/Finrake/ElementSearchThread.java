@@ -1,3 +1,4 @@
+package com.Finrake;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,6 +11,17 @@ import com.gargoylesoftware.htmlunit.html.DomElement;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
+/**
+ * This class consists of methods which service all of the scrapes (from the 
+ * Scrape table) associated with a specific task (from the Task table). This 
+ * class implements the Runnable interface, hence the instances of this class 
+ * are intended to be executed by a thread.
+ * 
+ * @author psyhh1
+ * @author psyjct
+ * @see Runnable
+ * @see TaskScheduler
+ */
 public class ElementSearchThread implements Runnable {
 	
 	private static final int MAX_CLICKED_PAGES = 8;
@@ -26,17 +38,30 @@ public class ElementSearchThread implements Runnable {
 	private WebClient webClient;
 	private HtmlPage page;
 	
-	/*
+	/**
 	 * Constructor
+	 * 
+	 * @param taskID the taskID of the task to service
+	 * @param urlStr the URL of the website associated with the task
 	 */
 	public ElementSearchThread(int taskID, String urlStr) {
 		this.taskID = taskID;
 		this.urlStr = urlStr;
 		this.page = null;
 		this.result = new ScrapeResult();
-		createWebClient();
+		this.webClient = createWebClient();
 	}
 
+	/**
+	 * Attempts to get the page using the WebClient object and urlStr String 
+	 * (both stored as member variables in the constructor). If that fails, 
+	 * sets the flag to 4 (indicating that the page failed to download) for 
+	 * all scrapes associated with the current task in the Scrape table.
+	 * 
+	 * @throws Exception if the getPage method failed to get the page.
+	 * @throws SQLException if there are any database errors when setting the flag.
+	 * @throws Exception if there are any Class.forName errors when setting the flag.
+	 */
 	@Override
 	public void run() {
 	    try {
@@ -86,19 +111,22 @@ public class ElementSearchThread implements Runnable {
 			return;
 		}
 	    
-		insertResultIntoDatabase();
+		serviceAllScrapesForTask();
 	   	webClient.close(); // plug memory leaks
 	}
 	
-	/*
-	 * Create the HtmlUnit WebClient, choose it's settings and set the newly created WebClient to the member variable
+	/**
+	 * Disable annoying HtmlUnit warnings then create and configure the HtmlUnit 
+	 * WebClient object.
+	 * 
+	 * @return webClient the newly created WebClient object.
 	 */
-	public void createWebClient() {
-		// turn off HtmlUnit warnings
+	public WebClient createWebClient() {
+		// Turn off HtmlUnit warnings
 		java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(java.util.logging.Level.OFF);
 	    java.util.logging.Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
 	    
-	    // create webclient and configure settings
+	    // create WebClient and configure settings
 	   	WebClient webClient = new WebClient();
 	   	webClient.getOptions().setTimeout(60000); // ??
 		webClient.waitForBackgroundJavaScript(10000);
@@ -107,15 +135,19 @@ public class ElementSearchThread implements Runnable {
 	    webClient.getOptions().setThrowExceptionOnScriptError(false);
 	    webClient.getOptions().setCssEnabled(false);
 	    webClient.getOptions().setUseInsecureSSL(true);
-	    this.webClient = webClient;
+	    return webClient;
 	}
 	
-	/*
-	 * Finds all the scrapes for the task,
-	 * For each scrape, call scrapeElement() iff flag != 2
+	/**
+	 * Finds all the scrapes for the task and for each scrape, call scrapeElement()
+	 * if the flag is not equal to 2. Otherwise, print an informative message.
 	 * 
+	 * @throws SQLException if there are any database errors when selecting all 
+	 * 		   the scrapes for the task.
+	 * @throws Exception if there are any Class.forName errors when selecting all 
+	 * 		   the scrapes for the task.
 	 */
-	public void insertResultIntoDatabase() {
+	public void serviceAllScrapesForTask() {
 		Connection conn = null;
 		Statement stmt = null;
 		
@@ -126,8 +158,6 @@ public class ElementSearchThread implements Runnable {
 			ResultSet rs = stmt.executeQuery(sql);
 			
 			while(rs.next()) {
-			   	long scrapeStartTime = System.currentTimeMillis();
-			   	
 				scrapeID = rs.getInt("scrapeID");
 				element = rs.getString("Element");
 				elementID = rs.getString("elementID");
@@ -139,9 +169,6 @@ public class ElementSearchThread implements Runnable {
 					scrapeElement();
 				else
 					System.out.println("taskID: " + this.taskID + ", scrapeID: " + this.scrapeID + ", Did not scrape because scrape flag is 2");
-				
-			    long scrapeEndTime = System.currentTimeMillis();
-			   	System.out.println("taskID: " + this.taskID + ", scrapeID: " + this.scrapeID + ", Time taken: " + (scrapeEndTime - scrapeStartTime) + " milliseconds");
 			}
 
 		    rs.close();
@@ -175,10 +202,23 @@ public class ElementSearchThread implements Runnable {
 	   }//end try 
 	}
 	
-	/*
-	 * Call regularScrapeFind, if that didn't work, call searchAIFind
-	 * Set flags to 1 and 2 respectively
-	 * Insert result into database and update the flag
+	/**
+	 * Attempt to scrape the element from the page, setting the flag field (in 
+	 * Scrape table) and result field (in Result table) for the scrape accordingly.
+	 * Firstly, try to call the regularScrapeFind method. If that fails, call 
+	 * the searchAIFind() method.
+	 * 
+	 * If the regularScrapeFind method succeeded, the flag field will be set 
+	 * to 0 and the result will be whatever the method found. If the 
+	 * regularScrapeFind method failed and the searchAIFind method succeeded, 
+	 * the flag field will be set to 1 and the result will be set to whatever the 
+	 * AI had found. Otherwise, if both functions failed, the flag field will be 
+	 * set to 2 and the result will be a message indicating failure.
+	 * 
+	 * @throws SQLException if there are any database errors when setting the 
+	 * 		   flag or result fields.
+	 * @throws Exception if there are any Class.forName errors when setting the 
+	 * 		   flag or result fields.
 	 */
 	public void scrapeElement() {
 		Connection conn = null;
@@ -246,8 +286,22 @@ public class ElementSearchThread implements Runnable {
 	   }//end try 
 	}
 
-	/*
+	/**
+	 * Searches the page for the element and attempts to bypass any consent forms. 
 	 * 
+	 * If the element isn't found to begin with, this method presumes a consent 
+	 * page might be the culprit. It attempts to click past any buttons with 
+	 * text that contains a few keywords which commonly appear in accept buttons. 
+	 * If it finds one, it clicks the button and searches for the element on the 
+	 * page resulting from the click. If an accept button wasn't found, the method 
+	 * tries clicking on a specific number of submit buttons and searching the following 
+	 * pages.
+	 * 
+	 * By the end of this, if the element was found, the Result member variable 
+	 * is set accordingly to contain the current found element text and a 0 flag.
+	 * 
+	 * @return true if the element was found, otherwise return false.
+	 * @throws Exception if there is an error searching the page.
 	 */
 	public Boolean regularScrapeFind() {
 		
@@ -272,7 +326,7 @@ public class ElementSearchThread implements Runnable {
 						}
 					}
 					
-					if (acceptButtonFound) {
+					if (acceptButtonFound) { // Unnecessary since we do this at 268?
 						break;
 					}
 				}
@@ -281,6 +335,7 @@ public class ElementSearchThread implements Runnable {
 				if (acceptButtonFound) {
 					System.out.println("taskID: " + this.taskID + ", scrapeID: " + this.scrapeID + ", Accept button led to a page that had the element. Accept button text: " + acceptButton.asText());
 					tmpPage = acceptButton.click();
+					this.page = tmpPage; // set current page to clicked page
 					e = (HtmlElement) tmpPage.getFirstByXPath(element);
 				}
 				else {
@@ -302,8 +357,9 @@ public class ElementSearchThread implements Runnable {
 					}
 				}
 			}
+			
 			if (e != null) {
-				// check the type and neighbours to ensure the element is still the same, if not return false
+				// check the type and neighbours to ensure the element is still the same type, if not return false
 				if (unchangedType(e.asText())) {
 					result.setResult(e.getTextContent());
 					result.setFlag(0);
@@ -318,8 +374,14 @@ public class ElementSearchThread implements Runnable {
 		return false;
 	}
 	
-	/*
-	 * Check if element is unchangedType
+	/**
+	 * Tests the type of the element that is passed in against the type of the 
+	 * sample data from the database for the current scrape. This method 
+	 * only tests for numeric, date/time and currency types.
+	 * 
+	 * @param element the element that is being tested.
+	 * @return true if the type of the element has not changed otherwise returns
+	 * 		    false.
 	 */
 	public Boolean unchangedType(String element) {
 		if (unchangedNumericness(element) && unchangedDateTimeness(element) && unchangedCurrencyness(element)) {
@@ -328,8 +390,11 @@ public class ElementSearchThread implements Runnable {
 		return false;
 	}
 	
-	/*
+	/**
+	 * Tests the type of the element that is passed in using regex matching.
 	 * 
+	 * @param element the element that is being tested.
+	 * @return true if the given element is numeric, otherwise returns false.
 	 */
 	public Boolean isNumeric(String element) {
 		if (Pattern.matches("^[ ]*(\\d+|\\d{1,3}(,\\d{3})*)(\\.\\d+)?[ ]*$", element)) {
@@ -338,19 +403,24 @@ public class ElementSearchThread implements Runnable {
 		return false;
 	}
 	
-	/*
+	/**
+	 * Tests that the type of the element that is passed in hasn't changed from/to 
+	 * a numeric type.
 	 * 
+	 * @param scrapedElement the element that is being tested.
+	 * @return true if the type of the element has not changed it's type from/to 
+	 * 			numeric otherwise returns false.
 	 */
 	public Boolean unchangedNumericness(String scrapedElement) {
 		Boolean hasNotChanged = true;
 		
 		// check type and neighbours
-		if (isNumeric(this.sampleData) ) { // should be num
-			if (!isNumeric(scrapedElement) ) { //is not num
+		if (isNumeric(this.sampleData) ) { // scrapedElement should be numeric
+			if (!isNumeric(scrapedElement) ) { // scrapedElement is not numeric
 				hasNotChanged = false;
 			}
-		} else { // should not be num
-			if (isNumeric(scrapedElement) ) { // is num
+		} else { // scrapedElement should not be numeric
+			if (isNumeric(scrapedElement) ) { // scrapedElement is numeric
 				hasNotChanged = false;
 			}
 		}
@@ -358,8 +428,12 @@ public class ElementSearchThread implements Runnable {
 		return hasNotChanged;
 	}
 	
-	/*
+	/**
+	 * Tests the type of the element that is passed in using regex matching.
 	 * 
+	 * @param element the element that is being tested.
+	 * @return true if the type of the given element is date/time, otherwise 
+	 * 		   returns false.
 	 */
 	public Boolean isDateTime(String element) {
 		if (Pattern.matches("^[ ]*[0-9]{2}[\\/\\-,.][0-9]{2}[\\/\\-,.](19|20)[0-9]{2}[ ]*$", element)) { //01/01/1998
@@ -382,7 +456,7 @@ public class ElementSearchThread implements Runnable {
 		}
 		else if (Pattern.matches("^[ ]*[0-9]{2}[\\/\\-,.][A-Z|a-z]{3}[\\/\\-,.](19|20)[0-9]{2} [0-2][0-9]:[0-5][0-9]:[0-5][0-9][ ]*$", element)) { // 01-JAN-1998 08:59:00
 			return true;
-		} //START OF REGEXS MATCHING EXAMPLE WEBSITES
+		} // Start of regular expressions matching examples from websites provided by James Millen
 		else if (Pattern.matches("^[ ]*[0-3]{0,1}[0-9]([s|n|r|t][t|d|h]){0,1}[\\/\\-,. ][A-Z|a-z]{3}.{0,1}[\\/\\-,. ](19|20){0,1}[0-9][0-9][ ]*$", element)) { // 1st Jan 2019
 			return true;
 		}
@@ -395,19 +469,24 @@ public class ElementSearchThread implements Runnable {
 		return false;
 	}
 	
-	/*
+	/**
+	 * Tests that the type of the element that is passed in hasn't changed from/to 
+	 * a date/time type.
 	 * 
+	 * @param scrapedElement the element that is being tested.
+	 * @return true if the type of the element has not changed it's type from/to 
+	 * 			date/time otherwise returns false.
 	 */
 	public Boolean unchangedDateTimeness(String scrapedElement) {
 		Boolean hasNotChanged = true;
 		
 		// check type and neighbours
-		if (isDateTime(this.sampleData) ) { // should be num
-			if (!isDateTime(scrapedElement) ) { //is not num
+		if (isDateTime(this.sampleData) ) { // scrapedElement should be date/time
+			if (!isDateTime(scrapedElement) ) { // scrapedElement is not date/time
 				hasNotChanged = false;
 			}
-		} else { // should not be num
-			if (isDateTime(scrapedElement) ) { // is num
+		} else { // scrapedElement should not be date/time
+			if (isDateTime(scrapedElement) ) { // scrapedElement is date/time
 				hasNotChanged = false;
 			}
 		}
@@ -415,8 +494,11 @@ public class ElementSearchThread implements Runnable {
 		return hasNotChanged;
 	}
 	
-	/*
+	/**
+	 * Tests the type of the element that is passed in using regex matching.
 	 * 
+	 * @param element the element that is being tested.
+	 * @return true if the given element is a currency, otherwise returns false.
 	 */
 	public Boolean isCurrency(String element) {
 		String currSymbols = "\\$|US\\$|\\€|\\¥|\\£|A\\$|C\\$|Fr|\\?|kr|NZ\\$|S\\$|HK\\$|R\\$|R";
@@ -431,19 +513,24 @@ public class ElementSearchThread implements Runnable {
 		return false;
 	}
 	
-	/*
+	/**
+	 * Tests that the type of the element that is passed in hasn't changed from/to 
+	 * a currency type.
 	 * 
+	 * @param scrapedElement the element that is being tested.
+	 * @return true if the type of the element has not changed it's type from/to 
+	 * 			currency otherwise returns false.
 	 */
 	public Boolean unchangedCurrencyness(String scrapedElement) {
 		Boolean hasNotChanged = true;
 		
 		// check type and neighbours
-		if (isCurrency(this.sampleData) ) { // should be num
-			if (!isCurrency(scrapedElement) ) { //is not num
+		if (isCurrency(this.sampleData) ) { // scrapedElement should be currency
+			if (!isCurrency(scrapedElement) ) { // scrapedElement is not currency
 				hasNotChanged = false;
 			}
-		} else { // should not be num
-			if (isCurrency(scrapedElement) ) { // is num
+		} else { // scrapedElement should not be currency
+			if (isCurrency(scrapedElement) ) { // scrapedElement is currency
 				hasNotChanged = false;
 			}
 		}
@@ -451,8 +538,13 @@ public class ElementSearchThread implements Runnable {
 		return hasNotChanged;
 	}
 	
-	/*
+	/**
+	 * Truncates the XPath of the element, removing everything from and including 
+	 * the last forward slash "/", if the forward slash existed.
 	 * 
+	 * @param element the XPath of the child.
+	 * @return the XPath of the parent if one existed, otherwise returns the 
+	 * 		   XPath of the child.
 	 */
 	public String findParent(String element) {
 		int index = element.lastIndexOf("/");
@@ -462,19 +554,19 @@ public class ElementSearchThread implements Runnable {
 		return element;
 	}
 	
-	/*
-	 * Get the average depth from the intervention table,
-	 * Traverse tree from element, return true if element is found with same type or false if element not found
+	/**
+	 * Find the average depth from the Intervention table and increment it by 1.
+	 * 
+	 * @return the average depth of all records in the Intervention table, plus 1.
+	 * @throws SQLException if there are any database errors when getting the 
+	 * 		   average depth.
+	 * @throws Exception if there are any Class.forName errors when getting the 
+	 * 		   average depth.
 	 */
-	public Boolean searchAIFind(String element, String elementID, HtmlPage page) {
+	public int getAverageDepth() {
 		Connection conn = null;
 		Statement stmt = null;
-		
 		int depth = 0;
-		int i;
-		
-		System.out.println("taskID: " + this.taskID + ", scrapeID: " + this.scrapeID + ", searchAIFind() called.");
-		
 		try {
 			conn = ConnectionManager.getConnection();
 			stmt = conn.createStatement();
@@ -514,7 +606,29 @@ public class ElementSearchThread implements Runnable {
 			catch(SQLException se) {
 				se.printStackTrace();
 			}//end finally try
-	   }//end try
+		}//end try
+		return depth;
+	}
+
+	/**
+	 * Traverses the tree from the element, searching for the nearest element 
+	 * with the same HTML id attribute or same type. Traversal takes place by 
+	 * incrementally finding the parent and exploring all of its descendants 
+	 * until an element is found matching the above criteria or the number of 
+	 * parents visited exceeds the average depth from the intervention table.
+	 * 
+	 * @param element the element that is currently being searched for.
+	 * @param elementID the HTML id attribute associated with the current scrape.
+	 * 		  This may be an empty string if an ID wasn't given in the Scrape table.
+	 * @param page the current page that is being searched.
+	 * @return true if an element with the same HTML id attribute or same type
+	 * 		   found, otherwise return false.
+	 */
+	public Boolean searchAIFind(String element, String elementID, HtmlPage page) {	
+		int depth = getAverageDepth();
+		int i;
+		
+		System.out.println("taskID: " + this.taskID + ", scrapeID: " + this.scrapeID + ", searchAIFind() called.");
 
 		for (i = 0; i < depth + 1; i++) {
 			System.out.println("\ttaskID: " + this.taskID + ", scrapeID: " + this.scrapeID + ", depth attempt " + i);
@@ -528,6 +642,7 @@ public class ElementSearchThread implements Runnable {
 				System.out.println("\ttaskID: " + this.taskID + ", scrapeID: " + this.scrapeID + ", Parent not found. Continue.");
 				continue;
 			}
+			
 			if (checkElements(parent, i)) {
 				return true;
 			}
@@ -546,8 +661,14 @@ public class ElementSearchThread implements Runnable {
 		return false;
 	}
 	
-	/*
-	 * Return true if e is the same type
+	/**
+	 * Tests whether or not the passed element has the same HTML id attribute or 
+	 * type as the element currently being scraped (stored in the member variables).
+	 * 
+	 * @param e the element to be compared with the current scrape.
+	 * @param depth the number of parents that have been visited to get to this element.
+	 * @return true if the passed element has the same HTML id attribute or type 
+	 * 		   as the element currently being scraped.
 	 */
 	public boolean checkElements(DomElement e, int depth) {
 		boolean passed = false;
@@ -565,14 +686,21 @@ public class ElementSearchThread implements Runnable {
 			System.out.println("\ttaskID: " + this.taskID + ", scrapeID: " + this.scrapeID + ", A child element passed, updating XPath and adding intervention.");
 			updateXPath(e.getCanonicalXPath(), depth);
 			result.setResult(e.asText());
-			return true;
 		}
-		return false;
+		return passed;
 	}
 	
-	/*
-	 * Upon successful AI, update the xpath in the database,
-	 * add the new intervention to the database
+	/**
+	 * Updates the XPath for the current scrape (in the Scrape table) and 
+	 * adds a new record to the Intervention table. This method is called upon 
+	 * the searchAIFind method finding a suitable candidate element.
+	 * 
+	 * @param updatedXPath the new XPath that the scrape will be set to.
+	 * @param depth the number of parents that have been visited to get to this element.
+	 * @throws SQLException if there are any database errors when updating the XPath 
+	 * 		   or inserting the new intervention.
+	 * @throws Exception if there are any Class.forName errors when updating the 
+	 * 		   XPath or inserting the new intervention.
 	 */
 	public void updateXPath(String updatedXPath, int depth) {
 		Connection conn = null;

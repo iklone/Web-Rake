@@ -1,7 +1,15 @@
+package com.Finrake;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * This class is responsible for creating and connecting to the database and 
+ * returning the Connection object.
+ * 
+ * @author psyhh1
+ * @author psyjct
+ */
 public class ConnectionManager {
 	// JDBC driver name and database URL
 	private static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
@@ -13,6 +21,11 @@ public class ConnectionManager {
 	
 	private static Connection conn = null;
 	
+	/**
+	 * Creates and connects to the database.
+	 * 
+	 * @return the Connection object that is connected to our database.
+	 */
     public static Connection getConnection() {
     	try {
 			Class.forName(JDBC_DRIVER);
